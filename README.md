@@ -1,5 +1,3 @@
-### Copyright (C) 2022, Cosmicmind, Inc. <http://cosmicmind.com>. All rights reserved.
-
 ### Domain
 
 A TypeScript framework for next generation applications using Domain Driven Design.
