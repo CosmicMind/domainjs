@@ -1,0 +1,55 @@
+{
+	"name": "@cosmicmind/domain",
+	"version": "0.0.1-rc-a",
+	"description": "A TypeScript framework for next generation applications using Domain Driven Design.",
+	"keywords": [],
+	"author": {
+		"name": "Daniel Jonathan",
+		"email": "daniel@cosmicmind.com"
+	},
+	"license" : "BSD-3-Clause",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/cosmicmind/Domain.git"
+	},
+	"main": "src/index.ts",
+	"module": "dist/lib.es.js",
+	"type": "module",
+	"config": {
+		"main": "src/index.ts",
+		"module": "lib.es.js",
+		"tests": "lib.tests.mjs"
+	},
+	"directories": {
+		"lib": "src",
+		"test": "tests"
+	},
+	"publishConfig": {
+		"access": "restricted"
+	},
+	"scripts": {
+		"test:build": "vite build --config vite.config.tests.js --mode development",
+		"test:watch": "vite build --config vite.config.tests.js --mode watch",
+		"test:run": "ava build/lib.tests.mjs",
+		"dev:build": "vite build --config vite.config.js --mode development",
+		"dev:watch": "vite build --config vite.config.js --mode watch",
+		"prod:build": "vite build --config vite.config.js --mode production",
+		"lint:run": "eslint . --ext .ts"
+	},
+	"devDependencies": {
+		"@types/node": "^17.0.26",
+		"@types/yup": "^0.29.13",
+		"@typescript-eslint/eslint-plugin": "^5.20.0",
+		"@typescript-eslint/parser": "^5.20.0",
+		"@vue/eslint-config-typescript": "^10.0.0",
+		"ava": "^4.2.0",
+		"eslint": "^8.14.0"
+	},
+	"dependencies": {
+		"dotenv": "^16.0.0",
+		"ts-node": "^10.7.0",
+		"tslib": "^2.4.0",
+		"vite-tsconfig-paths": "^3.4.1",
+		"yup": "^0.32.11"
+	}
+}
