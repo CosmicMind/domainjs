@@ -1,7 +1,7 @@
 {
 	"name": "@cosmicverse/domain",
 	"version": "0.0.1-rc-a",
-	"description": "A TypeScript framework for next generation applications using Domain Driven Design.",
+	"description": "A Domain Driven Design framework for next generation applications in TypeScript.",
 	"keywords": [],
 	"author": {
 		"name": "Daniel Jonathan",

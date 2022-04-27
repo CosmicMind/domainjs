@@ -1,6 +1,6 @@
 # Domain
 
-A TypeScript framework for next generation applications using Domain Driven Design.
+A Domain Driven Design framework for next generation applications in TypeScript.
 
 * Note: Initial RC Candidate. Not ready for use.
 
@@ -16,10 +16,8 @@ A TypeScript framework for next generation applications using Domain Driven Desi
 
 BSD 3-Clause License
 
-Copyright (c) 2022, Cosmicverse
+Copyright (c) 2022, Daniel Jonathan <daniel at cosmicverse dot com>
 All rights reserved.
-
-Author: Daniel Jonathan <daniel@cosmicverse.org>
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
