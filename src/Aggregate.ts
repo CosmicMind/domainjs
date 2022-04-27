@@ -1,10 +1,10 @@
 /**
  * BSD 3-Clause License
  *
- * Copyright (c) 2022, Cosmicmind, Inc.
+ * Copyright (c) 2022, CosmicMind, Inc.
  * All rights reserved.
  *
- * Author: Daniel Jonathan <daniel@cosmicmind.com>
+ * Author: Daniel Jonathan <daniel@cosmicverse.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -37,9 +37,9 @@
  */
 
 import {
-  Serializable,
   Optional,
-} from '@cosmicmind/foundation'
+  Serializable,
+} from '@cosmicverse/foundation'
 
 import {
   Entity,

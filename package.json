@@ -1,16 +1,16 @@
 {
-	"name": "@cosmicmind/domain",
+	"name": "@cosmicverse/domain",
 	"version": "0.0.1-rc-a",
 	"description": "A TypeScript framework for next generation applications using Domain Driven Design.",
 	"keywords": [],
 	"author": {
 		"name": "Daniel Jonathan",
-		"email": "daniel@cosmicmind.com"
+		"email": "daniel@cosmicverse.org"
 	},
 	"license" : "BSD-3-Clause",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/cosmicmind/Domain.git"
+		"url": "https://github.com/Cosmicverse/Domain.git"
 	},
 	"main": "src/index.ts",
 	"module": "dist/lib.es.js",
@@ -23,9 +23,6 @@
 	"directories": {
 		"lib": "src",
 		"test": "tests"
-	},
-	"publishConfig": {
-		"access": "restricted"
 	},
 	"scripts": {
 		"test:build": "vite build --config vite.config.tests.js --mode development",

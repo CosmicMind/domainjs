@@ -27,9 +27,6 @@
     "rootDir": ".",
     "baseUrl": ".",
     "paths": {
-      "^lib.config": [
-        "lib.config"
-      ],
       "@/*": [
         "src/*"
       ],
