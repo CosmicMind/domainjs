@@ -1,7 +1,7 @@
 /**
  * BSD 3-Clause License
  *
- * Copyright (c) 2022, CosmicMind, Inc.
+ * Copyright (c) 2022, Cosmicverse
  * All rights reserved.
  *
  * Author: Daniel Jonathan <daniel@cosmicverse.org>
