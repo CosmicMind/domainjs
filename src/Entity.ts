@@ -481,10 +481,10 @@ export const mapPropertyData = (entity: Entity, props: EntityPropertyData[]): vo
     if (key && meta && 'undefined' !== typeof value) {
 
       entity[key] = meta.boolean ? Boolean(value) :
-                    meta.number ? Number(value) :
-                    meta.object ? parse(String(value)) :
-                    meta.date ? new Date(String(value)) :
-                    meta.set ? new Set(parse(String(value))) : value
+        meta.number ? Number(value) :
+          meta.object ? parse(String(value)) :
+            meta.date ? new Date(String(value)) :
+              meta.set ? new Set(parse(String(value))) : value
     }
   }
 }

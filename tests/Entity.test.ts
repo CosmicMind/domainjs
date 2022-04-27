@@ -225,7 +225,7 @@ test('Entity: delete ProxyVirtualError',async t => {
     virtual: {
       get fullName(): Readonly<string> {
         return 'Daniel Jonathan'
-      }
+      },
     },
   })
 

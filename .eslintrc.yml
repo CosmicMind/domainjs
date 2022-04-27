@@ -1,0 +1,22 @@
+root: true
+parser: '@typescript-eslint/parser'
+plugins:
+  - '@typescript-eslint'
+extends:
+  - 'eslint:recommended'
+  - 'plugin:@typescript-eslint/eslint-recommended'
+  - 'plugin:@typescript-eslint/recommended'
+rules:
+  no-console: 1
+  '@typescript-eslint/no-inferrable-types': 2
+  comma-dangle:
+    - error
+    -
+      arrays: never
+      objects: always-multiline
+      imports: always-multiline
+      exports: always-multiline
+      functions: never
+  indent:
+    - error
+    - 2
