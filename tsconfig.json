@@ -1,9 +1,8 @@
 {
   "maxNodeModuleJsDepth": 5,
   "compilerOptions": {
-   "types": ["vite/client"],
+    "types": ["vite/client"],
     "target": "esnext",
-    "module": "esnext",
     "declaration": true,
     "strict": true,
     "importHelpers": true,
