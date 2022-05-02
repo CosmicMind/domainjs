@@ -61,6 +61,6 @@
 		"yup": "^0.32.11"
 	},
 	"dependencies": {
-		"@cosmicverse/foundation": "^0.0.1-rc-u"
+		"@cosmicverse/foundation": "^0.0.1-rc-v"
 	}
 }
