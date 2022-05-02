@@ -12,18 +12,29 @@
 		"type": "git",
 		"url": "https://github.com/Cosmicverse/Domain.git"
 	},
-	"main": "src/index.ts",
-	"module": "dist/lib.es.js",
 	"type": "module",
+	"main": "dist/src/index.js",
+	"typings": "dist/src/index.d.ts",
+	"module": "dist/src/index.js",
 	"config": {
 		"main": "src/index.ts",
-		"module": "lib.es.js",
-		"tests": "lib.tests.mjs"
+		"module": "org.cosmicverse.domain",
+		"tests": "org.cosmicverse.domain.tests.mjs"
 	},
-	"directories": {
-		"lib": "src",
-		"test": "tests"
+	"exports": {
+		".": {
+			"import": "./dist/org.cosmicverse.domain.mjs",
+			"require": "./dist/org.cosmicverse.domain.cjs"
+		}
 	},
+	"files": [
+		"dist",
+		"LICENSE",
+		"package.json",
+		"package-lock.json",
+		"README.md",
+		"tsconfig.json"
+	],
 	"scripts": {
 		"test:build": "vite build --config vite.config.tests.js --mode development",
 		"test:watch": "vite build --config vite.config.tests.js --mode watch",
@@ -31,23 +42,25 @@
 		"dev:build": "vite build --config vite.config.js --mode development",
 		"dev:watch": "vite build --config vite.config.js --mode watch",
 		"prod:build": "vite build --config vite.config.js --mode production",
-		"lint:run": "eslint . --ext .ts"
+		"lint:run": "eslint . --ext .ts",
+		"package:build": "vite build --config vite.config.js --mode development",
+		"package:publish": "npm publish --access public"
 	},
 	"devDependencies": {
 		"@types/node": "^17.0.26",
-		"@types/yup": "^0.29.13",
 		"@typescript-eslint/eslint-plugin": "^5.20.0",
 		"@typescript-eslint/parser": "^5.20.0",
 		"@vue/eslint-config-typescript": "^10.0.0",
 		"ava": "^4.2.0",
-		"eslint": "^8.14.0"
-	},
-	"dependencies": {
-		"@cosmicverse/foundation": "^0.0.1-rc-a",
 		"dotenv": "^16.0.0",
+		"eslint": "^8.14.0",
+		"lib0": "^0.2.51",
 		"ts-node": "^10.7.0",
 		"tslib": "^2.4.0",
 		"vite-tsconfig-paths": "^3.4.1",
 		"yup": "^0.32.11"
+	},
+	"dependencies": {
+		"@cosmicverse/foundation": "^0.0.1-rc-e"
 	}
 }

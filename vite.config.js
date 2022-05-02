@@ -35,14 +35,12 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 
 const main = process.env.npm_package_config_main
 const outDir = 'dist'
-const fileName = () => process.env.npm_package_config_module
+const fileName = format => `${process.env.npm_package_config_module}.${'es' == format ? 'mjs' : 'cjs'}`
 const name = process.env.npm_package_name
 const entry = main
-const formats = [ 'es' ]
+const formats = [ 'es', 'cjs' ]
 const external = [
-  'dotenv',
-  'yup',
-  '@cosmicverse/foundation'
+  
 ]
 const globals = {}
 
@@ -61,7 +59,11 @@ export default ({ mode }) => {
   return defineConfig({
     outDir,
     plugins: [
-      tsconfigPaths()
+      tsconfigPaths({
+        projects: [
+          'tsconfig.json'
+        ],
+      })
     ],
     build: {
       manifest,
@@ -85,3 +87,4 @@ export default ({ mode }) => {
     },
   })
 }
+ 

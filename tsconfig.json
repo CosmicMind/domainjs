@@ -1,9 +1,10 @@
 {
   "maxNodeModuleJsDepth": 5,
   "compilerOptions": {
-    "types": ["vite/client"],
+   "types": ["vite/client"],
     "target": "esnext",
     "module": "esnext",
+    "declaration": true,
     "strict": true,
     "importHelpers": true,
     "moduleResolution": "node",
@@ -21,11 +22,14 @@
     "useUnknownInCatchVariables": false,
     "preserveConstEnums": true,
     "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "removeComments": true,
     "lib": [
       "esnext"
     ],
-    "rootDir": ".",
-    "baseUrl": ".",
+    "rootDir": "./",
+    "baseUrl": "./",
+    "outDir": "./dist",
     "paths": {
       "@/*": [
         "src/*"
@@ -36,16 +40,8 @@
     }
   },
   "include": [
-    "src/**/*.json",
-    "src/**/*.ts",
-    "src/**/*.js",
-    "tests/**/*.ts"
-  ],
-  "exclude": [
-    "dist",
-    "build",
-    "node_modules",
-    "typings"
+    "./src/**/*.ts",
+    "./tests/**/*.ts"
   ],
   "typeRoots": [
     "typings",

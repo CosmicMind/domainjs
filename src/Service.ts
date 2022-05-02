@@ -85,7 +85,7 @@ export const createService = (): ServiceCreateFn<Service> =>
  * The `createServiceFor` is used to generate a new `Service`
  * instance from a given `class` constructor.
  *
- * @param {{ new (...args: any[]): TService }} _class
+ * @param {{ new (...args: unknown[]): TService }} _class
  * @returns {ServiceCreateFn<TService>}
  */
 export const createServiceFor = <TService extends Service>(_class: { new (...args: unknown[]): TService }): ServiceCreateFn<TService> =>
