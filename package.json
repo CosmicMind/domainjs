@@ -43,7 +43,8 @@
 		"dev:watch": "vite build --config vite.config.js --mode watch",
 		"prod:build": "vite build --config vite.config.js --mode production",
 		"lint:run": "eslint . --ext .ts",
-		"package:build": "vite build --config vite.config.js --mode development"
+		"package:build": "vite build --config vite.config.js --mode development",
+		"package:publish": "npm publish --access public"
 	},
 	"devDependencies": {
 		"@types/node": "^17.0.26",
