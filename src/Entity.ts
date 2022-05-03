@@ -497,4 +497,4 @@ export const mapPropertyData = (entity: Entity, props: EntityPropertyData[]): vo
  * @param {EntityType} [type = _class.name]
  * @returns {boolean}
  */
-export const validateEntityFor = (entity: Entity, _class: Optional<unknown> = Entity, type: EntityType = _class.name): boolean => entity instanceof _class && type == entity.type
+export const validateEntityFor = (entity: Entity, _class: any, type: EntityType = _class.name): boolean => entity instanceof _class && type == entity.type

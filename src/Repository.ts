@@ -41,10 +41,10 @@
  * to generate new `Repository` instances from a given
  * constructor function.
  *
- * @type {(...args: any[]) => TRepository}
+ * @type {() => TRepository}
  */
 export interface RepositoryCreateFn<TRepository extends Repository> {
-  (...args: unknown[]): TRepository
+  (): TRepository
 }
 
 /**
@@ -85,8 +85,8 @@ export const createRepository = (): RepositoryCreateFn<Repository> =>
  * The `createRepositoryFor` is used to generate a new `Repository`
  * instance from a given `class` constructor.
  *
- * @param {{ new (...args: any[]): TRepository }} _class
+ * @param {{ new (): TRepository }} _class
  * @returns {RepositoryCreateFn<TRepository>}
  */
-export const createRepositoryFor = <TRepository extends Repository>(_class: { new (...args: unknown[]): TRepository }): RepositoryCreateFn<TRepository> =>
-  (...args: unknown[]): TRepository => new _class(...args)
+export const createRepositoryFor = <TRepository extends Repository>(_class: { new (): TRepository }): RepositoryCreateFn<TRepository> =>
+  (): TRepository => new _class()

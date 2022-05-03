@@ -1,6 +1,7 @@
 {
   "maxNodeModuleJsDepth": 5,
   "compilerOptions": {
+    // "traceResolution": true,
     "types": ["vite/client"],
     "target": "esnext",
     "declaration": true,
@@ -26,12 +27,11 @@
     "lib": [
       "esnext"
     ],
-    "rootDir": "./",
-    "baseUrl": "./",
-    "outDir": "./dist",
+    "baseUrl": "./src",
+    "outDir": "dist/",
     "paths": {
       "@/*": [
-        "src/*"
+        "./*"
       ],
       "@tests/*": [
         "tests/*"
@@ -39,11 +39,11 @@
     }
   },
   "include": [
-    "./src/**/*.ts",
-    "./tests/**/*.ts"
+    "src/**/*.ts",
+    "src/**/*.js"
   ],
   "typeRoots": [
-    "typings",
+    "@types",
     "node_modules/@types"
   ]
 }

@@ -41,10 +41,10 @@
  * to generate new `Service` instances from a given
  * constructor function.
  *
- * @type {(...args: any[]) => TService}
+ * @type {() => TService}
  */
 export interface ServiceCreateFn<TService extends Service> {
-  (...args: unknown[]): TService
+  (): TService
 }
 
 /**
@@ -85,8 +85,8 @@ export const createService = (): ServiceCreateFn<Service> =>
  * The `createServiceFor` is used to generate a new `Service`
  * instance from a given `class` constructor.
  *
- * @param {{ new (...args: unknown[]): TService }} _class
+ * @param {{ new (): TService }} _class
  * @returns {ServiceCreateFn<TService>}
  */
-export const createServiceFor = <TService extends Service>(_class: { new (...args: unknown[]): TService }): ServiceCreateFn<TService> =>
-  (...args: unknown[]): TService => new _class(...args)
+export const createServiceFor = <TService extends Service>(_class: { new (): TService }): ServiceCreateFn<TService> =>
+  (): TService => new _class()

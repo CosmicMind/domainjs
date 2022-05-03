@@ -35,7 +35,7 @@
  */
 
 import {
-  Optional,
+  clone,
   Serializable,
 } from '@cosmicverse/foundation'
 
@@ -53,7 +53,7 @@ import {
  * to generate new `Aggregate` instances from a given
  * constructor function.
  *
- * @type {(...args: any[]) => TAggregate}
+ * @type {(root: Entity)) => TAggregate}
  */
 export interface AggregateCreateFn<TAggregate extends Aggregate> {
   (root: Entity): TAggregate
@@ -116,6 +116,10 @@ export class Aggregate<TEntity extends Entity = Entity> implements IAggregate {
     return this.#root.created
   }
 
+  get serialized(): Readonly<string> {
+    return clone(this.#root)
+  }
+
   /**
    * @constructor
    *
@@ -154,4 +158,4 @@ export const createAggregateFor = <TAggregate extends Aggregate>(_class: { new (
  * @param {any} [_class = Aggregate]
  * @returns {boolean}
  */
-export const validateAggregateFor = (aggregate: Aggregate, _class: Optional<unknown> = Aggregate): boolean => aggregate instanceof _class
+export const validateAggregateFor = (aggregate: Aggregate, _class: any): boolean => aggregate instanceof _class

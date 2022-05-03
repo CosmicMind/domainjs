@@ -30,6 +30,7 @@ jobs:
         continue-on-error: false
 
   build:
+    needs: eslint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -37,7 +38,7 @@ jobs:
         with:
           node-version: 16
       - run: npm ci
-      - run: npm run package:build
+      - run: npm run dev:build
       # - run: npm run test:build
       # - run: npm run test:run
 
@@ -57,7 +58,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
   publish-gpr:
-    needs: build
+    needs: publish-npm
     runs-on: ubuntu-latest
     permissions:
       packages: write

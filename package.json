@@ -1,6 +1,6 @@
 {
 	"name": "@cosmicverse/domain",
-	"version": "0.0.1-rc-b",
+	"version": "0.0.1-rc-c",
 	"description": "A Domain Driven Design framework for next generation applications in TypeScript.",
 	"keywords": [],
 	"author": {
@@ -13,19 +13,13 @@
 		"url": "https://github.com/Cosmicverse/Domain.git"
 	},
 	"type": "module",
-	"main": "./dist/org.cosmicverse.domain.cjs",
-	"module": "./dist/org.cosmicverse.domain.mjs",
-	"typings": "dist/src/index.d.ts",
+	"main": "dist/org.cosmicverse.domain.es.js",
+	"module": "dist/org.cosmicverse.domain.es.js",
+	"types": "dist/index.d.ts",
 	"config": {
 		"main": "src/index.ts",
 		"module": "org.cosmicverse.domain",
 		"tests": "org.cosmicverse.domain.tests.mjs"
-	},
-	"exports": {
-		".": {
-			"import": "./dist/org.cosmicverse.domain.mjs",
-			"require": "./dist/org.cosmicverse.domain.cjs"
-		}
 	},
 	"files": [
 		"dist",
@@ -36,8 +30,8 @@
 		"tsconfig.json"
 	],
 	"scripts": {
-		"test:build": "vite build --config vite.config.tests.js --mode development",
-		"test:watch": "vite build --config vite.config.tests.js --mode watch",
+		"test:build": "vite build --config vite.config.js --mode development",
+		"test:watch": "vite build --config vite.config.js --mode watch",
 		"test:run": "ava build/lib.tests.mjs",
 		"dev:build": "vite build --config vite.config.js --mode development",
 		"dev:watch": "vite build --config vite.config.js --mode watch",
@@ -54,13 +48,13 @@
 		"ava": "^4.2.0",
 		"dotenv": "^16.0.0",
 		"eslint": "^8.14.0",
-		"lib0": "^0.2.51",
 		"ts-node": "^10.7.0",
 		"tslib": "^2.4.0",
-		"vite-tsconfig-paths": "^3.4.1",
-		"yup": "^0.32.11"
+		"vite-plugin-dts": "^1.1.1",
+		"vite-tsconfig-paths": "^3.4.1"
 	},
 	"dependencies": {
-		"@cosmicverse/foundation": "^0.0.1-rc-x"
+		"@cosmicverse/foundation": "^0.0.1-rc-x",
+		"yup": "^0.32.11"
 	}
 }
