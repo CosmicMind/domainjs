@@ -1,6 +1,6 @@
 {
 	"name": "@cosmicverse/domain",
-	"version": "0.0.1-rc-c",
+	"version": "0.0.1-rc-d",
 	"description": "A Domain Driven Design framework for next generation applications in TypeScript.",
 	"keywords": [],
 	"author": {
@@ -54,7 +54,7 @@
 		"vite-tsconfig-paths": "^3.4.1"
 	},
 	"dependencies": {
-		"@cosmicverse/foundation": "^0.0.1-rc-x",
+		"@cosmicverse/foundation": "^0.0.1-rc-zh",
 		"yup": "^0.32.11"
 	}
 }
