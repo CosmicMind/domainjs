@@ -3,7 +3,7 @@
   "compilerOptions": {
     "types": ["vite/client"],
     "target": "esnext",
-    "module": "esnext",
+    "declaration": true,
     "strict": true,
     "importHelpers": true,
     "moduleResolution": "node",
@@ -21,14 +21,16 @@
     "useUnknownInCatchVariables": false,
     "preserveConstEnums": true,
     "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "removeComments": true,
     "lib": [
       "esnext"
     ],
-    "rootDir": ".",
-    "baseUrl": ".",
+    "baseUrl": "./src",
+    "outDir": "dist/",
     "paths": {
       "@/*": [
-        "src/*"
+        "./*"
       ],
       "@tests/*": [
         "tests/*"
@@ -36,19 +38,11 @@
     }
   },
   "include": [
-    "src/**/*.json",
     "src/**/*.ts",
-    "src/**/*.js",
-    "tests/**/*.ts"
-  ],
-  "exclude": [
-    "dist",
-    "build",
-    "node_modules",
-    "typings"
+    "src/**/*.js"
   ],
   "typeRoots": [
-    "typings",
+    "@types",
     "node_modules/@types"
   ]
 }

@@ -31,62 +31,62 @@
  */
 
 /**
- * @module Service
+ * @module Repository
  */
 
 /**
- * @template TService
+ * @template TRepository
  *
- * The `ServiceCreateFn` is a type definition that is used
- * to generate new `Service` instances from a given
+ * The `RepositoryCreateFn` is a type definition that is used
+ * to generate new `Repository` instances from a given
  * constructor function.
  *
- * @type {(...args: any[]) => TService}
+ * @type {() => TRepository}
  */
-export interface ServiceCreateFn<TService extends Service> {
-  (...args: unknown[]): TService
+export interface RepositoryCreateFn<TRepository extends Repository> {
+  (): TRepository
 }
 
 /**
- * The `IService` defines the base `Service` properties.
+ * The `IRepository` defines the base `Repository` properties.
  *
  * @property {EntityType} type
  * @property {EntityId} id
  * @property {EntityDate} created
  */
-export interface IService {
+export interface IRepository {
   get name(): Readonly<string>
 }
 
 /**
- * @implements {IService}
+ * @implements {IRepository}
  *
- * The `Service` class is the base structure used to
+ * The `Repository` class is the base structure used to
  * generate domain aggregates.
  */
-export class Service implements IService {
+export class Repository implements IRepository {
   get name(): Readonly<string> {
     return this.constructor.name
   }
 }
 
 /**
- * The `createService` is used to generate a new `Service`
+ * The `createRepository` is used to generate a new `Repository`
  * instance.
  *
- * @returns {ServiceCreateFn<Service>}
+ * @returns {RepositoryCreateFn<Repository>}
  */
-export const createService = (): ServiceCreateFn<Service> =>
-  createServiceFor(Service)
+export const createRepository = (): RepositoryCreateFn<Repository> =>
+  createRepositoryFor(Repository)
 
 /**
- * @template TService
+ * @template TRepository
  *
- * The `createServiceFor` is used to generate a new `Service`
+ * The `createRepositoryFor` is used to generate a new `Repository`
  * instance from a given `class` constructor.
  *
- * @param {{ new (...args: any[]): TService }} _class
- * @returns {ServiceCreateFn<TService>}
+ * @param {{ new (): TRepository }} _class
+ * @returns {RepositoryCreateFn<TRepository>}
  */
-export const createServiceFor = <TService extends Service>(_class: { new (...args: unknown[]): TService }): ServiceCreateFn<TService> =>
-  (...args: unknown[]): TService => new _class(...args)
+export const createRepositoryFor = <TRepository extends Repository>(_class: { new (): TRepository }): RepositoryCreateFn<TRepository> =>
+  (): TRepository => new _class()

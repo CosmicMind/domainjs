@@ -1,0 +1,75 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# ESLint is a tool for identifying and reporting on patterns
+# found in ECMAScript/JavaScript code.
+# More details at https://github.com/eslint/eslint
+# and https://eslint.org
+
+name: CI
+
+on: [push]
+
+jobs:
+  eslint:
+    name: Run eslint scanning
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install ESLint
+        run: |
+          npm install eslint@8.10.0
+          npm install @microsoft/eslint-formatter-sarif@2.1.7
+      - name: Run ESLint
+        run: npm run lint:run
+        continue-on-error: false
+
+  build:
+    needs: eslint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm ci
+      - run: npm run dev:build
+      # - run: npm run test:build
+      # - run: npm run test:run
+
+  publish-npm:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+      - run: npm run package:build
+      - run: npm run package:publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+
+  publish-gpr:
+    needs: publish-npm
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: https://npm.pkg.github.com/
+      - run: npm ci
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GH_TOKEN}}

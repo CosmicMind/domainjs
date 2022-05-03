@@ -32,15 +32,18 @@
 
 import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
+import dts from 'vite-plugin-dts'
 
 const main = process.env.npm_package_config_main
 const outDir = 'dist'
-const fileName = () => process.env.npm_package_config_module
+const fileName = format => `${process.env.npm_package_config_module}.${format}.${'es' == format ? 'js' : 'cjs'}`
 const name = process.env.npm_package_name
 const entry = main
 const formats = [ 'es' ]
 const external = [
+  'ava',
   'dotenv',
+  'eslint',
   'yup',
   '@cosmicverse/foundation'
 ]
@@ -61,7 +64,8 @@ export default ({ mode }) => {
   return defineConfig({
     outDir,
     plugins: [
-      tsconfigPaths()
+      tsconfigPaths(),
+      dts()
     ],
     build: {
       manifest,
@@ -85,3 +89,4 @@ export default ({ mode }) => {
     },
   })
 }
+ 

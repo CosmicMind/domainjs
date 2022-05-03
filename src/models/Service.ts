@@ -30,58 +30,63 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { defineConfig } from 'vite'
-import tsconfigPaths from 'vite-tsconfig-paths'
+/**
+ * @module Service
+ */
 
-const main = 'tests/index.ts'
-const outDir = 'build'
-const fileName = () => process.env.npm_package_config_tests
-const name = process.env.npm_package_name
-const entry = main
-const formats = [ 'es' ]
-const external = [
-  'ava',
-  'dotenv',
-  'yup',
-]
-const globals = {}
-
-const isWatch = mode => 'watch' === mode
-const isDev = mode => 'development' === mode || isWatch(mode)
-
-export default ({ mode }) => {
-  const manifest = false
-  const emptyOutDir = true
-  const cssCodeSplit = true
-  const sourcemap = false
-
-  const minify = isDev(mode) ? false : 'terser'
-  const watch = isWatch(mode)
-
-  return defineConfig({
-    plugins: [
-      tsconfigPaths()
-    ],
-    build: {
-      outDir,
-      manifest,
-      emptyOutDir,
-      cssCodeSplit,
-      sourcemap,
-      lib: {
-        name,
-        entry,
-        formats,
-        fileName,
-      },
-      rollupOptions: {
-        external,
-        output: {
-          globals,
-        },
-      },
-      minify,
-      watch,
-    },
-  })
+/**
+ * @template TService
+ *
+ * The `ServiceCreateFn` is a type definition that is used
+ * to generate new `Service` instances from a given
+ * constructor function.
+ *
+ * @type {() => TService}
+ */
+export interface ServiceCreateFn<TService extends Service> {
+  (): TService
 }
+
+/**
+ * The `IService` defines the base `Service` properties.
+ *
+ * @property {EntityType} type
+ * @property {EntityId} id
+ * @property {EntityDate} created
+ */
+export interface IService {
+  get name(): Readonly<string>
+}
+
+/**
+ * @implements {IService}
+ *
+ * The `Service` class is the base structure used to
+ * generate domain aggregates.
+ */
+export class Service implements IService {
+  get name(): Readonly<string> {
+    return this.constructor.name
+  }
+}
+
+/**
+ * The `createService` is used to generate a new `Service`
+ * instance.
+ *
+ * @returns {ServiceCreateFn<Service>}
+ */
+export const createService = (): ServiceCreateFn<Service> =>
+  createServiceFor(Service)
+
+/**
+ * @template TService
+ *
+ * The `createServiceFor` is used to generate a new `Service`
+ * instance from a given `class` constructor.
+ *
+ * @param {{ new (): TService }} _class
+ * @returns {ServiceCreateFn<TService>}
+ */
+export const createServiceFor = <TService extends Service>(_class: { new (): TService }): ServiceCreateFn<TService> =>
+  (): TService => new _class()
