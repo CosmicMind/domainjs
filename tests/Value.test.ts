@@ -43,7 +43,7 @@ import {
   validateValueFor,
   createValue,
   createValueFor,
-} from '@/Value'
+} from '@/models/Value'
 
 class ValueObject extends Value {}
 

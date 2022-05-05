@@ -66,9 +66,7 @@ export type ValuePropertyValue = string | number | boolean | Date | Record<strin
  * given constructor function.
  * @type {(value: TValueProperty) => TValue}
  */
-export interface ValueCreateFn<TValue extends Value, TValueProperty extends ValuePropertyValue = ValuePropertyValue> {
-  (value: TValueProperty): TValue
-}
+export type ValueCreateFn<TValue extends Value, TValueProperty extends ValuePropertyValue = ValuePropertyValue> = (value: TValueProperty) => TValue
 
 /**
  * @extends {ProxyValidator}
@@ -192,7 +190,7 @@ export const createValueFor = <TValue extends Value, TValueProperty extends Valu
  * The `validateValueFor` is ued to validate a given `Value`.
  *
  * @param {Value} value
- * @param {any} [_class = Value]
+ * @param {Optional<unknown>} [_class = Value]
  * @param {ValueType} [type = _class.name]
  * @returns {boolean}
  */

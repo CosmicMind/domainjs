@@ -43,9 +43,7 @@
  *
  * @type {() => TService}
  */
-export interface ServiceCreateFn<TService extends Service> {
-  (): TService
-}
+export type ServiceCreateFn<TService extends Service> = () => TService
 
 /**
  * The `IService` defines the base `Service` properties.

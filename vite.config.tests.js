@@ -30,58 +30,60 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export type {
-  IValue,
-  ValueType,
-  ValuePropertyValue,
-  validateValueFor,
-} from '@/models/Value'
+import { defineConfig } from 'vite'
+import tsconfigPaths from 'vite-tsconfig-paths'
 
-export {
-  Value,
-  createValue,
-  createValueFor,
-} from '@/models/Value'
+const main = 'tests/index.ts'
+const outDir = process.env.npm_out_dir
+const fileName = format => `lib.${format}.tests.mjs`
+const name = process.env.npm_package_name
+const entry = main
+const formats = [ 'es' ]
+const external = [
+  'ava',
+  'dotenv',
+  'eslint',
+  'lib0',
+  'yup'
+]
+const globals = {}
 
-export type {
-  IEntity,
-  EntityType,
-  EntityId,
-  EntityDate,
-  EntityPropertyValue,
-} from '@/models/Entity'
+const isWatch = mode => 'watch' === mode
+const isDev = mode => 'development' === mode || isWatch(mode)
 
-export {
-  Entity,
-  createEntity,
-  createEntityFor,
-  validateEntityFor,
-} from '@/models/Entity'
+export default ({ mode }) => {
+  const manifest = false
+  const emptyOutDir = false
+  const cssCodeSplit = true
+  const sourcemap = false
 
-export type { IAggregate } from '@/models/Aggregate'
+  const minify = isDev(mode) ? false : 'terser'
+  const watch = isWatch(mode)
 
-export {
-  Aggregate,
-  createAggregate,
-  createAggregateFor,
-  validateAggregateFor,
-} from '@/models/Aggregate'
-
-export type { ICommand } from '@/models/Command'
-export { Command } from '@/models/Command'
-
-export type { IRepository } from '@/models/Repository'
-
-export {
-  Repository,
-  createRepository,
-  createRepositoryFor,
-} from '@/models/Repository'
-
-export type { IService } from '@/models/Service'
-
-export {
-  Service,
-  createService,
-  createServiceFor,
-} from '@/models/Service'
+  return defineConfig({
+    outDir,
+    plugins: [
+      tsconfigPaths()
+    ],
+    build: {
+      manifest,
+      emptyOutDir,
+      cssCodeSplit,
+      sourcemap,
+      lib: {
+        name,
+        entry,
+        formats,
+        fileName,
+      },
+      rollupOptions: {
+        external,
+        output: {
+          globals,
+        },
+      },
+      minify,
+      watch,
+    },
+  })
+}

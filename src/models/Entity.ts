@@ -40,10 +40,10 @@ import {
 } from 'yup'
 
 import {
-  Serializable,
-  Optional,
   parse,
   stringify,
+  Serializable,
+  Optional,
   ProxySchema,
   ProxyImmutable,
   ProxyMutable,
@@ -199,9 +199,7 @@ export type EntityProps = Id<EntityId> & Created<EntityDate> & { [key: string]: 
  *
  * @type {(props: TEntityProps) => TEntity}
  */
-export interface EntityCreateFn<TEntity extends Entity, TEntityProps extends EntityProps = EntityProps> {
-  (props: TEntityProps): TEntity
-}
+export type EntityCreateFn<TEntity extends Entity, TEntityProps extends EntityProps = EntityProps> = (props: TEntityProps) => TEntity
 
 /**
  * The `EntityData` is used to recreate the instance after
@@ -479,7 +477,6 @@ export const mapPropertyData = (entity: Entity, props: EntityPropertyData[]): vo
   for (const prop of props) {
     const { key, value, meta } = prop
     if (key && meta && 'undefined' !== typeof value) {
-
       entity[key] = meta.boolean ? Boolean(value) :
         meta.number ? Number(value) :
           meta.object ? parse(String(value)) :
@@ -493,8 +490,8 @@ export const mapPropertyData = (entity: Entity, props: EntityPropertyData[]): vo
  * The `validateEntity` is ued to validate a given `Entity`.
  *
  * @param {Entity} entity
- * @param {any} [_class = Entity]
+ * @param {Optional<unknown>} [_class = Entity]
  * @param {EntityType} [type = _class.name]
  * @returns {boolean}
  */
-export const validateEntityFor = (entity: Entity, _class: any, type: EntityType = _class.name): boolean => entity instanceof _class && type == entity.type
+export const validateEntityFor = (entity: Entity, _class: Optional<unknown> = Entity, type: EntityType = _class.name): boolean => entity instanceof _class && type == entity.type

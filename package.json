@@ -13,14 +13,9 @@
 		"url": "https://github.com/Cosmicverse/Domain.git"
 	},
 	"type": "module",
-	"main": "dist/org.cosmicverse.domain.es.js",
-	"module": "dist/org.cosmicverse.domain.es.js",
+	"main": "dist/lib.es.js",
+	"module": "dist/lib.es.js",
 	"types": "dist/index.d.ts",
-	"config": {
-		"main": "src/index.ts",
-		"module": "org.cosmicverse.domain",
-		"tests": "org.cosmicverse.domain.tests.mjs"
-	},
 	"files": [
 		"dist",
 		"LICENSE",
@@ -30,15 +25,16 @@
 		"tsconfig.json"
 	],
 	"scripts": {
-		"test:build": "vite build --config vite.config.js --mode development",
-		"test:watch": "vite build --config vite.config.js --mode watch",
-		"test:run": "ava build/lib.tests.mjs",
+		"lint:run": "eslint . --ext .ts",
+		"test:build": "vite build --config vite.config.tests.js --mode development",
+		"test:watch": "vite build --config vite.config.tests.js --mode watch",
+		"test:run": "ava dist/lib.es.tests.mjs",
 		"dev:build": "vite build --config vite.config.js --mode development",
 		"dev:watch": "vite build --config vite.config.js --mode watch",
-		"prod:build": "vite build --config vite.config.js --mode production",
-		"lint:run": "eslint . --ext .ts",
 		"package:build": "vite build --config vite.config.js --mode development",
-		"package:publish": "npm publish --access public"
+		"package:watch": "vite build --config vite.config.js --mode watch",
+		"package:publish": "npm publish --access public",
+		"prod:build": "vite build --config vite.config.js --mode production"
 	},
 	"devDependencies": {
 		"@types/node": "^17.0.31",

@@ -34,13 +34,13 @@ import test from 'ava'
 
 import { uuidv4 } from '@cosmicverse/foundation'
 
-import { createEntityFor } from '@/Entity'
+import { createEntityFor } from '@/models/Entity'
 
 import {
   Aggregate,
   createAggregateFor,
   validateAggregateFor,
-} from '@/Aggregate'
+} from '@/models/Aggregate'
 
 import { EntityObject } from '@tests/Entity.test'
 
