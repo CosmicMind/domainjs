@@ -30,58 +30,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export type {
-  IValue,
-  ValueType,
-  ValuePropertyValue,
-  validateValueFor,
-} from '@/models/Value'
+/**
+ * @module User
+ */
 
-export {
-  Value,
-  createValue,
-  createValueFor,
-} from '@/models/Value'
-
-export type {
-  IEntity,
-  EntityType,
-  EntityId,
-  EntityDate,
-  EntityPropertyValue,
-} from '@/models/Entity'
-
-export {
+import {
   Entity,
-  createEntity,
   createEntityFor,
-  validateEntityFor,
 } from '@/models/Entity'
 
-export type { IAggregate } from '@/models/Aggregate'
+export class User extends Entity {}
 
-export {
-  Aggregate,
-  createAggregate,
-  createAggregateFor,
-  validateAggregateFor,
-} from '@/models/Aggregate'
-
-export type { ICommand } from '@/models/Command'
-export { Command } from '@/models/Command'
-
-export type { IRepository } from '@/models/Repository'
-
-export {
-  Repository,
-  createRepository,
-  createRepositoryFor,
-} from '@/models/Repository'
-
-export type { IService } from '@/models/Service'
-
-export {
-  Service,
-  createService,
-  createServiceFor,
-} from '@/models/Service'
+export const createUser = createEntityFor(User, {
+  
+})

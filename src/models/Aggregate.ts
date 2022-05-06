@@ -37,6 +37,7 @@
 import {
   clone,
   Serializable,
+  Optional,
 } from '@cosmicverse/foundation'
 
 import {
@@ -55,9 +56,7 @@ import {
  *
  * @type {(root: Entity)) => TAggregate}
  */
-export interface AggregateCreateFn<TAggregate extends Aggregate> {
-  (root: Entity): TAggregate
-}
+export type AggregateCreateFn<TAggregate extends Aggregate> = (root: Entity) => TAggregate
 
 /**
  * The `IAggregate` defines the base `Aggregate` properties.
@@ -81,6 +80,7 @@ export interface IAggregate extends Serializable {
  */
 export class Aggregate<TEntity extends Entity = Entity> implements IAggregate {
   /**
+   * @template TEntity
    * @private
    *
    * A reference to the root `Entity` instance.
@@ -158,4 +158,4 @@ export const createAggregateFor = <TAggregate extends Aggregate>(_class: { new (
  * @param {any} [_class = Aggregate]
  * @returns {boolean}
  */
-export const validateAggregateFor = (aggregate: Aggregate, _class: any): boolean => aggregate instanceof _class
+export const validateAggregateFor = (aggregate: Aggregate, _class: Optional<unknown>): boolean => aggregate instanceof _class

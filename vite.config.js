@@ -34,9 +34,9 @@ import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import dts from 'vite-plugin-dts'
 
-const main = process.env.npm_package_config_main
-const outDir = 'dist'
-const fileName = format => `${process.env.npm_package_config_module}.${format}.${'es' == format ? 'js' : 'cjs'}`
+const main = 'src/index.ts'
+const outDir = process.env.npm_out_dir
+const fileName = format => `lib.${format}.js`
 const name = process.env.npm_package_name
 const entry = main
 const formats = [ 'es' ]
@@ -89,4 +89,3 @@ export default ({ mode }) => {
     },
   })
 }
- 

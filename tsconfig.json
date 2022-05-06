@@ -26,11 +26,15 @@
     "lib": [
       "esnext"
     ],
-    "baseUrl": "./src",
-    "outDir": "dist/",
+    "rootDirs": [
+      "src",
+      "tests"
+    ],
+    "baseUrl": ".",
+    "outDir": "dist",
     "paths": {
       "@/*": [
-        "./*"
+        "src/*"
       ],
       "@tests/*": [
         "tests/*"
@@ -39,7 +43,7 @@
   },
   "include": [
     "src/**/*.ts",
-    "src/**/*.js"
+    "tests/**/*.ts"
   ],
   "typeRoots": [
     "@types",

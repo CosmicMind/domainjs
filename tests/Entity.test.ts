@@ -50,7 +50,7 @@ import {
   createEntity,
   createEntityFor,
   EntityPropertyError,
-} from '@/Entity'
+} from '@/models/Entity'
 
 export class EntityObject extends Entity {}
 

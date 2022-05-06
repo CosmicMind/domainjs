@@ -43,9 +43,7 @@
  *
  * @type {() => TRepository}
  */
-export interface RepositoryCreateFn<TRepository extends Repository> {
-  (): TRepository
-}
+export type RepositoryCreateFn<TRepository extends Repository> = () => TRepository
 
 /**
  * The `IRepository` defines the base `Repository` properties.
