@@ -66,9 +66,9 @@ export type AggregateCreateFn<TAggregate extends Aggregate> = (root: Entity) => 
  * @property {EntityDate} created
  */
 export interface IAggregate extends Serializable {
-  get type(): Readonly<EntityType>
-  get id(): Readonly<EntityId>
-  get created(): Readonly<EntityDate>
+  get type(): EntityType
+  get id(): EntityId
+  get created(): EntityDate
 }
 
 /**
@@ -94,7 +94,7 @@ export class Aggregate<TEntity extends Entity = Entity> implements IAggregate {
    *
    * @type {EntityType}
    */
-  get type(): Readonly<EntityType> {
+  get type(): EntityType {
     return this.#root.type
   }
 
@@ -103,7 +103,7 @@ export class Aggregate<TEntity extends Entity = Entity> implements IAggregate {
    *
    * @type {EntityType}
    */
-  get id(): Readonly<EntityId> {
+  get id(): EntityId {
     return this.#root.id
   }
 
@@ -112,11 +112,11 @@ export class Aggregate<TEntity extends Entity = Entity> implements IAggregate {
    *
    * @type {EntityType}
    */
-  get created(): Readonly<EntityDate> {
+  get created(): EntityDate {
     return this.#root.created
   }
 
-  get serialized(): Readonly<string> {
+  get serialized(): string {
     return clone(this.#root)
   }
 
@@ -155,7 +155,7 @@ export const createAggregateFor = <TAggregate extends Aggregate>(_class: { new (
  * The `validateAggregateFor` is ued to validate a given `Aggregate`.
  *
  * @param {Aggregate} aggregate
- * @param {any} [_class = Aggregate]
+ * @param {Optional<unknown>} [_class = Aggregate]
  * @returns {boolean}
  */
-export const validateAggregateFor = (aggregate: Aggregate, _class: Optional<unknown>): boolean => aggregate instanceof _class
+export const validateAggregateFor = (aggregate: Aggregate, _class: Optional<unknown> = Aggregate): boolean => aggregate instanceof _class

@@ -53,7 +53,7 @@ export type ServiceCreateFn<TService extends Service> = () => TService
  * @property {EntityDate} created
  */
 export interface IService {
-  get name(): Readonly<string>
+  get name(): string
 }
 
 /**
@@ -63,7 +63,7 @@ export interface IService {
  * generate domain aggregates.
  */
 export class Service implements IService {
-  get name(): Readonly<string> {
+  get name(): string {
     return this.constructor.name
   }
 }

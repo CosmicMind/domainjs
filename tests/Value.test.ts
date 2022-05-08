@@ -88,7 +88,7 @@ test('Value: validation', async t => {
 test('Value: virtual string', async t => {
   const type = 'Value'
   const createVO = createValue(type, string().defined().strict(true), {
-    get fullName(): Readonly<string> {
+    get fullName(): string {
       const value = this.value
       const result = value.charAt(0).toUpperCase() + value.slice(1);
       return `${result} Jonathan`

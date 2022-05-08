@@ -223,7 +223,7 @@ test('Entity: delete ProxyVirtualError',async t => {
   const type = 'Entity'
   const createEntityObject = createEntity(type, {
     virtual: {
-      get fullName(): Readonly<string> {
+      get fullName(): string {
         return 'Daniel Jonathan'
       },
     },
@@ -305,7 +305,7 @@ test('Entity: virtual string',async t => {
       name: string().defined().strict(true),
     },
     virtual: {
-      get fullName(): Readonly<string> {
+      get fullName(): string {
         const name = this.name
         const result = name.charAt(0).toUpperCase() + name.slice(1);
         return `${result} Jonathan`
@@ -333,7 +333,7 @@ test('Entity: update ProxyVirtualError',async t => {
       name: string().defined().strict(true),
     },
     virtual: {
-      get fullName(): Readonly<string> {
+      get fullName(): string {
         const name = this.name
         const result = name.charAt(0).toUpperCase() + name.slice(1);
         return `${result} Jonathan`
@@ -366,7 +366,7 @@ test('Entity: serialized',async t => {
       name: string().defined().strict(true),
     },
     virtual: {
-      get fullName(): Readonly<string> {
+      get fullName(): string {
         const name = this.name
         const result = name.charAt(0).toUpperCase() + name.slice(1);
         return `${result} Jonathan`

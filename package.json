@@ -50,7 +50,7 @@
 		"vite-tsconfig-paths": "^3.4.1"
 	},
 	"dependencies": {
-		"@cosmicverse/foundation": "^0.0.1-rc-zl",
+		"@cosmicverse/foundation": "^0.0.1-rc-zn",
 		"yup": "^0.32.11"
 	}
 }

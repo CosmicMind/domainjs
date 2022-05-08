@@ -35,11 +35,11 @@
  */
 
 export interface IEvent {
-  get name(): Readonly<string>
+  get name(): string
 }
 
 export abstract class Event implements IEvent {
-  get name(): Readonly<string> {
+  get name(): string {
     return this.constructor.name
   }
 }

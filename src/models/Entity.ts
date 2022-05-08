@@ -34,9 +34,9 @@
  * @module Entity
  */
 
-import { 
+import {
   date,
-  string, 
+  string,
 } from 'yup'
 
 import {
@@ -71,18 +71,18 @@ export class EntityPropertyError extends FoundationError {
   /**
    * Fetches the `name` value for the class.
    *
-   * @type {Readonly<string>}
+   * @type {string}
    */
-  get name(): Readonly<string> {
+  get name(): string {
     return super.name
   }
 
   /**
    * Fetches the `message` value for the class.
    *
-   * @type {Readonly<string>}
+   * @type {string}
    */
-  get message(): Readonly<string> {
+  get message(): string {
     return super.message
   }
 
@@ -244,13 +244,11 @@ export interface EntityProxySchema extends ProxySchema {
  * @property {EntityType} type
  * @property {EntityId} id
  * @property {EntityDate} created
- * @property {EntityPropertyValue} [key: string]
  */
 export interface IEntity {
   type: EntityType
   id: EntityId
   created: EntityDate
-  [key: string]: EntityPropertyValue
 }
 
 /**
@@ -293,7 +291,7 @@ export class Entity implements IEntity, Serializable {
    *
    * @returns {string}
    */
-  get serialized(): Readonly<string> {
+  get serialized(): string {
     return stringify(createEntityDataFor(this))
   }
 
@@ -409,7 +407,7 @@ export const createEntityDataFor = (entity: Entity): EntityData => ({
  * is in the `EntityDataKeys` value. This is used to avoid
  * treating `key/value` pairs as `EntityDataKeys`.
  *
- * @param {any} key
+ * @param {Optional<string>} key
  * @returns {boolean}
  */
 export const isEntityProperty = (key: Optional<string>): boolean => EntityDataKeys.includes(key)
@@ -462,7 +460,7 @@ export const generateEntityPropertyDataFor = (entity: Entity, fn: typeof isEntit
 
     result.push({ key, value, meta })
   }
-  
+
   return result
 }
 

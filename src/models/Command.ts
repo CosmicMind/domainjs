@@ -35,11 +35,11 @@
  */
 
 export interface ICommand {
-  get name(): Readonly<string>
+  get name(): string
 }
 
 export abstract class Command implements ICommand {
-  get name(): Readonly<string> {
+  get name(): string {
     return this.constructor.name
   }
 }

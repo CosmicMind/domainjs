@@ -53,7 +53,7 @@ export type RepositoryCreateFn<TRepository extends Repository> = () => TReposito
  * @property {EntityDate} created
  */
 export interface IRepository {
-  get name(): Readonly<string>
+  get name(): string
 }
 
 /**
@@ -63,7 +63,7 @@ export interface IRepository {
  * generate domain aggregates.
  */
 export class Repository implements IRepository {
-  get name(): Readonly<string> {
+  get name(): string {
     return this.constructor.name
   }
 }
