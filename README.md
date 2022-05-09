@@ -101,9 +101,9 @@ import {
    createValueFor,
 } from '@cosmicverse/domain'
 
-class Email extends Value {}
+export class Email extends Value {}
 
-const createEmailVO = createValueFor(Email, string().email())
+export const createEmailVO = createValueFor(Email, string().email())
 ```
 
 In our example, we will receive the email data through a network request to our API or service. At this point it would be a great place to create our EmailVO instance. As you learn to use *Domain*, it will be clear how and when to create VOs. For now, this is the best place to further our example.
