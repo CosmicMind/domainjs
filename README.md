@@ -2,7 +2,7 @@
 
 Welcome to Domain, a framework for building applications with Domain-driven design in TypeScript.
 
-## What is DDD?
+## What is Domain-driven design?
 
 Accoring to [Wikipedia](https://en.wikipedia.org/wiki/Domain-driven_design), "Domain-driven design, or DDD as its acronym, is as software design approach focusing on modelling software to match a domain according to input from that domain's experts."
 
