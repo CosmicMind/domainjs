@@ -4,32 +4,32 @@ Welcome to Domain, a framework for building applications with Domain-driven desi
 
 ## What is Domain-driven design?
 
-Accoring to [Wikipedia](https://en.wikipedia.org/wiki/Domain-driven_design), "Domain-driven design, or DDD as its acronym, is as software design approach focusing on modelling software to match a domain according to input from that domain's experts."
+According to [Wikipedia](https://en.wikipedia.org/wiki/Domain-driven_design), "Domain-driven design, or DDD as its acronym, is as software design approach focusing on modelling software to match a domain according to input from that domain's experts."
 
 - What does this DDD description really mean? 
 - Is the software design approach the right one for my project?
 - How quickly can I already be improving my project with DDD's concepts?
 - The list goes on...
 
-These are all really good questions, and the list goes on and on. Let's answer the first 3 questions, and if you have any more, feel free to ask. You may find that you can answer them yourself once you understand the tools available in the *Domain framework* and DDD patterns themselves.
+These are all great questions, and the list goes on and on. Let's answer the first 3 questions, and if you have anymore, feel free to ask. You may find that you can answer them yourself once you understand the tools available in the *Domain framework* and DDD patterns themselves.
 
 ### WHat is DDD really? 
 
-Domain-driven design is a set of patterns to follow in order to solve problems. At the core of the solution's design, there is an emphasasis on the business and technical teams being aligned through clear communication and understandings of what a solution actually is.
+Domain-driven design is a set of patterns to follow in order to solve problems. At the core of the solution's design, there is an emphasis on the business and technical teams being aligned through clear communication and understandings of what a solution actually is.
 
 ### Is DDD right for my project? 
 
-Ultimately, this is a decision each project's team will need to make. By using Domain, even if a project doesn't fully adhere to Domain-driven designs's concepts, the tooling and features will help to organize, build, validate, and ultimately design great software. 
+Ultimately, this is a decision each project's team will need to make. By using Domain, even if a project doesn't fully adhere to Domain-driven design's concepts, the tooling and features will help to organize, build, validate, and ultimately design great software. 
 
 ### How quickly can I already be improving my project with DDD's concepts? 
 
-For this question, let's write some code. First, let's set the stage with our problem. You have incoming data that is going to be validated before used. You don't necessaryily know where this data is coming from, but it will be passed to your function for processing of some sort, for example: 
+For this question, let's write some code. First, let's set the stage with our problem. You have incoming data that is going to be validated before used. You don't necessarily know where this data is coming from, but it will be passed to your function for processing of some sort, for example: 
 
 1. adding entries into your database
 2. authenticating a user
 3. fetching resources from an external service
 
-All three of these examples are typical, and the list can esily be expanded. The basic issue is to validate incoming data and process it. In a typical project, this scenario can easily create code that looks like this: 
+All three of these examples are typical, and the list can easily be expanded. The basic issue is to validate incoming data and process it. In a typical project, this scenario can easily create code that looks like this: 
 
 ```typescript
 function login(email: string, password: string, date: Date): Promise<User> {
@@ -57,7 +57,7 @@ function login(email: string, password: string, date: Date): Promise<User> {
 }
 ```
 
-What would be the best scenario here? It could be said that the best scenario is one where the values passed into the *login* function are already validated, and the tools to validate that data is always within scope of the data itself, so the value couldn't exist if it wasn't validated.
+What would be the best scenario here? It could be said that the best scenario is one where the values passed into the *login* function are already validated, and the tools to validate that data is always within scope of the data itself, so the value couldn't exist if it was not validated.
 
 What would my code look like if it was self validating and could only exist if validated?
 
@@ -69,11 +69,11 @@ function login(email: EmailVO, password: PasswordVO, date: DateVO): Promise<User
 }
 ```
 
-What is a *VO*? VO stands for **Value Object** and characteristically implies that a value itself can only exist if valid, and the object itself knows how to validate it's own data. Let's create our first *Value Object*, or *VO*. 
+What is a *VO*? VO stands for **Value Object** and characteristically implies that a value itself can only exist if valid, and the object itself knows how to validate its own data. Let's create our first *Value Object*, or *VO*. 
 
-Let it be said, solving these kinds of problems, and much more challenging ones are at your finger tips with **Domain**.
+Let it be said, solving these kinds of problems, and much more challenging ones are at your fingertips with **Domain**.
 
-## Instaling Domain
+## Installing Domain
 
 ###### NPM
 
