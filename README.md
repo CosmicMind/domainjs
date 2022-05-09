@@ -6,22 +6,22 @@ Welcome to Domain, a framework for building applications with Domain-driven desi
 
 According to [Wikipedia](https://en.wikipedia.org/wiki/Domain-driven_design), "Domain-driven design, or DDD as its acronym, is as software design approach focusing on modelling software to match a domain according to input from that domain's experts."
 
-- What does this DDD description really mean? 
+- What does this Domain-driven design description really mean? 
 - Is the software design approach the right one for my project?
-- How quickly can I already be improving my project with DDD's concepts?
+- How quickly can I already be improving my project with Domain-driven design's concepts?
 - The list goes on...
 
 These are all great questions, and the list goes on and on. Let's answer the first 3 questions, and if you have anymore, feel free to ask. You may find that you can answer them yourself once you understand the tools available in the *Domain framework* and DDD patterns themselves.
 
-### WHat is DDD really? 
+### What is Domain-driven design really? 
 
 Domain-driven design is a set of patterns to follow in order to solve problems. At the core of the solution's design, there is an emphasis on the business and technical teams being aligned through clear communication and understandings of what a solution actually is.
 
-### Is DDD right for my project? 
+### Is Domain-driven design right for my project? 
 
 Ultimately, this is a decision each project's team will need to make. By using Domain, even if a project doesn't fully adhere to Domain-driven design's concepts, the tooling and features will help to organize, build, validate, and ultimately design great software. 
 
-### How quickly can I already be improving my project with DDD's concepts? 
+### How quickly can I already be improving my project with Domain-driven design's concepts? 
 
 For this question, let's write some code. First, let's set the stage with our problem. You have incoming data that is going to be validated before used. You don't necessarily know where this data is coming from, but it will be passed to your function for processing of some sort, for example: 
 
