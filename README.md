@@ -75,10 +75,16 @@ Let it be said, solving these kinds of problems, and much more challenging ones 
 
 ## Installing Domain
 
-###### NPM
+###### Install from the command line:
 
 ```zsh
-npm install @cosmicverse/domain yup
+$ npm install @cosmicverse/domain yup
+```
+
+###### Install via package.json:
+
+```json
+"@cosmicverse/domain": "0.0.1-rc-j"
 ```
 
 In order to validate our data, we will use [YUP](https://github.com/jquense/yup). Please read the documentation for YUP in order to discover how dynamic your validation strategy can be. By reading through this repo and the sample projects that are shared, you will begin to get a grasp for YUP regardless. 
