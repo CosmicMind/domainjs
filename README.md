@@ -126,7 +126,7 @@ function handler(request) {
 
 ... more to come
 
-The above code snippet is purely for demonstration purposes. A real life world example to follow... 
+The above code snippet is purely for demonstration purposes. A real world example to follow... 
 
 
 ## License
