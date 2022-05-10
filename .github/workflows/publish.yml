@@ -7,7 +7,6 @@ on:
 
 jobs:
   publish-npm:
-    key: ${{ runner.os }}-mycache-${{ secrets.CACHE_VERSION }}-${{ hashFiles(...) }}
     runs-on: ubuntu-latest
     steps:
       - uses: ./.github/workflows/run-lint
