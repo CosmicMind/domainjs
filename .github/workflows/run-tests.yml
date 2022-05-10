@@ -14,7 +14,9 @@ jobs:
         with:
           node-version: 16
       - name: Install Packages
-        run: npm ci
+        run: npm i
+      - name: Install @cosmicverse/foundation
+        run: npm i @cosmicverse/foundation
       - name: Build tests
         run: npm run tests:build
       - name: Run tests
