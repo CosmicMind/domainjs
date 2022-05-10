@@ -13,8 +13,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'npm'
+          cache: false
       - name: Install Packages
         run: npm i
       - name: Build library
         run: npm run dev:build
+        continue-on-error: false
