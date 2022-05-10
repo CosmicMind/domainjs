@@ -12,10 +12,8 @@ jobs:
           fetch-depth: 0
       - name: Install ESLint
         run: |
-          npm install eslint@8.10.0
-          npm install @microsoft/eslint-formatter-sarif@2.1.7
-      - name: Lint Code Base
-        uses: github/super-linter@v4
+          npm i eslint
+          npm i @microsoft/eslint-formatter-sarif
       - name: Run ESLint
         run: npm run lint:run
         continue-on-error: false

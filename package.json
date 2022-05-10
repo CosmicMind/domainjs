@@ -37,13 +37,14 @@
 		"prod:build": "vite build --config vite.config.js --mode production"
 	},
 	"devDependencies": {
+		"@microsoft/eslint-formatter-sarif": "^3.0.0",
 		"@types/node": "^17.0.31",
-		"@typescript-eslint/eslint-plugin": "^5.22.0",
-		"@typescript-eslint/parser": "^5.22.0",
+		"@types/yup": "^0.29.13",
+		"@typescript-eslint/eslint-plugin": "^5.23.0",
+		"@typescript-eslint/parser": "^5.23.0",
 		"@vue/eslint-config-typescript": "^10.0.0",
 		"ava": "^4.2.0",
-		"dotenv": "^16.0.0",
-		"eslint": "^8.14.0",
+		"eslint": "^8.15.0",
 		"ts-node": "^10.7.0",
 		"tslib": "^2.4.0",
 		"vite-plugin-dts": "^1.1.1",
@@ -51,6 +52,7 @@
 	},
 	"dependencies": {
 		"@cosmicverse/foundation": "^0.0.1-rc-zn",
+		"dotenv": "^16.0.0",
 		"yup": "^0.32.11"
 	}
 }

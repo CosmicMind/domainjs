@@ -12,7 +12,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: npm ci
+      - run: npm i
       - run: npm run dev:build
       - run: npm run test:build
       - run: npm run test:run
