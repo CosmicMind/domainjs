@@ -1,0 +1,21 @@
+name: ESLint
+
+on: [push, pull_request]
+    
+jobs:
+  run-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Install ESLint
+        run: |
+          npm install eslint@8.10.0
+          npm install @microsoft/eslint-formatter-sarif@2.1.7
+      - name: Lint Code Base
+        uses: github/super-linter@v4
+      - name: Run ESLint
+        run: npm run lint:run
+        continue-on-error: false
