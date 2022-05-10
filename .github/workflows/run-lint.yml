@@ -1,9 +1,10 @@
-name: ESLint
+name: Run Lint
 
 on: [push]
     
 jobs:
   run-lint:
+    name: 'run-lint'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

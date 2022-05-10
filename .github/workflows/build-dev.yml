@@ -1,10 +1,10 @@
-name: Test Run
+name: Build Dev
 
 on: [push]
 
 jobs:
-  test-run:
-    name: 'test-run'
+  build-dev:
+    name: 'build-dev'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -15,8 +15,5 @@ jobs:
           node-version: 16
       - name: Install Packages
         run: npm i
-      - name: Build tests
-        run: npm run test:build
-      - name: Run tests
-        run: npm run test:run
-        continue-on-error: false
+      - name: Build library
+        run: npm run dev:build
