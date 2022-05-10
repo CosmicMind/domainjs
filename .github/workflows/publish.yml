@@ -9,11 +9,11 @@ jobs:
   publish-npm:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
       - uses: ./.github/workflows/run-lint
       - uses: ./.github/workflows/build-dev
       - uses: ./.github/workflows/run-tests
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
@@ -31,11 +31,11 @@ jobs:
       packages: write
       contents: read
     steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
       - uses: ./.github/workflows/run-lint
       - uses: ./.github/workflows/build-dev
       - uses: ./.github/workflows/run-tests
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
         with:
           node-version: 16
           registry-url: https://npm.pkg.github.com/
