@@ -31,7 +31,7 @@
  */
 
 export interface Id<TId extends string | number> {
-  id: TId
+  id: TId 
 }
 
 export interface Key<TKey extends string | symbol | number> {

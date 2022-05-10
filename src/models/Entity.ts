@@ -340,7 +340,9 @@ export const EntitySerializedValidator = string().min(1).typeError(EntitySeriali
  */
 export const createEntity = (type: EntityType, schema: Partial<EntityProxySchema> = {}): EntityCreateFn<Entity> =>
   (props: EntityProps): Entity => {
-    if ('undefined' !== typeof props.type) throw new EntityPropertyError('property (type) cannot be redefined')
+    if ('undefined' !== typeof props.type) {
+      throw new EntityPropertyError('property (type) cannot be redefined')
+    }
 
     const { immutable, mutable, virtual } = schema
 
@@ -371,7 +373,9 @@ export const createEntity = (type: EntityType, schema: Partial<EntityProxySchema
  */
 export const createEntityFor = <TEntity extends Entity, TEntityProps extends EntityProps = EntityProps>(_class: { new (type: EntityType, props: TEntityProps): TEntity }, schema: Partial<EntityProxySchema> = {}): EntityCreateFn<TEntity, TEntityProps> =>
   (props: TEntityProps): TEntity => {
-    if ('undefined' !== typeof props.type) throw new EntityPropertyError('property (type) cannot be redefined')
+    if ('undefined' !== typeof props.type) {
+      throw new EntityPropertyError('property (type) cannot be redefined')
+    }
 
     const { immutable, mutable, virtual } = schema
 
@@ -425,7 +429,9 @@ export const generateEntityPropertyDataFor = (entity: Entity, fn: typeof isEntit
   const result: EntityPropertyData[] = []
 
   for (const [ key, v ] of Object.entries(entity)) {
-    if (fn(key) || 'undefined' === typeof v) continue
+    if (fn(key) || 'undefined' === typeof v) {
+      continue
+    }
 
     const meta: Partial<EntityPropertyMeta> = {}
     let value: EntityPropertyDataValue

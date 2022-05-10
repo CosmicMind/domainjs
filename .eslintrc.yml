@@ -7,7 +7,7 @@ extends:
   - 'plugin:@typescript-eslint/eslint-recommended'
   - 'plugin:@typescript-eslint/recommended'
 rules:
-  no-console: 1
+  no-console: 2
   '@typescript-eslint/no-inferrable-types': 2
   comma-dangle:
     - error
@@ -20,3 +20,12 @@ rules:
   indent:
     - error
     - 2
+  object-curly-spacing: 
+    - 2
+    - always
+  array-bracket-spacing:
+    - 2
+    - always
+  curly:
+    - 2
+    - all
