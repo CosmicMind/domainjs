@@ -18,5 +18,6 @@ jobs:
       - name: Build tests
         run: npm run tests:build
       - name: Run tests
+        working-directory: /
         run: npm run tests:run
         continue-on-error: false
