@@ -1,0 +1,19 @@
+name: Build Dev
+
+on: [push]
+
+jobs:
+  build-dev:
+    name: 'build-dev'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install Packages
+        run: npm i
+      - name: Build library
+        run: npm run dev:build

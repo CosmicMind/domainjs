@@ -31,10 +31,10 @@
  */
 
 export default {
-	extensions: [
-    'mjs'
+  extensions: [
+    'js'
   ],
   require: [
     'ts-node/register'
-  ]
+  ],
 }

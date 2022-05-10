@@ -41,9 +41,9 @@ const name = process.env.npm_package_name
 const entry = main
 const formats = [ 'es' ]
 const external = [
-  'ava',
   'dotenv',
   'eslint',
+  'lib0',
   'yup',
   '@cosmicverse/foundation'
 ]
