@@ -44,8 +44,7 @@ const external = [
   'dotenv',
   'eslint',
   'lib0',
-  'yup',
-  '@cosmicverse/foundation'
+  'yup'
 ]
 const globals = {}
 
