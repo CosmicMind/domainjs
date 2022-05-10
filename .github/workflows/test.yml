@@ -3,7 +3,8 @@ name: Test
 on: [push]
 
 jobs:
-  build:
+  dev-build:
+    name: 'dev-build'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -16,25 +17,16 @@ jobs:
         run: npm i
       - name: Build library
         run: npm run dev:build
+  
+  run-tests:
+    name: 'run-tests'
+    needs: dev-build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Packages
+        run: npm i
       - name: Build tests
         run: npm run test:build
       - name: Run tests
         run: npm run test:run
         continue-on-error: false
-
-  # publish-gpr:
-  #   needs: publish-npm
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     packages: write
-  #     contents: read
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: actions/setup-node@v3
-  #       with:
-  #         node-version: 16
-  #         registry-url: https://npm.pkg.github.com/
-  #     - run: npm ci
-  #     - run: npm publish
-  #       env:
-  #         NODE_AUTH_TOKEN: ${{secrets.GH_TOKEN}}
