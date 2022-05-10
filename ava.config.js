@@ -32,7 +32,7 @@
 
 export default {
 	extensions: [
-    'mjs'
+    'js'
   ],
   require: [
     'ts-node/register'

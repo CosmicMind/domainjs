@@ -18,6 +18,7 @@ jobs:
       - name: Build tests
         run: npm run tests:build
       - name: Run tests
-        working-directory: ./
         run: npm run tests:run
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GH_TOKEN}}
         continue-on-error: false

@@ -35,7 +35,7 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 
 const main = 'tests/index.ts'
 const outDir = process.env.npm_out_dir
-const fileName = format => `lib.${format}.tests.mjs`
+const fileName = format => `lib.${format}.tests.js`
 const name = process.env.npm_package_name
 const entry = main
 const formats = [ 'es' ]
