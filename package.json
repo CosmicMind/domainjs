@@ -24,6 +24,9 @@
 		"README.md",
 		"tsconfig.json"
 	],
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"lint:run": "eslint . --ext .ts",
 		"tests:build": "vite build --config vite.config.tests.js --mode development",
@@ -52,7 +55,7 @@
 	},
 	"dependencies": {
 		"@cosmicverse/foundation": "^0.0.1-rc-zn",
-		"dotenv": "^16.0.0",
+		"dotenv": "^16.0.1",
 		"yup": "^0.32.11"
 	}
 }

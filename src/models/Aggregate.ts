@@ -35,7 +35,6 @@
  */
 
 import {
-  clone,
   Serializable,
   Optional,
 } from '@cosmicverse/foundation'
@@ -81,13 +80,13 @@ export interface IAggregate extends Serializable {
 export class Aggregate<TEntity extends Entity = Entity> implements IAggregate {
   /**
    * @template TEntity
-   * @private
+   * @protected
    *
    * A reference to the root `Entity` instance.
    *
    * @type {TEntity}
    */
-  readonly #root: TEntity
+  protected root: TEntity
 
   /**
    * A reference to the root `Entity` type.
@@ -95,7 +94,7 @@ export class Aggregate<TEntity extends Entity = Entity> implements IAggregate {
    * @type {EntityType}
    */
   get type(): EntityType {
-    return this.#root.type
+    return this.root.type
   }
 
   /**
@@ -104,7 +103,7 @@ export class Aggregate<TEntity extends Entity = Entity> implements IAggregate {
    * @type {EntityType}
    */
   get id(): EntityId {
-    return this.#root.id
+    return this.root.id
   }
 
   /**
@@ -113,12 +112,18 @@ export class Aggregate<TEntity extends Entity = Entity> implements IAggregate {
    * @type {EntityType}
    */
   get created(): EntityDate {
-    return this.#root.created
+    return this.root.created
   }
 
-  get serialized(): string {
-    return clone(this.#root)
-  }
+  /**
+   * A `serialized` representation of the
+   * root `Entity`.
+   *
+   * @type {string}
+   */
+  // get serialized(): string {
+  //   return this.root.serialized
+  // }
 
   /**
    * @constructor
@@ -126,7 +131,7 @@ export class Aggregate<TEntity extends Entity = Entity> implements IAggregate {
    * @param {TEntity} root
    */
   constructor(root: TEntity) {
-    this.#root = root
+    this.root = root
   }
 }
 
@@ -136,8 +141,7 @@ export class Aggregate<TEntity extends Entity = Entity> implements IAggregate {
  *
  * @returns {AggregateCreateFn<Aggregate>}
  */
-export const createAggregate = (): AggregateCreateFn<Aggregate> =>
-  createAggregateFor(Aggregate)
+export const createAggregate = (): AggregateCreateFn<Aggregate> => createAggregateFor(Aggregate)
 
 /**
  * @template TAggregate
