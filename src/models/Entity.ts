@@ -58,7 +58,7 @@ import {
   Value,
   Meta,
   Created,
-} from '@/utils/type-defs'
+} from '../utils/type-defs'
 
 /**
  * @extends {FoundationError}
@@ -346,7 +346,7 @@ export const createEntity = (type: EntityType, schema: Partial<EntityProxySchema
 
     const { immutable, mutable, virtual } = schema
 
-    return createProxyFor({
+    return createProxyFor<Entity>({
       immutable: {
         ...immutable,
         type: EntityTypeValidator,

@@ -159,7 +159,7 @@ export const createValue = (type: ValueType, value: ValueValidator, virtual?: Va
     virtual,
   }
 
-  return (value: ValuePropertyValue): Value => createProxyFor(schema, new Value(type, value))
+  return (value: ValuePropertyValue): Value => createProxyFor<Value>(schema, new Value(type, value))
 }
 
 /**

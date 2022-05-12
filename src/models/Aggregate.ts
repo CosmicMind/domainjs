@@ -44,7 +44,7 @@ import {
   EntityType,
   EntityId,
   EntityDate,
-} from '@/models/Entity'
+} from './Entity'
 
 /**
  * @template TAggregate
@@ -121,9 +121,9 @@ export class Aggregate<TEntity extends Entity = Entity> implements IAggregate {
    *
    * @type {string}
    */
-  // get serialized(): string {
-  //   return this.root.serialized
-  // }
+  get serialized(): string {
+    return this.root.serialized
+  }
 
   /**
    * @constructor

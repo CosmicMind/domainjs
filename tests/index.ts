@@ -30,10 +30,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export * from '@tests/Value.test'
-export * from '@tests/Entity.test'
-export * from '@tests/Aggregate.test'
-export * from '@tests/Command.test'
-export * from '@tests/Event.test'
-export * from '@tests/Repository.test'
-export * from '@tests/Service.test'
+export * from './Value.test'
+export * from './Entity.test'
+export * from './Aggregate.test'
+export * from './Command.test'
+export * from './Event.test'
+export * from './Repository.test'
+export * from './Service.test'

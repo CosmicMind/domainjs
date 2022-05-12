@@ -34,15 +34,15 @@ import test from 'ava'
 
 import { uuidv4 } from '@cosmicverse/foundation'
 
-import { createEntityFor } from '@/models/Entity'
+import { createEntityFor } from '../src'
 
 import {
   Aggregate,
   createAggregateFor,
   validateAggregateFor,
-} from '@/models/Aggregate'
+} from '../src'
 
-import { EntityObject } from '@tests/Entity.test'
+import { EntityObject } from './Entity.test'
 
 const createEntityObject = createEntityFor(EntityObject)
 

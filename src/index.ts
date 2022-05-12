@@ -34,14 +34,14 @@ export type {
   IValue,
   ValueType,
   ValuePropertyValue,
-  validateValueFor,
-} from '@/models/Value'
+} from './models/Value'
 
 export {
   Value,
   createValue,
   createValueFor,
-} from '@/models/Value'
+  validateValueFor,
+} from './models/Value'
 
 export type {
   IEntity,
@@ -49,39 +49,40 @@ export type {
   EntityId,
   EntityDate,
   EntityPropertyValue,
-} from '@/models/Entity'
+} from './models/Entity'
 
 export {
   Entity,
   createEntity,
   createEntityFor,
   validateEntityFor,
-} from '@/models/Entity'
+  EntityPropertyError,
+} from './models/Entity'
 
-export type { IAggregate } from '@/models/Aggregate'
+export type { IAggregate } from './models/Aggregate'
 
 export {
   Aggregate,
   createAggregate,
   createAggregateFor,
   validateAggregateFor,
-} from '@/models/Aggregate'
+} from './models/Aggregate'
 
-export type { ICommand } from '@/models/Command'
-export { Command } from '@/models/Command'
+export type { ICommand } from './models/Command'
+export { Command } from './models/Command'
 
-export type { IRepository } from '@/models/Repository'
+export type { IRepository } from './models/Repository'
 
 export {
   Repository,
   createRepository,
   createRepositoryFor,
-} from '@/models/Repository'
+} from './models/Repository'
 
-export type { IService } from '@/models/Service'
+export type { IService } from './models/Service'
 
 export {
   Service,
   createService,
   createServiceFor,
-} from '@/models/Service'
+} from './models/Service'

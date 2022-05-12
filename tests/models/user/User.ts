@@ -39,7 +39,7 @@ import { string } from 'yup'
 import {
   Entity,
   createEntityFor,
-} from '@/models/Entity'
+} from '../../../src'
 
 export class User extends Entity {}
 
