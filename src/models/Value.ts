@@ -37,7 +37,7 @@
 import { string } from 'yup'
 
 import {
-  Optional,
+  Newable,
   ProxyValidator,
   ProxyVirtual,
   createProxyFor,
@@ -187,11 +187,13 @@ export const createValueFor = <TValue extends Value, TValueProperty extends Valu
 }
 
 /**
+ * @template TValue
+ *
  * The `validateValueFor` is ued to validate a given `Value`.
  *
- * @param {Value} value
- * @param {Optional<unknown>} [_class = Value]
+ * @param {TValue} value
+ * @param {Newable<TValue>} _class
  * @param {ValueType} [type = _class.name]
  * @returns {boolean}
  */
-export const validateValueFor = (value: Value, _class: Optional<unknown> = Value, type: ValueType = _class.name): boolean => value instanceof _class && type == value.type
+export const validateValueFor = <TValue extends Value>(value: TValue, _class: Newable<TValue>, type: ValueType = _class.name): boolean => value instanceof _class && type == value.type

@@ -63,7 +63,6 @@ export type { IAggregate } from './models/Aggregate'
 
 export {
   Aggregate,
-  createAggregate,
   createAggregateFor,
   validateAggregateFor,
 } from './models/Aggregate'

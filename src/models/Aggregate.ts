@@ -35,8 +35,8 @@
  */
 
 import {
+  Newable,
   Serializable,
-  Optional,
 } from '@cosmicverse/foundation'
 
 import {
@@ -53,9 +53,9 @@ import {
  * to generate new `Aggregate` instances from a given
  * constructor function.
  *
- * @type {(root: Entity)) => TAggregate}
+ * @type {(root: TEntity)) => TAggregate}
  */
-export type AggregateCreateFn<TAggregate extends Aggregate> = (root: Entity) => TAggregate
+export type AggregateCreateFn<TEntity extends Entity, TAggregate extends Aggregate<TEntity>> = (root: TEntity) => TAggregate
 
 /**
  * The `IAggregate` defines the base `Aggregate` properties.
@@ -72,12 +72,12 @@ export interface IAggregate extends Serializable {
 
 /**
  * @template TEntity
- * @implements {IAggregate}
+ * @implements {IAggregate<TEntity>}
  *
  * The `Aggregate` class is the base structure used to
  * generate domain aggregates.
  */
-export class Aggregate<TEntity extends Entity = Entity> implements IAggregate {
+export class Aggregate<TEntity extends Entity> implements IAggregate {
   /**
    * @template TEntity
    * @protected
@@ -136,30 +136,24 @@ export class Aggregate<TEntity extends Entity = Entity> implements IAggregate {
 }
 
 /**
- * The `createAggregate` is used to generate a new `Aggregate`
- * instance.
- *
- * @returns {AggregateCreateFn<Aggregate>}
- */
-export const createAggregate = (): AggregateCreateFn<Aggregate> => createAggregateFor(Aggregate)
-
-/**
  * @template TAggregate
  *
  * The `createAggregateFor` is used to generate a new `Aggregate`
  * instance from a given `class` constructor.
  *
- * @param {{ new (root: Entity): TAggregate  }} _class
+ * @param {{ new (root: TEntity): TAggregate  }} _class
  * @returns {AggregateCreateFn<TAggregate>}
  */
-export const createAggregateFor = <TAggregate extends Aggregate>(_class: { new (root: Entity): TAggregate }): AggregateCreateFn<TAggregate> =>
-  (root: Entity): TAggregate => new _class(root)
+export const createAggregateFor = <TEntity extends Entity, TAggregate extends Aggregate<TEntity>>(_class: Newable<TAggregate>): AggregateCreateFn<TEntity, TAggregate> =>
+  (root: TEntity): TAggregate => new _class(root)
 
 /**
+ * @template TAggregate
+ *
  * The `validateAggregateFor` is ued to validate a given `Aggregate`.
  *
- * @param {Aggregate} aggregate
- * @param {Optional<unknown>} [_class = Aggregate]
+ * @param {TAggregate} aggregate
+ * @param {Newable<TAggregate>} _class
  * @returns {boolean}
  */
-export const validateAggregateFor = (aggregate: Aggregate, _class: Optional<unknown> = Aggregate): boolean => aggregate instanceof _class
+export const validateAggregateFor = <TEntity extends Entity, TAggregate extends Aggregate<TEntity>>(aggregate: TAggregate, _class: Newable<TAggregate>): boolean => aggregate instanceof _class

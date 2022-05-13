@@ -42,8 +42,9 @@ import {
 import {
   parse,
   stringify,
-  Serializable,
+  Newable,
   Optional,
+  Serializable,
   ProxySchema,
   ProxyImmutable,
   ProxyMutable,
@@ -67,34 +68,7 @@ import {
  * a given property value doesn't pass validation checks
  * for a given property key.
  */
-export class EntityPropertyError extends FoundationError {
-  /**
-   * Fetches the `name` value for the class.
-   *
-   * @type {string}
-   */
-  get name(): string {
-    return super.name
-  }
-
-  /**
-   * Fetches the `message` value for the class.
-   *
-   * @type {string}
-   */
-  get message(): string {
-    return super.message
-  }
-
-  /**
-   * @constructor
-   *
-   * @param {string} message
-   */
-  constructor(message: string) {
-    super(message)
-  }
-}
+export class EntityPropertyError extends FoundationError {}
 
 /**
  * Defines the `EntityType` type.
@@ -210,7 +184,7 @@ export type EntityCreateFn<TEntity extends Entity, TEntityProps extends EntityPr
  * @property {EntityDateSerialized} created
  * @property {EntityPropertyData[]} props
  */
-export interface EntityData {
+export interface EntityData extends Object {
   type: EntityType
   id: EntityId
   created: EntityDateSerialized
@@ -221,7 +195,7 @@ export interface EntityData {
  * The `EntityDataKeys` are used for checks or iterators
  * when processing `Entity` instances or `EntityData` values.
  */
-export const EntityDataKeys = [ 'type', 'id', 'created', 'props' ] as const
+export const EntityDataKeys = [ 'type', 'id', 'created', 'props' ]
 
 /**
  * The `EntityProxySchema` extends `ProxySchema`.
@@ -282,9 +256,9 @@ export class Entity implements IEntity, Serializable {
   /**
    * A reference to the property `key/value` pairs.
    *
-   * @type {EntityPropertyValue}
+   * @type {Optional<EntityPropertyValue>}
    */
-  [key: string]: EntityPropertyValue
+  [key: string]: Optional<EntityPropertyValue>
 
   /**
    * Converts the `Entity` to a serialized value.
@@ -292,7 +266,7 @@ export class Entity implements IEntity, Serializable {
    * @returns {string}
    */
   get serialized(): string {
-    return stringify(createEntityDataFor(this))
+    return stringify(createEntityDataFor(this)) as string
   }
 
   /**
@@ -411,10 +385,10 @@ export const createEntityDataFor = (entity: Entity): EntityData => ({
  * is in the `EntityDataKeys` value. This is used to avoid
  * treating `key/value` pairs as `EntityDataKeys`.
  *
- * @param {Optional<string>} key
+ * @param {string} key
  * @returns {boolean}
  */
-export const isEntityProperty = (key: Optional<string>): boolean => EntityDataKeys.includes(key)
+export const isEntityProperty = (key: string): boolean => EntityDataKeys.includes(key)
 
 /**
  * The `generateEntityPropertyDataFor` is used to create an
@@ -454,11 +428,11 @@ export const generateEntityPropertyDataFor = (entity: Entity, fn: typeof isEntit
     }
     else if (v instanceof Set) {
       meta.set = true
-      value = stringify([ ...v.values() ])
+      value = stringify([ ...v.values() ]) as string
     }
     else if ('object' === typeof v) {
       meta.object = true
-      value = stringify(v)
+      value = stringify(v) as string
     }
     else {
       value = String(v)
@@ -485,17 +459,19 @@ export const mapPropertyData = (entity: Entity, props: EntityPropertyData[]): vo
         meta.number ? Number(value) :
           meta.object ? parse(String(value)) :
             meta.date ? new Date(String(value)) :
-              meta.set ? new Set(parse(String(value))) : value
+              meta.set ? new Set(parse(String(value)) as Array<unknown>) : value
     }
   }
 }
 
 /**
- * The `validateEntity` is ued to validate a given `Entity`.
+ * @template TEntity
  *
- * @param {Entity} entity
- * @param {Optional<unknown>} [_class = Entity]
+ * The `validateEntityFor` is ued to validate a given `Entity`.
+ *
+ * @param {TEntity} entity
+ * @param {Newable<TEntity>} _class
  * @param {EntityType} [type = _class.name]
  * @returns {boolean}
  */
-export const validateEntityFor = (entity: Entity, _class: Optional<unknown> = Entity, type: EntityType = _class.name): boolean => entity instanceof _class && type == entity.type
+export const validateEntityFor = <TEntity extends Entity>(entity: TEntity, _class: Newable<TEntity>, type: EntityType = _class.name): boolean => entity instanceof _class && type == entity.type
