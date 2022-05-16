@@ -7,5 +7,3 @@ on:
 jobs:
   stale:
     uses: cosmicverse/workflows/.github/workflows/stale.yml@main
-    with:
-      reponame: foundation
