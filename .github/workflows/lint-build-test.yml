@@ -3,5 +3,11 @@ name: Lint, Build, and Test
 on: [push]
 
 jobs:
-  general:
-    uses: cosmicverse/Actions/.github/workflows/lint-build-test.yml@main
+  lint:
+    uses: cosmicverse/Actions/.github/workflows/lint.yml@main
+  build:
+    needs: lint
+    uses: cosmicverse/Actions/.github/workflows/build.yml@main
+  test:
+    needs: build
+    uses: cosmicverse/Actions/.github/workflows/test.yml@main
