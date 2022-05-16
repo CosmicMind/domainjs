@@ -1,0 +1,9 @@
+name: Lint, Build, and Test
+
+on: [push]
+
+jobs:
+  general:
+    uses: cosmicverse/workflows/.github/workflows/general.yml@main
+    with:
+      reponame: foundation

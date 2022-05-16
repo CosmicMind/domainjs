@@ -34,8 +34,9 @@ import test from 'ava'
 import { string } from 'yup'
 
 import {
-  FoundationTypeError,
+  Newable,
   ProxyTypeError,
+  FoundationTypeError,
 } from '@cosmicverse/foundation'
 
 import {
@@ -52,7 +53,7 @@ test('Value: create', async t => {
   const createVO = createValue(type, string().defined().strict(true))
 
   const vo = createVO('daniel')
-  t.true(validateValueFor(vo))
+  t.true(validateValueFor(vo, Value as Newable<Value>))
   t.is(vo.type, type)
   t.is(vo.value, 'daniel')
 })
@@ -62,7 +63,7 @@ test('Value: create ValueObject', async t => {
   const createVO = createValueFor(ValueObject, string().defined().strict(true))
 
   const vo = createVO('daniel')
-  t.true(validateValueFor(vo, ValueObject))
+  t.true(validateValueFor(vo, ValueObject as Newable<ValueObject>))
   t.is(vo.type, type)
   t.is(vo.value, 'daniel')
 })
@@ -96,7 +97,7 @@ test('Value: virtual string', async t => {
   })
 
   const vo = createVO('daniel')
-  t.true(validateValueFor(vo))
+  t.true(validateValueFor(vo, Value as Newable<Value>))
   t.is(vo.type, type)
   t.is(vo.value, 'daniel')
   t.is(vo.fullName, 'Daniel Jonathan')

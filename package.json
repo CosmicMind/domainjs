@@ -28,10 +28,10 @@
 		"access": "public"
 	},
 	"scripts": {
-		"lint:run": "eslint . --ext .ts",
+		"lint:exec": "eslint . --ext .ts",
 		"tests:build": "vite build --config vite.config.tests.js --mode development",
 		"tests:watch": "vite build --config vite.config.tests.js --mode watch",
-		"tests:run": "ava dist/lib.es.tests.js",
+		"tests:exec": "ava dist/lib.es.tests.js",
 		"dev:build": "vite build --config vite.config.js --mode development",
 		"dev:watch": "vite build --config vite.config.js --mode watch",
 		"package:build": "vite build --config vite.config.js --mode development",
@@ -41,15 +41,18 @@
 	},
 	"devDependencies": {
 		"@microsoft/eslint-formatter-sarif": "^3.0.0",
-		"@types/node": "^17.0.31",
+		"@types/node": "^17.0.33",
 		"@types/yup": "^0.29.13",
 		"@typescript-eslint/eslint-plugin": "^5.23.0",
 		"@typescript-eslint/parser": "^5.23.0",
+		"@vitejs/plugin-vue": "^2.3.3",
+		"@vue/compiler-sfc": "^3.2.33",
 		"@vue/eslint-config-typescript": "^10.0.0",
 		"ava": "^4.2.0",
 		"eslint": "^8.15.0",
 		"ts-node": "^10.7.0",
 		"tslib": "^2.4.0",
+		"vite": "^2.9.9",
 		"vite-plugin-dts": "^1.1.1",
 		"vite-tsconfig-paths": "^3.4.1"
 	},

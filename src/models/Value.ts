@@ -38,6 +38,7 @@ import { string } from 'yup'
 
 import {
   Newable,
+  Optional,
   ProxyValidator,
   ProxyVirtual,
   createProxyFor,
@@ -55,7 +56,7 @@ export type ValueType = string
  *
  * @type {string | number | boolean | Date | Record<string, string | number> | (string | number)[] | Set<string | number> | object}
  */
-export type ValuePropertyValue = string | number | boolean | Date | Record<string, string | number> | (string | number)[] | Set<string | number> | object
+export type ValuePropertyValue = Optional<string | number | boolean | Date | Record<string, string | number> | (string | number)[] | Set<string | number> | object>
 
 /**
  * @template TValue
@@ -159,7 +160,7 @@ export const createValue = (type: ValueType, value: ValueValidator, virtual?: Va
     virtual,
   }
 
-  return (value: ValuePropertyValue): Value => createProxyFor<Value>(schema, new Value(type, value))
+  return (value: ValuePropertyValue): Value => createProxyFor(schema, new Value(type, value))
 }
 
 /**
@@ -174,7 +175,7 @@ export const createValue = (type: ValueType, value: ValueValidator, virtual?: Va
  * @param {ValueVirtual} virtual
  * @returns {ValueCreateFn<TValue>}
  */
-export const createValueFor = <TValue extends Value, TValueProperty extends ValuePropertyValue = ValuePropertyValue>(_class: { new (type: ValueType, value: ValuePropertyValue): TValue }, value: ValueValidator, virtual?: ValueVirtual): ValueCreateFn<TValue, TValueProperty> => {
+export const createValueFor = <TValue extends Value, TValueProperty extends ValuePropertyValue = ValuePropertyValue>(_class: Newable<TValue>, value: ValueValidator, virtual?: ValueVirtual): ValueCreateFn<TValue, TValueProperty> => {
   const schema = {
     immutable: {
       type: ValueTypeValidator,

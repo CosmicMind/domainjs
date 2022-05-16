@@ -320,7 +320,7 @@ export const createEntity = (type: EntityType, schema: Partial<EntityProxySchema
 
     const { immutable, mutable, virtual } = schema
 
-    return createProxyFor<Entity>({
+    return createProxyFor({
       immutable: {
         ...immutable,
         type: EntityTypeValidator,
@@ -341,11 +341,11 @@ export const createEntity = (type: EntityType, schema: Partial<EntityProxySchema
  * The `createEntityFor` is used to generate a new `Entity` instance
  * from a given `class` constructor, `type`, and `schema`.
  *
- * @param {{ new (type: EntityType, props: TEntityProps): TEntity }} _class
+ * @param {Newable<TEntity>} _class
  * @param {Partial<EntityProxySchema>} [schema = {}]
  * @returns {EntityCreateFn<TEntity>}
  */
-export const createEntityFor = <TEntity extends Entity, TEntityProps extends EntityProps = EntityProps>(_class: { new (type: EntityType, props: TEntityProps): TEntity }, schema: Partial<EntityProxySchema> = {}): EntityCreateFn<TEntity, TEntityProps> =>
+export const createEntityFor = <TEntity extends Entity, TEntityProps extends EntityProps = EntityProps>(_class: Newable<TEntity>, schema: Partial<EntityProxySchema> = {}): EntityCreateFn<TEntity, TEntityProps> =>
   (props: TEntityProps): TEntity => {
     if ('undefined' !== typeof props.type) {
       throw new EntityPropertyError('property (type) cannot be redefined')

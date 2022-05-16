@@ -82,6 +82,5 @@ export type { IService } from './models/Service'
 
 export {
   Service,
-  createService,
   createServiceFor,
 } from './models/Service'

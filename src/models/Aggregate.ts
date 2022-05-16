@@ -72,7 +72,7 @@ export interface IAggregate extends Serializable {
 
 /**
  * @template TEntity
- * @implements {IAggregate<TEntity>}
+ * @implements {IAggregate}
  *
  * The `Aggregate` class is the base structure used to
  * generate domain aggregates.
@@ -141,7 +141,7 @@ export class Aggregate<TEntity extends Entity> implements IAggregate {
  * The `createAggregateFor` is used to generate a new `Aggregate`
  * instance from a given `class` constructor.
  *
- * @param {{ new (root: TEntity): TAggregate  }} _class
+ * @param {Newable<TAggregate>} _class
  * @returns {AggregateCreateFn<TAggregate>}
  */
 export const createAggregateFor = <TEntity extends Entity, TAggregate extends Aggregate<TEntity>>(_class: Newable<TAggregate>): AggregateCreateFn<TEntity, TAggregate> =>

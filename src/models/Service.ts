@@ -34,6 +34,10 @@
  * @module Service
  */
 
+import { Newable } from '@cosmicverse/foundation'
+
+export type Options = object
+
 /**
  * @template TService
  *
@@ -41,41 +45,48 @@
  * to generate new `Service` instances from a given
  * constructor function.
  *
- * @type {() => TService}
+ * @type {(options: TOptions)) => TService}
  */
-export type ServiceCreateFn<TService extends Service> = () => TService
+export type ServiceCreateFn<TOptions extends Options, TService extends Service<TOptions>> = (options: TOptions) => TService
 
 /**
  * The `IService` defines the base `Service` properties.
- *
- * @property {EntityType} type
- * @property {EntityId} id
- * @property {EntityDate} created
  */
 export interface IService {
   get name(): string
 }
 
 /**
+ * @template TOptions
  * @implements {IService}
  *
  * The `Service` class is the base structure used to
- * generate domain aggregates.
+ * generate domain services.
  */
-export class Service implements IService {
+export class Service<TOptions extends Options> implements IService {
+  /**
+   * @template TOptions
+   * @protected
+   *
+   * A reference to the options `Options` instance.
+   *
+   * @type {TOptions}
+   */
+  protected options: TOptions
+
   get name(): string {
     return this.constructor.name
   }
-}
 
-/**
- * The `createService` is used to generate a new `Service`
- * instance.
- *
- * @returns {ServiceCreateFn<Service>}
- */
-export const createService = (): ServiceCreateFn<Service> =>
-  createServiceFor(Service)
+  /**
+   * @constructor
+   *
+   * @param {TOptions} options
+   */
+  constructor(options: TOptions) {
+    this.options = options
+  }
+}
 
 /**
  * @template TService
@@ -83,8 +94,19 @@ export const createService = (): ServiceCreateFn<Service> =>
  * The `createServiceFor` is used to generate a new `Service`
  * instance from a given `class` constructor.
  *
- * @param {{ new (): TService }} _class
+ * @param {Newable<TService>} _class
  * @returns {ServiceCreateFn<TService>}
  */
-export const createServiceFor = <TService extends Service>(_class: { new (): TService }): ServiceCreateFn<TService> =>
-  (): TService => new _class()
+export const createServiceFor = <TOptions extends Options, TService extends Service<TOptions>>(_class: Newable<TService>): ServiceCreateFn<TOptions, TService> =>
+  (options: TOptions): TService => new _class(options)
+
+/**
+ * @template TService
+ *
+ * The `validateServiceFor` is ued to validate a given `Service`.
+ *
+ * @param {TService} service
+ * @param {Newable<TService>} _class
+ * @returns {boolean}
+ */
+export const validateServiceFor = <TOptions extends Options, TService extends Service<TOptions>>(service: TService, _class: Newable<TService>): boolean => service instanceof _class

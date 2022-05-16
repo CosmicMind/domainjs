@@ -6,15 +6,6 @@ on:
 
 jobs:
   stale:
-    runs-on: ubuntu-latest
-    permissions:
-      issues: write
-      pull-requests: write
-    steps:
-    - uses: actions/stale@v5
-      with:
-        repo-token: ${{secrets.GH_TOKEN}}
-        stale-issue-message: 'This issue has been marked stale.'
-        stale-pr-message: 'This pull request has been marked stale.'
-        stale-issue-label: 'This issue has been labeled stale.'
-        stale-pr-label: 'This pull request has been labeled stale.'
+    uses: cosmicverse/workflows/.github/workflows/stale.yml@main
+    with:
+      reponame: foundation
