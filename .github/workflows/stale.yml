@@ -6,4 +6,4 @@ on:
 
 jobs:
   stale:
-    uses: cosmicverse/workflows/.github/workflows/stale.yml@main
+    uses: cosmicverse/Actions/.github/workflows/stale.yml@main
