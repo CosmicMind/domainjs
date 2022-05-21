@@ -45,7 +45,7 @@ import {
   ProxyNotDefinedError,
 } from '@cosmicverse/foundation'
 
-import { 
+import {
   Entity,
   validateEntityFor,
   createEntity,
@@ -107,11 +107,15 @@ test('Entity: create with type set',async t => {
     t.true('undefined' === typeof mo)
   }
   catch (e) {
-    t.true(e instanceof Error)
-    t.true(e instanceof FoundationError)
-    t.true(e instanceof EntityPropertyError)
-    t.is(e.name, 'EntityPropertyError')
-    t.is(e.message, 'property (type) cannot be redefined')
+    if (e instanceof Error) {
+      t.true(e instanceof FoundationError)
+      t.true(e instanceof EntityPropertyError)
+      t.is(e.name, 'EntityPropertyError')
+      t.is(e.message, 'property (type) cannot be redefined')
+    }
+    else {
+      t.true(false)
+    }
   }
 })
 
@@ -133,11 +137,15 @@ test('Entity: create ProxyTypeError',async t => {
     t.true('undefined' === typeof mo)
   }
   catch (e) {
-    t.true(e instanceof Error)
-    t.true(e instanceof FoundationTypeError)
-    t.true(e instanceof ProxyTypeError)
-    t.is(e.name,'ProxyTypeError')
-    t.is(e.message, errorMessage)
+    if (e instanceof Error) {
+      t.true(e instanceof FoundationTypeError)
+      t.true(e instanceof ProxyTypeError)
+      t.is(e.name, 'ProxyTypeError')
+      t.is(e.message, errorMessage)
+    }
+    else {
+      t.true(false)
+    }
   }
 })
 
@@ -160,11 +168,15 @@ test('Entity: update ProxyTypeError',async t => {
     t.true('undefined' === typeof mo)
   }
   catch (e) {
-    t.true(e instanceof Error)
-    t.true(e instanceof FoundationTypeError)
-    t.true(e instanceof ProxyTypeError)
-    t.is(e.name, 'ProxyTypeError')
-    t.is(e.message, errorMessage)
+    if (e instanceof Error) {
+      t.true(e instanceof FoundationTypeError)
+      t.true(e instanceof ProxyTypeError)
+      t.is(e.name, 'ProxyTypeError')
+      t.is(e.message, errorMessage)
+    }
+    else {
+      t.true(false)
+    }
   }
 })
 
@@ -186,11 +198,15 @@ test('Entity: delete ProxyImmutableError',async t => {
     t.true('undefined' === typeof mo)
   }
   catch (e) {
-    t.true(e instanceof Error)
-    t.true(e instanceof FoundationError)
-    t.true(e instanceof ProxyImmutableError)
-    t.is(e.name, 'ProxyImmutableError')
-    t.is(e.message, 'property (name) is immutable')
+    if (e instanceof Error) {
+      t.true(e instanceof FoundationError)
+      t.true(e instanceof ProxyImmutableError)
+      t.is(e.name, 'ProxyImmutableError')
+      t.is(e.message, 'property (name) is immutable')
+    }
+    else {
+      t.true(false)
+    }
   }
 })
 
@@ -212,11 +228,15 @@ test('Entity: delete ProxyMutableError',async t => {
     t.true('undefined' === typeof mo)
   }
   catch (e) {
-    t.true(e instanceof Error)
-    t.true(e instanceof FoundationError)
-    t.true(e instanceof ProxyMutableError)
-    t.is(e.name, 'ProxyMutableError')
-    t.is(e.message, 'property (name) is mutable')
+    if (e instanceof Error) {
+      t.true(e instanceof FoundationError)
+      t.true(e instanceof ProxyMutableError)
+      t.is(e.name, 'ProxyMutableError')
+      t.is(e.message, 'property (name) is mutable')
+    }
+    else {
+      t.true(false)
+    }
   }
 })
 
@@ -239,11 +259,15 @@ test('Entity: delete ProxyVirtualError',async t => {
     t.true('undefined' === typeof mo)
   }
   catch (e) {
-    t.true(e instanceof Error)
-    t.true(e instanceof FoundationError)
-    t.true(e instanceof ProxyVirtualError)
-    t.is(e.name, 'ProxyVirtualError')
-    t.is(e.message, 'property (fullName) is virtual')
+    if (e instanceof Error) {
+      t.true(e instanceof FoundationError)
+      t.true(e instanceof ProxyVirtualError)
+      t.is(e.name, 'ProxyVirtualError')
+      t.is(e.message, 'property (fullName) is virtual')
+    }
+    else {
+      t.true(false)
+    }
   }
 })
 
@@ -265,11 +289,15 @@ test('Entity: defined ProxyImmutableError',async t => {
     t.true('undefined' === typeof mo)
   }
   catch (e) {
-    t.true(e instanceof Error)
-    t.true(e instanceof FoundationError)
-    t.true(e instanceof ProxyImmutableError)
-    t.is(e.name, 'ProxyImmutableError')
-    t.is(e.message, 'property (name) is immutable')
+    if (e instanceof Error) {
+      t.true(e instanceof FoundationError)
+      t.true(e instanceof ProxyImmutableError)
+      t.is(e.name, 'ProxyImmutableError')
+      t.is(e.message, 'property (name) is immutable')
+    }
+    else {
+      t.true(false)
+    }
   }
 })
 
@@ -291,11 +319,15 @@ test('Entity: ProxyNotDefinedError',async t => {
     t.true('undefined' === typeof mo)
   }
   catch (e) {
-    t.true(e instanceof Error)
-    t.true(e instanceof FoundationError)
-    t.true(e instanceof ProxyNotDefinedError)
-    t.is(e.name, 'ProxyNotDefinedError')
-    t.is(e.message, 'property (age) is not defined')
+    if (e instanceof Error) {
+      t.true(e instanceof FoundationError)
+      t.true(e instanceof ProxyNotDefinedError)
+      t.is(e.name, 'ProxyNotDefinedError')
+      t.is(e.message, 'property (age) is defined')
+    }
+    else {
+      t.true(false)
+    }
   }
 })
 
@@ -307,7 +339,7 @@ test('Entity: virtual string',async t => {
     },
     virtual: {
       get fullName(): string {
-        const name = this.name
+        const name = this.name as string
         const result = name.charAt(0).toUpperCase() + name.slice(1);
         return `${result} Jonathan`
       },
@@ -335,7 +367,7 @@ test('Entity: update ProxyVirtualError',async t => {
     },
     virtual: {
       get fullName(): string {
-        const name = this.name
+        const name = this.name as string
         const result = name.charAt(0).toUpperCase() + name.slice(1);
         return `${result} Jonathan`
       },
@@ -352,11 +384,15 @@ test('Entity: update ProxyVirtualError',async t => {
     t.true('undefined' === typeof mo)
   }
   catch (e) {
-    t.true(e instanceof Error)
-    t.true(e instanceof FoundationError)
-    t.true(e instanceof ProxyVirtualError)
-    t.is(e.name, 'ProxyVirtualError')
-    t.is(e.message, 'property (fullName) is virtual')
+    if (e instanceof Error) {
+      t.true(e instanceof FoundationError)
+      t.true(e instanceof ProxyVirtualError)
+      t.is(e.name, 'ProxyVirtualError')
+      t.is(e.message, 'property (fullName) is virtual')
+    }
+    else {
+      t.true(false)
+    }
   }
 })
 
@@ -368,7 +404,7 @@ test('Entity: serialized',async t => {
     },
     virtual: {
       get fullName(): string {
-        const name = this.name
+        const name = this.name as string
         const result = name.charAt(0).toUpperCase() + name.slice(1);
         return `${result} Jonathan`
       },

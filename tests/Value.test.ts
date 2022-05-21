@@ -78,11 +78,15 @@ test('Value: validation', async t => {
     t.true('undefined' === typeof vo)
   }
   catch (e) {
-    t.true(e instanceof Error)
-    t.true(e instanceof FoundationTypeError)
-    t.true(e instanceof ProxyTypeError)
-    t.is(e.name, 'ProxyTypeError')
-    t.is(e.message, errorMessage)
+    if (e instanceof Error) {
+      t.true(e instanceof FoundationTypeError)
+      t.true(e instanceof ProxyTypeError)
+      t.is(e.name, 'ProxyTypeError')
+      t.is(e.message, errorMessage)
+    }
+    else {
+      t.true(false)
+    }
   }
 })
 
@@ -90,7 +94,7 @@ test('Value: virtual string', async t => {
   const type = 'Value'
   const createVO = createValue(type, string().defined().strict(true), {
     get fullName(): string {
-      const value = this.value
+      const value = this.value as string
       const result = value.charAt(0).toUpperCase() + value.slice(1);
       return `${result} Jonathan`
     },
