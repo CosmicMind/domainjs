@@ -30,10 +30,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export interface Id<TId extends string | number> {
-  id: TId 
-}
-
 export interface Key<TKey extends string | symbol | number> {
   key: TKey
 }

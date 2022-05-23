@@ -37,12 +37,18 @@
 import { string } from 'yup'
 
 import {
+  stringify,
   Newable,
   Optional,
   ProxyValidator,
   ProxyVirtual,
   createProxyFor,
 } from '@cosmicverse/foundation'
+
+import {
+  Typeable,
+  Serializable,
+} from '@cosmicverse/patterns'
 
 /**
  * Defines the `ValueType` type.
@@ -88,23 +94,34 @@ export type ValueValidator = ProxyValidator
 export type ValueVirtual = ProxyVirtual
 
 /**
+ * @extends {Typeable}
  * The `IValue` defines the base `Value` properties.
  *
  * @property {ValueType} type
  * @property {ValuePropertyValue} value
  */
-export interface IValue {
-  type: ValueType
+export interface IValue extends Typeable<ValueType> {
   value: ValuePropertyValue
 }
 
 /**
- * @implements {IValue}
+ * @extends {IValue}
+ *
+ * The `ValueData` is used to recreate the instance after
+ * being serialized.
+ *
+ * @property {ValueType} type
+ * @property {ValuePropertyValue} value
+ */
+export interface ValueData extends IValue {}
+
+/**
+ * @implements {IValue, Serializable}
  *
  * The `Value` class is the base structure used to
  * generate domain values.
  */
-export class Value implements IValue {
+export class Value implements IValue, Serializable {
   /**
    * A reference to the `type` value.
    *
@@ -126,6 +143,15 @@ export class Value implements IValue {
    * @type {ValuePropertyValue}
    */
   readonly [key: string]: ValuePropertyValue
+
+  /**
+   * Converts the `Value` to a serialized value.
+   *
+   * @type {string}
+   */
+  get serialized(): string {
+    return stringify(createValueDataFor(this)) as string
+  }
 
   /**
    * @constructor
@@ -186,6 +212,18 @@ export const createValueFor = <TValue extends Value, TValueProperty extends Valu
 
   return (value: TValueProperty): TValue => createProxyFor(schema, new _class(_class.name, value))
 }
+
+/**
+ * The `createValueDataFor` is used to generate `ValueData`
+ * for a given `Value` instance.
+ *
+ * @param {Value} value
+ * @returns {ValueData}
+ */
+export const createValueDataFor = (value: Value): ValueData => ({
+  type: value.type,
+  value: value.id,
+})
 
 /**
  * @template TValue

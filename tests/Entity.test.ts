@@ -323,7 +323,7 @@ test('Entity: ProxyNotDefinedError',async t => {
       t.true(e instanceof FoundationError)
       t.true(e instanceof ProxyNotDefinedError)
       t.is(e.name, 'ProxyNotDefinedError')
-      t.is(e.message, 'property (age) is defined')
+      t.is(e.message, 'property (age) is not defined')
     }
     else {
       t.true(false)

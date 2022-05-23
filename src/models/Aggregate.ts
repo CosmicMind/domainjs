@@ -34,10 +34,13 @@
  * @module Aggregate
  */
 
+import { Newable } from '@cosmicverse/foundation'
+
 import {
-  Newable,
+  Identifiable,
+  Typeable,
   Serializable,
-} from '@cosmicverse/foundation'
+} from '@cosmicverse/patterns'
 
 import {
   Entity,
@@ -58,20 +61,21 @@ import {
 export type AggregateCreateFn<TEntity extends Entity, TAggregate extends Aggregate<TEntity>> = (root: TEntity) => TAggregate
 
 /**
+ * @extends {Typeable, Identifiable, Serializable}
  * The `IAggregate` defines the base `Aggregate` properties.
  *
  * @property {EntityType} type
  * @property {EntityId} id
  * @property {EntityDate} created
  */
-export interface IAggregate extends Serializable {
+export interface IAggregate extends Typeable<EntityType>, Identifiable<EntityId>, Serializable {
   get type(): EntityType
   get id(): EntityId
   get created(): EntityDate
 }
 
 /**
- * @template TEntity
+ * @template {TEntity}
  * @implements {IAggregate}
  *
  * The `Aggregate` class is the base structure used to

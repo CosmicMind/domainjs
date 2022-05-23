@@ -44,7 +44,6 @@ import {
   stringify,
   Newable,
   Optional,
-  Serializable,
   ProxySchema,
   ProxyImmutable,
   ProxyMutable,
@@ -54,7 +53,12 @@ import {
 } from '@cosmicverse/foundation'
 
 import {
-  Id,
+  Identifiable,
+  Typeable,
+  Serializable,
+} from '@cosmicverse/patterns'
+
+import {
   Key,
   Value,
   Meta,
@@ -72,6 +76,7 @@ export class EntityPropertyError extends FoundationError {}
 
 /**
  * Defines the `EntityType` type.
+ *
  * @type {string}
  */
 export type EntityType = string
@@ -161,7 +166,7 @@ export type EntityPropertyData = Key<EntityPropertyDataKey> & Value<EntityProper
  *
  * @type {Id<EntityId> & Created<EntityDate> & { [key: string]: EntityPropertyValue }}
  */
-export type EntityProps = Id<EntityId> & Created<EntityDate> & { [key: string]: EntityPropertyValue }
+export type EntityProps = Identifiable<EntityId> & Created<EntityDate> & { [key: string]: EntityPropertyValue }
 
 /**
  * @template TEntity
@@ -174,22 +179,6 @@ export type EntityProps = Id<EntityId> & Created<EntityDate> & { [key: string]: 
  * @type {(props: TEntityProps) => TEntity}
  */
 export type EntityCreateFn<TEntity extends Entity, TEntityProps extends EntityProps = EntityProps> = (props: TEntityProps) => TEntity
-
-/**
- * The `EntityData` is used to recreate the instance after
- * being serialized.
- *
- * @property {EntityType} type
- * @property {EntityId} id
- * @property {EntityDateSerialized} created
- * @property {EntityPropertyData[]} props
- */
-export interface EntityData extends Object {
-  type: EntityType
-  id: EntityId
-  created: EntityDateSerialized
-  props: EntityPropertyData[]
-}
 
 /**
  * The `EntityDataKeys` are used for checks or iterators
@@ -213,20 +202,35 @@ export interface EntityProxySchema extends ProxySchema {
 }
 
 /**
+ * @extends {Typeable, Identifiable}
+ *
  * The `IEntity` defines the base `Entity` properties.
  *
  * @property {EntityType} type
- * @property {EntityId} id
  * @property {EntityDate} created
  */
-export interface IEntity {
-  type: EntityType
-  id: EntityId
+export interface IEntity extends Typeable<EntityType>, Identifiable<EntityId> {
   created: EntityDate
 }
 
 /**
- * @implements {IEntity}
+ * @extends {Omit<IEntity, 'created'>}
+ *
+ * The `EntityData` is used to recreate the instance after
+ * being serialized.
+ *
+ * @property {EntityType} type
+ * @property {EntityId} id
+ * @property {EntityDateSerialized} created
+ * @property {EntityPropertyData[]} props
+ */
+export interface EntityData extends Omit<IEntity, 'created'> {
+  created: EntityDateSerialized
+  props: EntityPropertyData[]
+}
+
+/**
+ * @implements {IEntity, Serializable}
  *
  * The `Entity` class is the base structure used to
  * generate domain entities.
@@ -263,7 +267,7 @@ export class Entity implements IEntity, Serializable {
   /**
    * Converts the `Entity` to a serialized value.
    *
-   * @returns {string}
+   * @type {string}
    */
   get serialized(): string {
     return stringify(createEntityDataFor(this)) as string
@@ -279,15 +283,7 @@ export class Entity implements IEntity, Serializable {
     this.id = props.id
     this.created = props.created
 
-    for (const p of Object.keys(props)) {
-      Object.defineProperty(this, p, {
-        value: props[p],
-        writable: true,
-        enumerable: true,
-        configurable: false,
-      })
-    }
-
+    Object.assign(this, props)
     this.type = type
   }
 }

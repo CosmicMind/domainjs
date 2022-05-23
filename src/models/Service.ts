@@ -36,7 +36,16 @@
 
 import { Newable } from '@cosmicverse/foundation'
 
+import { Nameable } from '@cosmicverse/patterns'
+
 export type Options = object
+
+/**
+ * Defines the `ServiceName` type.
+ *
+ * @type {string}
+ */
+export type ServiceName = string
 
 /**
  * @template TService
@@ -51,13 +60,15 @@ export type ServiceCreateFn<TOptions extends Options, TService extends Service<T
 
 /**
  * The `IService` defines the base `Service` properties.
+ *
+ * @property {ServiceName} name
  */
-export interface IService {
-  get name(): string
+export interface IService extends Nameable<ServiceName> {
+  get name(): ServiceName
 }
 
 /**
- * @template TOptions
+ * @template {TOptions}
  * @implements {IService}
  *
  * The `Service` class is the base structure used to
@@ -74,7 +85,7 @@ export class Service<TOptions extends Options> implements IService {
    */
   protected options: TOptions
 
-  get name(): string {
+  get name(): ServiceName {
     return this.constructor.name
   }
 
