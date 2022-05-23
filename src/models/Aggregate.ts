@@ -83,13 +83,13 @@ export interface IAggregate extends Typeable<EntityType>, Identifiable<EntityId>
  */
 export class Aggregate<TEntity extends Entity> implements IAggregate {
   /**
-   * The `__brand` property is used to guarantee that
+   * The `__type` property is used to guarantee that
    * only an `Aggregate` type can be passed to parameter
    * types that accept `Aggregate` instances.
    *
    * @type {unique symbol}
    */
-  private static readonly __brand: unique symbol = Symbol()
+  protected static readonly __type: unique symbol = Symbol()
 
   /**
    * @template TEntity

@@ -40,13 +40,13 @@ export interface ICommand {
 
 export abstract class Command implements ICommand {
   /**
-   * The `__brand` property is used to guarantee that
+   * The `__type` property is used to guarantee that
    * only an `Command` type can be passed to parameter
    * types that accept `Command` instances.
    *
    * @type {unique symbol}
    */
-  private static readonly __brand: unique symbol = Symbol()
+  protected static readonly __type: unique symbol = Symbol()
 
   get name(): string {
     return this.constructor.name

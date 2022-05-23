@@ -76,13 +76,13 @@ export interface IService extends Nameable<ServiceName> {
  */
 export class Service<TOptions extends Options> implements IService {
   /**
-   * The `__brand` property is used to guarantee that
+   * The `__type` property is used to guarantee that
    * only an `Service` type can be passed to parameter
    * types that accept `Service` instances.
    *
    * @type {unique symbol}
    */
-  private static readonly __brand: unique symbol = Symbol()
+  protected static readonly __type: unique symbol = Symbol()
 
   /**
    * @template TOptions

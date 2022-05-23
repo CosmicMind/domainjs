@@ -113,7 +113,7 @@ export interface IValue extends Typeable<ValueType> {
  * @property {ValueType} type
  * @property {ValuePropertyValue} value
  */
-export interface ValueData extends IValue {}
+export type ValueData = IValue
 
 /**
  * @implements {IValue, Serializable}
@@ -123,13 +123,13 @@ export interface ValueData extends IValue {}
  */
 export class Value implements IValue, Serializable {
   /**
-   * The `__brand` property is used to guarantee that
+   * The `__type` property is used to guarantee that
    * only an `Value` type can be passed to parameter
    * types that accept `Value` instances.
    *
    * @type {unique symbol}
    */
-  private static readonly __brand: unique symbol = Symbol()
+  protected static readonly __type: unique symbol = Symbol()
 
   /**
    * A reference to the `type` value.

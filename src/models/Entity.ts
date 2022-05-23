@@ -224,7 +224,7 @@ export interface IEntity extends Typeable<EntityType>, Identifiable<EntityId> {
  * @property {EntityDateSerialized} created
  * @property {EntityPropertyData[]} props
  */
-export interface EntityData extends Omit<IEntity, 'created'> {
+export type EntityData = Omit<IEntity, 'created'> & {
   created: EntityDateSerialized
   props: EntityPropertyData[]
 }
@@ -237,13 +237,13 @@ export interface EntityData extends Omit<IEntity, 'created'> {
  */
 export class Entity implements IEntity, Serializable {
   /**
-   * The `__brand` property is used to guarantee that
+   * The `__type` property is used to guarantee that
    * only an `Entity` type can be passed to parameter
    * types that accept `Entity` instances.
    *
    * @type {unique symbol}
    */
-  private static readonly __brand: unique symbol = Symbol()
+  protected static readonly __type: unique symbol = Symbol()
 
   /**
    * A reference to the `type` value.
