@@ -237,6 +237,15 @@ export interface EntityData extends Omit<IEntity, 'created'> {
  */
 export class Entity implements IEntity, Serializable {
   /**
+   * The `__brand` property is used to guarantee that
+   * only an `Entity` type can be passed to parameter
+   * types that accept `Entity` instances.
+   *
+   * @type {unique symbol}
+   */
+  private static readonly __brand: unique symbol = Symbol()
+
+  /**
    * A reference to the `type` value.
    *
    * @type {EntityType}
@@ -363,8 +372,8 @@ export const createEntityFor = <TEntity extends Entity, TEntityProps extends Ent
   }
 
 /**
- * The `createEntityDataFor` is used to generate `EntityData`
- * for a given `Entity` instance.
+ * The `createEntityDataFor` is used to generate a `EntityData`
+ * instance for a given `Entity` instance.
  *
  * @param {Entity} entity
  * @returns {EntityData}

@@ -123,6 +123,15 @@ export interface ValueData extends IValue {}
  */
 export class Value implements IValue, Serializable {
   /**
+   * The `__brand` property is used to guarantee that
+   * only an `Value` type can be passed to parameter
+   * types that accept `Value` instances.
+   *
+   * @type {unique symbol}
+   */
+  private static readonly __brand: unique symbol = Symbol()
+
+  /**
    * A reference to the `type` value.
    *
    * @type {ValueType}
@@ -214,8 +223,8 @@ export const createValueFor = <TValue extends Value, TValueProperty extends Valu
 }
 
 /**
- * The `createValueDataFor` is used to generate `ValueData`
- * for a given `Value` instance.
+ * The `createValueDataFor` is used to generate a `ValueData`
+ * instance for a given `Value` instance.
  *
  * @param {Value} value
  * @returns {ValueData}
