@@ -222,7 +222,7 @@ export const createValueFor = <TValue extends Value, TValueProperty extends Valu
  */
 export const createValueDataFor = (value: Value): ValueData => ({
   type: value.type,
-  value: value.id,
+  value: value.value,
 })
 
 /**

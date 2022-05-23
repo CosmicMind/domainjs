@@ -106,3 +106,16 @@ test('Value: virtual string', async t => {
   t.is(vo.value, 'daniel')
   t.is(vo.fullName, 'Daniel Jonathan')
 })
+
+test('Value: serialized', async t => {
+  const type = 'Value'
+  const createVO = createValue(type, string().defined().strict(true))
+
+  const name = 'daniel'
+  const vo = createVO(name)
+  t.true(validateValueFor(vo, Value as Newable<Value>))
+  t.is(vo.type, type)
+  t.is(vo.value, name)
+
+  t.is(vo.serialized, `{"type":"${type}","value":"${name}"}`)
+})

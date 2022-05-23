@@ -75,7 +75,7 @@ export interface IAggregate extends Typeable<EntityType>, Identifiable<EntityId>
 }
 
 /**
- * @template {TEntity}
+ * @template TEntity
  * @implements {IAggregate}
  *
  * The `Aggregate` class is the base structure used to

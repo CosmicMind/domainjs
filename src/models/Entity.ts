@@ -164,7 +164,7 @@ export type EntityPropertyData = Key<EntityPropertyDataKey> & Value<EntityProper
 /**
  * Defines the `EntityProps` type.
  *
- * @type {Id<EntityId> & Created<EntityDate> & { [key: string]: EntityPropertyValue }}
+ * @type {Identifiable<EntityId> & Created<EntityDate> & { [key: string]: EntityPropertyValue }}
  */
 export type EntityProps = Identifiable<EntityId> & Created<EntityDate> & { [key: string]: EntityPropertyValue }
 

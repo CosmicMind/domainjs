@@ -68,7 +68,7 @@ export interface IService extends Nameable<ServiceName> {
 }
 
 /**
- * @template {TOptions}
+ * @template TOptions
  * @implements {IService}
  *
  * The `Service` class is the base structure used to
