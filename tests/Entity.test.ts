@@ -35,7 +35,6 @@ import { string } from 'yup'
 
 import {
   uuidv4,
-  Newable,
   FoundationError,
   FoundationTypeError,
   ProxyTypeError,
@@ -68,7 +67,7 @@ test('Entity: create Entity',async t => {
   const name = 'daniel'
   const mo = createEntityObject({ id, created, name })
 
-  t.true(validateEntityFor(mo, Entity as Newable<Entity>))
+  t.true(validateEntityFor(mo, Entity))
   t.is(mo.type, type)
   t.is(mo.id, id)
   t.is(mo.created, created)
@@ -88,7 +87,7 @@ test('Entity: create EntityObject',async t => {
   const name = 'daniel'
   const mo = createEntityObject({ id, created, name })
 
-  t.true(validateEntityFor(mo, EntityObject as Newable<EntityObject>))
+  t.true(validateEntityFor(mo, EntityObject))
   t.is(mo.type, type)
   t.is(mo.id, id)
   t.is(mo.created, created)
@@ -351,7 +350,7 @@ test('Entity: virtual string',async t => {
   const name = 'daniel'
   const mo = createEntityObject({ id, created, name })
 
-  t.true(validateEntityFor(mo, Entity as Newable<Entity>))
+  t.true(validateEntityFor(mo, Entity))
   t.is(mo.type, type)
   t.is(mo.id, id)
   t.is(mo.created, created)

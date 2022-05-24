@@ -34,7 +34,6 @@ import test from 'ava'
 import { string } from 'yup'
 
 import {
-  Newable,
   ProxyTypeError,
   FoundationTypeError,
 } from '@cosmicverse/foundation'
@@ -53,7 +52,7 @@ test('Value: create', async t => {
   const createVO = createValue(type, string().defined().strict(true))
 
   const vo = createVO('daniel')
-  t.true(validateValueFor(vo, Value as Newable<Value>))
+  t.true(validateValueFor(vo, Value))
   t.is(vo.type, type)
   t.is(vo.value, 'daniel')
 })
@@ -63,7 +62,7 @@ test('Value: create ValueObject', async t => {
   const createVO = createValueFor(ValueObject, string().defined().strict(true))
 
   const vo = createVO('daniel')
-  t.true(validateValueFor(vo, ValueObject as Newable<ValueObject>))
+  t.true(validateValueFor(vo, ValueObject))
   t.is(vo.type, type)
   t.is(vo.value, 'daniel')
 })
@@ -101,7 +100,7 @@ test('Value: virtual string', async t => {
   })
 
   const vo = createVO('daniel')
-  t.true(validateValueFor(vo, Value as Newable<Value>))
+  t.true(validateValueFor(vo, Value))
   t.is(vo.type, type)
   t.is(vo.value, 'daniel')
   t.is(vo.fullName, 'Daniel Jonathan')
@@ -113,7 +112,7 @@ test('Value: serialized', async t => {
 
   const name = 'daniel'
   const vo = createVO(name)
-  t.true(validateValueFor(vo, Value as Newable<Value>))
+  t.true(validateValueFor(vo, Value))
   t.is(vo.type, type)
   t.is(vo.value, name)
 

@@ -34,11 +34,9 @@
  * @module Service
  */
 
-import { Newable } from '@cosmicverse/foundation'
-
 import { Nameable } from '@cosmicverse/patterns'
 
-export type Options = object
+import { Value } from './Value'
 
 /**
  * Defines the `ServiceName` type.
@@ -48,15 +46,16 @@ export type Options = object
 export type ServiceName = string
 
 /**
+ * @template TValue
  * @template TService
  *
  * The `ServiceCreateFn` is a type definition that is used
  * to generate new `Service` instances from a given
  * constructor function.
  *
- * @type {(options: TOptions)) => TService}
+ * @type {(options: TValue)) => TService}
  */
-export type ServiceCreateFn<TOptions extends Options, TService extends Service<TOptions>> = (options: TOptions) => TService
+export type ServiceCreateFn<TValue extends Value, TService extends Service<TValue>> = (options: TValue) => TService
 
 /**
  * The `IService` defines the base `Service` properties.
@@ -68,32 +67,37 @@ export interface IService extends Nameable<ServiceName> {
 }
 
 /**
- * @template TOptions
+ * @template TValue
+ * @template TService
+ *
+ * A `constructor` type for `Service` types.
+ *
+ * @returns {TService}
+ */
+export type ServiceConstructor<TValue extends Value, TService extends Service<TValue>> = new (options: TValue) => TService
+
+/**
+ * @template TValue
  * @implements {IService}
  *
  * The `Service` class is the base structure used to
  * generate domain services.
  */
-export class Service<TOptions extends Options> implements IService {
+export class Service<TValue extends Value> implements IService {
   /**
-   * The `__type` property is used to guarantee that
-   * only an `Service` type can be passed to parameter
-   * types that accept `Service` instances.
-   *
-   * @type {unique symbol}
-   */
-  protected static readonly __type: unique symbol = Symbol()
-
-  /**
-   * @template TOptions
    * @protected
    *
    * A reference to the options `Options` instance.
    *
-   * @type {TOptions}
+   * @type {TValue}
    */
-  protected options: TOptions
+  protected options: TValue
 
+  /**
+   * A reference to the `name` value.
+   *
+   * @type {ServiceName}
+   */
   get name(): ServiceName {
     return this.constructor.name
   }
@@ -101,32 +105,34 @@ export class Service<TOptions extends Options> implements IService {
   /**
    * @constructor
    *
-   * @param {TOptions} options
+   * @param {TValue} options
    */
-  constructor(options: TOptions) {
+  constructor(options: TValue) {
     this.options = options
   }
 }
 
 /**
+ * @template TValue
  * @template TService
  *
  * The `createServiceFor` is used to generate a new `Service`
  * instance from a given `class` constructor.
  *
- * @param {Newable<TService>} _class
+ * @param {ServiceConstructor<TService>} _class
  * @returns {ServiceCreateFn<TService>}
  */
-export const createServiceFor = <TOptions extends Options, TService extends Service<TOptions>>(_class: Newable<TService>): ServiceCreateFn<TOptions, TService> =>
-  (options: TOptions): TService => new _class(options)
+export const createServiceFor = <TValue extends Value, TService extends Service<TValue>>(_class: ServiceConstructor<TValue, TService>): ServiceCreateFn<TValue, TService> =>
+  (options: TValue): TService => new _class(options)
 
 /**
+ * @template TValue
  * @template TService
  *
  * The `validateServiceFor` is ued to validate a given `Service`.
  *
  * @param {TService} service
- * @param {Newable<TService>} _class
+ * @param {ServiceConstructor<TService>} _class
  * @returns {boolean}
  */
-export const validateServiceFor = <TOptions extends Options, TService extends Service<TOptions>>(service: TService, _class: Newable<TService>): boolean => service instanceof _class
+export const validateServiceFor = <TValue extends Value, TService extends Service<TValue>>(service: TService, _class: ServiceConstructor<TValue, TService>): boolean => service instanceof _class

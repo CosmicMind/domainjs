@@ -38,7 +38,6 @@ import { string } from 'yup'
 
 import {
   stringify,
-  Newable,
   Optional,
   ProxyValidator,
   ProxyVirtual,
@@ -116,21 +115,23 @@ export interface IValue extends Typeable<ValueType> {
 export type ValueData = IValue
 
 /**
- * @implements {IValue, Serializable}
+ * @template TValue
+ *
+ * A `constructor` type for `Value` types.
+ *
+ * @param {ValueType} type
+ * @param {ValuePropertyValue} value
+ * @returns {TValue}
+ */
+export type ValueConstructor<TValue extends Value> = new (type: ValueType, value: ValuePropertyValue) => TValue
+
+/**
+ * @implements {IValue, Nameable, Serializable}
  *
  * The `Value` class is the base structure used to
  * generate domain values.
  */
 export class Value implements IValue, Serializable {
-  /**
-   * The `__type` property is used to guarantee that
-   * only an `Value` type can be passed to parameter
-   * types that accept `Value` instances.
-   *
-   * @type {unique symbol}
-   */
-  protected static readonly __type: unique symbol = Symbol()
-
   /**
    * A reference to the `type` value.
    *
@@ -205,12 +206,12 @@ export const createValue = (type: ValueType, value: ValueValidator, virtual?: Va
  * The `createValueFor` is used to generate a new `Value` instance
  * from a given `class` constructor, `type`, and partial `schema`.
  *
- * @param {{ new (type: ValueType, value: ValuePropertyValue): TValue }} _class
+ * @param {ValueConstructor<TValue>} _class
  * @param {ValueValidator} value
  * @param {ValueVirtual} virtual
  * @returns {ValueCreateFn<TValue>}
  */
-export const createValueFor = <TValue extends Value, TValueProperty extends ValuePropertyValue = ValuePropertyValue>(_class: Newable<TValue>, value: ValueValidator, virtual?: ValueVirtual): ValueCreateFn<TValue, TValueProperty> => {
+export const createValueFor = <TValue extends Value, TValueProperty extends ValuePropertyValue = ValuePropertyValue>(_class: ValueConstructor<TValue>, value: ValueValidator, virtual?: ValueVirtual): ValueCreateFn<TValue, TValueProperty> => {
   const schema = {
     immutable: {
       type: ValueTypeValidator,
@@ -240,8 +241,7 @@ export const createValueDataFor = (value: Value): ValueData => ({
  * The `validateValueFor` is ued to validate a given `Value`.
  *
  * @param {TValue} value
- * @param {Newable<TValue>} _class
- * @param {ValueType} [type = _class.name]
+ * @param {ValueConstructor<TValue>} _class
  * @returns {boolean}
  */
-export const validateValueFor = <TValue extends Value>(value: TValue, _class: Newable<TValue>, type: ValueType = _class.name): boolean => value instanceof _class && type == value.type
+export const validateValueFor = <TValue extends Value>(value: TValue, _class: ValueConstructor<TValue>): boolean => value instanceof _class

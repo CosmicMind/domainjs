@@ -83,4 +83,5 @@ export type { IService } from './models/Service'
 export {
   Service,
   createServiceFor,
+  validateServiceFor,
 } from './models/Service'

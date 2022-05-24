@@ -42,7 +42,6 @@ import {
 import {
   parse,
   stringify,
-  Newable,
   Optional,
   ProxySchema,
   ProxyImmutable,
@@ -230,21 +229,23 @@ export type EntityData = Omit<IEntity, 'created'> & {
 }
 
 /**
+ * @template TEntity
+ *
+ * A `constructor` type for `Entity` types.
+ *
+ * @param {EntityType} type
+ * @param {EntityProps} value
+ * @returns {TEntity}
+ */
+export type EntityConstructor<TEntity extends Entity> = new (type: EntityType, props: EntityProps) => TEntity
+
+/**
  * @implements {IEntity, Serializable}
  *
  * The `Entity` class is the base structure used to
  * generate domain entities.
  */
 export class Entity implements IEntity, Serializable {
-  /**
-   * The `__type` property is used to guarantee that
-   * only an `Entity` type can be passed to parameter
-   * types that accept `Entity` instances.
-   *
-   * @type {unique symbol}
-   */
-  protected static readonly __type: unique symbol = Symbol()
-
   /**
    * A reference to the `type` value.
    *
@@ -314,7 +315,7 @@ export const EntitySerializedValidator = string().min(1).typeError(EntitySeriali
  * from a given `type` and `schema`.
  *
  * @param {EntityType} type
- * @param {Partial<EntityProxySchema>} [schema = {}]
+ * @param {Partial<EntityProxySchema>} [schema={}]
  * @returns {EntityCreateFn<Entity>}
  */
 export const createEntity = (type: EntityType, schema: Partial<EntityProxySchema> = {}): EntityCreateFn<Entity> =>
@@ -346,11 +347,11 @@ export const createEntity = (type: EntityType, schema: Partial<EntityProxySchema
  * The `createEntityFor` is used to generate a new `Entity` instance
  * from a given `class` constructor, `type`, and `schema`.
  *
- * @param {Newable<TEntity>} _class
- * @param {Partial<EntityProxySchema>} [schema = {}]
+ * @param {EntityConstructor<TEntity>} _class
+ * @param {Partial<EntityProxySchema>} [schema={}]
  * @returns {EntityCreateFn<TEntity>}
  */
-export const createEntityFor = <TEntity extends Entity, TEntityProps extends EntityProps = EntityProps>(_class: Newable<TEntity>, schema: Partial<EntityProxySchema> = {}): EntityCreateFn<TEntity, TEntityProps> =>
+export const createEntityFor = <TEntity extends Entity, TEntityProps extends EntityProps = EntityProps>(_class: EntityConstructor<TEntity>, schema: Partial<EntityProxySchema> = {}): EntityCreateFn<TEntity, TEntityProps> =>
   (props: TEntityProps): TEntity => {
     if ('undefined' !== typeof props.type) {
       throw new EntityPropertyError('property (type) cannot be redefined')
@@ -475,8 +476,7 @@ export const mapPropertyData = (entity: Entity, props: EntityPropertyData[]): vo
  * The `validateEntityFor` is ued to validate a given `Entity`.
  *
  * @param {TEntity} entity
- * @param {Newable<TEntity>} _class
- * @param {EntityType} [type = _class.name]
+ * @param {EntityConstructor<TEntity>} _class
  * @returns {boolean}
  */
-export const validateEntityFor = <TEntity extends Entity>(entity: TEntity, _class: Newable<TEntity>, type: EntityType = _class.name): boolean => entity instanceof _class && type == entity.type
+export const validateEntityFor = <TEntity extends Entity>(entity: TEntity, _class: EntityConstructor<TEntity>): boolean => entity instanceof _class

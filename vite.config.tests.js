@@ -45,7 +45,8 @@ const external = [
   'eslint',
   'lib0',
   'yup',
-  '@cosmicverse/foundation'
+  '@cosmicverse/foundation',
+  '@cosmicverse/patterns'
 ]
 const globals = {}
 
