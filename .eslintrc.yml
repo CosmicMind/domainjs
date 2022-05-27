@@ -29,3 +29,5 @@ rules:
   curly:
     - 2
     - all
+  no-trailing-spaces:
+    - 2
