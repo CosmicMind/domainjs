@@ -30,7 +30,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { defineConfig } from 'vite'
+import {defineConfig} from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 const main = 'tests/index.ts'
@@ -38,54 +38,54 @@ const outDir = process.env.npm_out_dir
 const fileName = format => `lib.${format}.tests.js`
 const name = process.env.npm_package_name
 const entry = main
-const formats = [ 'es' ]
+const formats = ['es']
 const external = [
-  'ava',
-  'dotenv',
-  'eslint',
-  'lib0',
-  'yup',
-  '@cosmicverse/foundation',
-  '@cosmicverse/patterns'
+    'ava',
+    'dotenv',
+    'eslint',
+    'lib0',
+    'yup',
+    '@cosmicverse/foundation',
+    '@cosmicverse/patterns'
 ]
 const globals = {}
 
 const isWatch = mode => 'watch' === mode
 const isDev = mode => 'development' === mode || isWatch(mode)
 
-export default ({ mode }) => {
-  const manifest = false
-  const emptyOutDir = false
-  const cssCodeSplit = true
-  const sourcemap = false
+export default ({mode}) => {
+    const manifest = false
+    const emptyOutDir = false
+    const cssCodeSplit = true
+    const sourcemap = false
 
-  const minify = isDev(mode) ? false : 'terser'
-  const watch = isWatch(mode)
+    const minify = isDev(mode) ? false : 'terser'
+    const watch = isWatch(mode)
 
-  return defineConfig({
-    outDir,
-    plugins: [
-      tsconfigPaths()
-    ],
-    build: {
-      manifest,
-      emptyOutDir,
-      cssCodeSplit,
-      sourcemap,
-      lib: {
-        name,
-        entry,
-        formats,
-        fileName,
-      },
-      rollupOptions: {
-        external,
-        output: {
-          globals,
+    return defineConfig({
+        outDir,
+        plugins: [
+            tsconfigPaths()
+        ],
+        build: {
+            manifest,
+            emptyOutDir,
+            cssCodeSplit,
+            sourcemap,
+            lib: {
+                name,
+                entry,
+                formats,
+                fileName,
+            },
+            rollupOptions: {
+                external,
+                output: {
+                    globals,
+                },
+            },
+            minify,
+            watch,
         },
-      },
-      minify,
-      watch,
-    },
-  })
+    })
 }

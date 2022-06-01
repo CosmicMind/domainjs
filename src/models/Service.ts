@@ -34,9 +34,9 @@
  * @module Service
  */
 
-import { Nameable } from '@cosmicverse/patterns'
+import {Nameable} from '@cosmicverse/patterns'
 
-import { Value } from './Value'
+import {Value} from './Value'
 
 /**
  * Defines the `ServiceName` type.
@@ -63,7 +63,7 @@ export type ServiceCreateFn<TValue extends Value, TService extends Service<TValu
  * @property {ServiceName} name
  */
 export interface IService extends Nameable<ServiceName> {
-  get name(): ServiceName
+    get name(): ServiceName
 }
 
 /**
@@ -84,32 +84,32 @@ export type ServiceConstructor<TValue extends Value, TService extends Service<TV
  * generate domain services.
  */
 export class Service<TValue extends Value> implements IService {
-  /**
-   * @protected
-   *
-   * A reference to the options `Options` instance.
-   *
-   * @type {TValue}
-   */
-  protected options: TValue
+    /**
+     * @protected
+     *
+     * A reference to the options `Options` instance.
+     *
+     * @type {TValue}
+     */
+    protected options: TValue
 
-  /**
-   * A reference to the `name` value.
-   *
-   * @type {ServiceName}
-   */
-  get name(): ServiceName {
-    return this.constructor.name
-  }
+    /**
+     * A reference to the `name` value.
+     *
+     * @type {ServiceName}
+     */
+    get name(): ServiceName {
+        return this.constructor.name
+    }
 
-  /**
-   * @constructor
-   *
-   * @param {TValue} options
-   */
-  constructor(options: TValue) {
-    this.options = options
-  }
+    /**
+     * @constructor
+     *
+     * @param {TValue} options
+     */
+    constructor(options: TValue) {
+        this.options = options
+    }
 }
 
 /**
@@ -123,7 +123,7 @@ export class Service<TValue extends Value> implements IService {
  * @returns {ServiceCreateFn<TService>}
  */
 export const createServiceFor = <TValue extends Value, TService extends Service<TValue>>(_class: ServiceConstructor<TValue, TService>): ServiceCreateFn<TValue, TService> =>
-  (options: TValue): TService => new _class(options)
+    (options: TValue): TService => new _class(options)
 
 /**
  * @template TValue

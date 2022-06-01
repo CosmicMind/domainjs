@@ -32,8 +32,8 @@
 
 import test from 'ava'
 
-test('Repository: IRepository',async t => {
+test('Repository: IRepository', async t => {
 
 
-  t.true(true)
+    t.true(true)
 })

@@ -53,7 +53,7 @@ export type RepositoryCreateFn<TRepository extends Repository> = () => TReposito
  * @property {EntityDate} created
  */
 export interface IRepository {
-  get name(): string
+    get name(): string
 }
 
 /**
@@ -63,9 +63,9 @@ export interface IRepository {
  * generate domain aggregates.
  */
 export class Repository implements IRepository {
-  get name(): string {
-    return this.constructor.name
-  }
+    get name(): string {
+        return this.constructor.name
+    }
 }
 
 /**
@@ -75,7 +75,7 @@ export class Repository implements IRepository {
  * @returns {RepositoryCreateFn<Repository>}
  */
 export const createRepository = (): RepositoryCreateFn<Repository> =>
-  createRepositoryFor(Repository)
+    createRepositoryFor(Repository)
 
 /**
  * @template TRepository
@@ -86,5 +86,5 @@ export const createRepository = (): RepositoryCreateFn<Repository> =>
  * @param {{ new (): TRepository }} _class
  * @returns {RepositoryCreateFn<TRepository>}
  */
-export const createRepositoryFor = <TRepository extends Repository>(_class: { new (): TRepository }): RepositoryCreateFn<TRepository> =>
-  (): TRepository => new _class()
+export const createRepositoryFor = <TRepository extends Repository>(_class: { new(): TRepository }): RepositoryCreateFn<TRepository> =>
+    (): TRepository => new _class()

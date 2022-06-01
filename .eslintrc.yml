@@ -11,8 +11,7 @@ rules:
   '@typescript-eslint/no-inferrable-types': 2
   comma-dangle:
     - error
-    -
-      arrays: never
+    - arrays: never
       objects: always-multiline
       imports: always-multiline
       exports: always-multiline
@@ -20,7 +19,7 @@ rules:
   indent:
     - error
     - 2
-  object-curly-spacing: 
+  object-curly-spacing:
     - 2
     - always
   array-bracket-spacing:

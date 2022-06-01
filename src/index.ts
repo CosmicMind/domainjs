@@ -31,57 +31,57 @@
  */
 
 export type {
-  IValue,
-  ValueType,
-  ValuePropertyValue,
+    IValue,
+    ValueType,
+    ValuePropertyValue,
 } from './models/Value'
 
 export {
-  Value,
-  createValue,
-  createValueFor,
-  validateValueFor,
+    Value,
+    createValue,
+    createValueFor,
+    validateValueFor,
 } from './models/Value'
 
 export type {
-  IEntity,
-  EntityType,
-  EntityId,
-  EntityDate,
-  EntityPropertyValue,
+    IEntity,
+    EntityType,
+    EntityId,
+    EntityDate,
+    EntityPropertyValue,
 } from './models/Entity'
 
 export {
-  Entity,
-  createEntity,
-  createEntityFor,
-  validateEntityFor,
-  EntityPropertyError,
+    Entity,
+    createEntity,
+    createEntityFor,
+    validateEntityFor,
+    EntityPropertyError,
 } from './models/Entity'
 
-export type { IAggregate } from './models/Aggregate'
+export type {IAggregate} from './models/Aggregate'
 
 export {
-  Aggregate,
-  createAggregateFor,
-  validateAggregateFor,
+    Aggregate,
+    createAggregateFor,
+    validateAggregateFor,
 } from './models/Aggregate'
 
-export type { ICommand } from './models/Command'
-export { Command } from './models/Command'
+export type {ICommand} from './models/Command'
+export {Command} from './models/Command'
 
-export type { IRepository } from './models/Repository'
+export type {IRepository} from './models/Repository'
 
 export {
-  Repository,
-  createRepository,
-  createRepositoryFor,
+    Repository,
+    createRepository,
+    createRepositoryFor,
 } from './models/Repository'
 
-export type { IService } from './models/Service'
+export type {IService} from './models/Service'
 
 export {
-  Service,
-  createServiceFor,
-  validateServiceFor,
+    Service,
+    createServiceFor,
+    validateServiceFor,
 } from './models/Service'

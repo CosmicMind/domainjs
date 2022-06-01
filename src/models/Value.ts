@@ -34,19 +34,19 @@
  * @module Value
  */
 
-import { string } from 'yup'
+import {string} from 'yup'
 
 import {
-  stringify,
-  Optional,
-  ProxyValidator,
-  ProxyVirtual,
-  createProxyFor,
+    stringify,
+    Optional,
+    ProxyValidator,
+    ProxyVirtual,
+    createProxyFor,
 } from '@cosmicverse/foundation'
 
 import {
-  Typeable,
-  Serializable,
+    Typeable,
+    Serializable,
 } from '@cosmicverse/patterns'
 
 /**
@@ -100,7 +100,7 @@ export type ValueVirtual = ProxyVirtual
  * @property {ValuePropertyValue} value
  */
 export interface IValue extends Typeable<ValueType> {
-  value: ValuePropertyValue
+    value: ValuePropertyValue
 }
 
 /**
@@ -132,47 +132,47 @@ export type ValueConstructor<TValue extends Value> = new (type: ValueType, value
  * generate domain values.
  */
 export class Value implements IValue, Serializable {
-  /**
-   * A reference to the `type` value.
-   *
-   * @type {ValueType}
-   */
-  readonly type: ValueType
+    /**
+     * A reference to the `type` value.
+     *
+     * @type {ValueType}
+     */
+    readonly type: ValueType
 
-  /**
-   * A reference to the `value` value.
-   *
-   * @type {ValuePropertyValue}
-   */
-  readonly value: ValuePropertyValue
+    /**
+     * A reference to the `value` value.
+     *
+     * @type {ValuePropertyValue}
+     */
+    readonly value: ValuePropertyValue
 
-  /**
-   * This allows for keys to be defined within the
-   * `virtual` definition.
-   *
-   * @type {ValuePropertyValue}
-   */
-  readonly [key: string]: ValuePropertyValue
+    /**
+     * This allows for keys to be defined within the
+     * `virtual` definition.
+     *
+     * @type {ValuePropertyValue}
+     */
+    readonly [key: string]: ValuePropertyValue
 
-  /**
-   * Converts the `Value` to a serialized value.
-   *
-   * @type {string}
-   */
-  get serialized(): string {
-    return stringify(createValueDataFor(this)) as string
-  }
+    /**
+     * Converts the `Value` to a serialized value.
+     *
+     * @type {string}
+     */
+    get serialized(): string {
+        return stringify(createValueDataFor(this)) as string
+    }
 
-  /**
-   * @constructor
-   *
-   * @param {ValueType} type
-   * @param {ValuePropertyValue} value
-   */
-  constructor(type: ValueType, value: ValuePropertyValue) {
-    this.type = type
-    this.value = value
-  }
+    /**
+     * @constructor
+     *
+     * @param {ValueType} type
+     * @param {ValuePropertyValue} value
+     */
+    constructor(type: ValueType, value: ValuePropertyValue) {
+        this.type = type
+        this.value = value
+    }
 }
 
 export const ValueTypeErrorMessage = 'Value type is invalid'
@@ -188,15 +188,15 @@ export const ValueTypeValidator = string().min(1).typeError(ValueTypeErrorMessag
  * @returns {ValueCreateFn<Value>}
  */
 export const createValue = (type: ValueType, value: ValueValidator, virtual?: ValueVirtual): ValueCreateFn<Value> => {
-  const schema = {
-    immutable: {
-      type: ValueTypeValidator,
-      value,
-    },
-    virtual,
-  }
+    const schema = {
+        immutable: {
+            type: ValueTypeValidator,
+            value,
+        },
+        virtual,
+    }
 
-  return (value: ValuePropertyValue): Value => createProxyFor(schema, new Value(type, value))
+    return (value: ValuePropertyValue): Value => createProxyFor(schema, new Value(type, value))
 }
 
 /**
@@ -212,15 +212,15 @@ export const createValue = (type: ValueType, value: ValueValidator, virtual?: Va
  * @returns {ValueCreateFn<TValue>}
  */
 export const createValueFor = <TValue extends Value, TValueProperty extends ValuePropertyValue = ValuePropertyValue>(_class: ValueConstructor<TValue>, value: ValueValidator, virtual?: ValueVirtual): ValueCreateFn<TValue, TValueProperty> => {
-  const schema = {
-    immutable: {
-      type: ValueTypeValidator,
-      value,
-    },
-    virtual,
-  }
+    const schema = {
+        immutable: {
+            type: ValueTypeValidator,
+            value,
+        },
+        virtual,
+    }
 
-  return (value: TValueProperty): TValue => createProxyFor(schema, new _class(_class.name, value))
+    return (value: TValueProperty): TValue => createProxyFor(schema, new _class(_class.name, value))
 }
 
 /**
@@ -231,8 +231,8 @@ export const createValueFor = <TValue extends Value, TValueProperty extends Valu
  * @returns {ValueData}
  */
 export const createValueDataFor = (value: Value): ValueData => ({
-  type: value.type,
-  value: value.value,
+    type: value.type,
+    value: value.value,
 })
 
 /**

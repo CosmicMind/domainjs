@@ -35,16 +35,16 @@
  */
 
 import {
-  Identifiable,
-  Typeable,
-  Serializable,
+    Identifiable,
+    Typeable,
+    Serializable,
 } from '@cosmicverse/patterns'
 
 import {
-  Entity,
-  EntityType,
-  EntityId,
-  EntityDate,
+    Entity,
+    EntityType,
+    EntityId,
+    EntityDate,
 } from './Entity'
 
 /**
@@ -67,9 +67,11 @@ export type AggregateCreateFn<TEntity extends Entity, TAggregate extends Aggrega
  * @property {EntityDate} created
  */
 export interface IAggregate extends Typeable<EntityType>, Identifiable<EntityId>, Serializable {
-  get type(): EntityType
-  get id(): EntityId
-  get created(): EntityDate
+    get type(): EntityType
+
+    get id(): EntityId
+
+    get created(): EntityDate
 }
 
 /**
@@ -91,61 +93,61 @@ export type AggregateConstructor<TEntity extends Entity, TAggregate extends Aggr
  * generate domain aggregates.
  */
 export class Aggregate<TEntity extends Entity> implements IAggregate {
-  /**
-   * @template TEntity
-   * @protected
-   *
-   * A reference to the root `Entity` instance.
-   *
-   * @type {TEntity}
-   */
-  protected root: TEntity
+    /**
+     * @template TEntity
+     * @protected
+     *
+     * A reference to the root `Entity` instance.
+     *
+     * @type {TEntity}
+     */
+    protected root: TEntity
 
-  /**
-   * A reference to the root `Entity` type.
-   *
-   * @type {EntityType}
-   */
-  get type(): EntityType {
-    return this.root.type
-  }
+    /**
+     * A reference to the root `Entity` type.
+     *
+     * @type {EntityType}
+     */
+    get type(): EntityType {
+        return this.root.type
+    }
 
-  /**
-   * A reference to the root `Entity` type.
-   *
-   * @type {EntityType}
-   */
-  get id(): EntityId {
-    return this.root.id
-  }
+    /**
+     * A reference to the root `Entity` type.
+     *
+     * @type {EntityType}
+     */
+    get id(): EntityId {
+        return this.root.id
+    }
 
-  /**
-   * A reference to the root `Entity` type.
-   *
-   * @type {EntityType}
-   */
-  get created(): EntityDate {
-    return this.root.created
-  }
+    /**
+     * A reference to the root `Entity` type.
+     *
+     * @type {EntityType}
+     */
+    get created(): EntityDate {
+        return this.root.created
+    }
 
-  /**
-   * A `serialized` representation of the
-   * root `Entity`.
-   *
-   * @type {string}
-   */
-  get serialized(): string {
-    return this.root.serialized
-  }
+    /**
+     * A `serialized` representation of the
+     * root `Entity`.
+     *
+     * @type {string}
+     */
+    get serialized(): string {
+        return this.root.serialized
+    }
 
-  /**
-   * @constructor
-   *
-   * @param {TEntity} root
-   */
-  constructor(root: TEntity) {
-    this.root = root
-  }
+    /**
+     * @constructor
+     *
+     * @param {TEntity} root
+     */
+    constructor(root: TEntity) {
+        this.root = root
+    }
 }
 
 /**
@@ -159,7 +161,7 @@ export class Aggregate<TEntity extends Entity> implements IAggregate {
  * @returns {AggregateCreateFn<TAggregate>}
  */
 export const createAggregateFor = <TEntity extends Entity, TAggregate extends Aggregate<TEntity>>(_class: AggregateConstructor<TEntity, TAggregate>): AggregateCreateFn<TEntity, TAggregate> =>
-  (root: TEntity): TAggregate => new _class(root)
+    (root: TEntity): TAggregate => new _class(root)
 
 /**
  * @template TEntity

@@ -34,23 +34,24 @@
  * @module User
  */
 
-import { string } from 'yup'
+import {string} from 'yup'
 
 import {
-  Entity,
-  createEntityFor,
+    Entity,
+    createEntityFor,
 } from '../../../src'
 
-export class User extends Entity {}
+export class User extends Entity {
+}
 
 
 export const createUser = createEntityFor(User, {
-  mutable: {
-    name: string().defined().strict(),
-  },
-  virtual: {
-    get displayName(): string {
-      return this.name as string
+    mutable: {
+        name: string().defined().strict(),
     },
-  },
+    virtual: {
+        get displayName(): string {
+            return this.name as string
+        },
+    },
 })

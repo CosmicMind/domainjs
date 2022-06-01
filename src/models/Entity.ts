@@ -35,33 +35,33 @@
  */
 
 import {
-  date,
-  string,
+    date,
+    string,
 } from 'yup'
 
 import {
-  parse,
-  stringify,
-  Optional,
-  ProxySchema,
-  ProxyImmutable,
-  ProxyMutable,
-  ProxyVirtual,
-  createProxyFor,
-  FoundationError,
+    parse,
+    stringify,
+    Optional,
+    ProxySchema,
+    ProxyImmutable,
+    ProxyMutable,
+    ProxyVirtual,
+    createProxyFor,
+    FoundationError,
 } from '@cosmicverse/foundation'
 
 import {
-  Identifiable,
-  Typeable,
-  Serializable,
+    Identifiable,
+    Typeable,
+    Serializable,
 } from '@cosmicverse/patterns'
 
 import {
-  Key,
-  Value,
-  Meta,
-  Created,
+    Key,
+    Value,
+    Meta,
+    Created,
 } from '../utils/type-defs'
 
 /**
@@ -71,7 +71,8 @@ import {
  * a given property value doesn't pass validation checks
  * for a given property key.
  */
-export class EntityPropertyError extends FoundationError {}
+export class EntityPropertyError extends FoundationError {
+}
 
 /**
  * Defines the `EntityType` type.
@@ -106,7 +107,15 @@ export type EntityDateSerialized = string
  *
  * @type {string | number | boolean | Date | Record<string, string | number> | (string | number)[] | Set<string | number> | object}
  */
-export type EntityPropertyValue = string | number | boolean | Date | Record<string, string | number> | (string | number)[] | Set<string | number> | object
+export type EntityPropertyValue =
+    string
+    | number
+    | boolean
+    | Date
+    | Record<string, string | number>
+    | (string | number)[]
+    | Set<string | number>
+    | object
 
 /**
  * The meta type definition for `EntityPropertyData`.
@@ -124,12 +133,12 @@ export type EntityPropertyValue = string | number | boolean | Date | Record<stri
  * @property {boolean} set
  */
 export type EntityPropertyMeta = {
-  boolean: boolean
-  string: boolean
-  number: boolean
-  object: boolean
-  date: boolean
-  set: boolean
+    boolean: boolean
+    string: boolean
+    number: boolean
+    object: boolean
+    date: boolean
+    set: boolean
 }
 
 /**
@@ -158,7 +167,10 @@ export type EntityPropertyDataMeta = Partial<EntityPropertyMeta>
  *
  * @type {Key<string> & Value<string> & Meta<Partial<EntityPropertyMeta>>}
  */
-export type EntityPropertyData = Key<EntityPropertyDataKey> & Value<EntityPropertyDataValue> & Meta<EntityPropertyDataMeta>
+export type EntityPropertyData =
+    Key<EntityPropertyDataKey>
+    & Value<EntityPropertyDataValue>
+    & Meta<EntityPropertyDataMeta>
 
 /**
  * Defines the `EntityProps` type.
@@ -183,7 +195,7 @@ export type EntityCreateFn<TEntity extends Entity, TEntityProps extends EntityPr
  * The `EntityDataKeys` are used for checks or iterators
  * when processing `Entity` instances or `EntityData` values.
  */
-export const EntityDataKeys = [ 'type', 'id', 'created', 'props' ]
+export const EntityDataKeys = ['type', 'id', 'created', 'props']
 
 /**
  * The `EntityProxySchema` extends `ProxySchema`.
@@ -195,9 +207,9 @@ export const EntityDataKeys = [ 'type', 'id', 'created', 'props' ]
  * @property {ProxyVirtual} virtual
  */
 export interface EntityProxySchema extends ProxySchema {
-  immutable: ProxyImmutable
-  mutable: ProxyMutable
-  virtual: ProxyVirtual
+    immutable: ProxyImmutable
+    mutable: ProxyMutable
+    virtual: ProxyVirtual
 }
 
 /**
@@ -209,7 +221,7 @@ export interface EntityProxySchema extends ProxySchema {
  * @property {EntityDate} created
  */
 export interface IEntity extends Typeable<EntityType>, Identifiable<EntityId> {
-  created: EntityDate
+    created: EntityDate
 }
 
 /**
@@ -224,8 +236,8 @@ export interface IEntity extends Typeable<EntityType>, Identifiable<EntityId> {
  * @property {EntityPropertyData[]} props
  */
 export type EntityData = Omit<IEntity, 'created'> & {
-  created: EntityDateSerialized
-  props: EntityPropertyData[]
+    created: EntityDateSerialized
+    props: EntityPropertyData[]
 }
 
 /**
@@ -246,56 +258,56 @@ export type EntityConstructor<TEntity extends Entity> = new (type: EntityType, p
  * generate domain entities.
  */
 export class Entity implements IEntity, Serializable {
-  /**
-   * A reference to the `type` value.
-   *
-   * @type {EntityType}
-   */
-  readonly type: EntityType
+    /**
+     * A reference to the `type` value.
+     *
+     * @type {EntityType}
+     */
+    readonly type: EntityType
 
-  /**
-   * A reference to the `id` value.
-   *
-   * @type {EntityId}
-   */
-  readonly id: EntityId
+    /**
+     * A reference to the `id` value.
+     *
+     * @type {EntityId}
+     */
+    readonly id: EntityId
 
-  /**
-   * A reference to the `created` value.
-   *
-   * @type {EntityDate}
-   */
-  readonly created: EntityDate
+    /**
+     * A reference to the `created` value.
+     *
+     * @type {EntityDate}
+     */
+    readonly created: EntityDate
 
-  /**
-   * A reference to the property `key/value` pairs.
-   *
-   * @type {Optional<EntityPropertyValue>}
-   */
-  [key: string]: Optional<EntityPropertyValue>
+    /**
+     * A reference to the property `key/value` pairs.
+     *
+     * @type {Optional<EntityPropertyValue>}
+     */
+    [key: string]: Optional<EntityPropertyValue>
 
-  /**
-   * Converts the `Entity` to a serialized value.
-   *
-   * @type {string}
-   */
-  get serialized(): string {
-    return stringify(createEntityDataFor(this)) as string
-  }
+    /**
+     * Converts the `Entity` to a serialized value.
+     *
+     * @type {string}
+     */
+    get serialized(): string {
+        return stringify(createEntityDataFor(this)) as string
+    }
 
-  /**
-   * @constructor
-   *
-   * @param {EntityType} type
-   * @param {EntityProps} props
-   */
-  constructor(type: EntityType, props: EntityProps) {
-    this.id = props.id
-    this.created = props.created
+    /**
+     * @constructor
+     *
+     * @param {EntityType} type
+     * @param {EntityProps} props
+     */
+    constructor(type: EntityType, props: EntityProps) {
+        this.id = props.id
+        this.created = props.created
 
-    Object.assign(this, props)
-    this.type = type
-  }
+        Object.assign(this, props)
+        this.type = type
+    }
 }
 
 export const EntityTypeErrorMessage = 'Entity type is invalid'
@@ -319,25 +331,25 @@ export const EntitySerializedValidator = string().min(1).typeError(EntitySeriali
  * @returns {EntityCreateFn<Entity>}
  */
 export const createEntity = (type: EntityType, schema: Partial<EntityProxySchema> = {}): EntityCreateFn<Entity> =>
-  (props: EntityProps): Entity => {
-    if ('undefined' !== typeof props.type) {
-      throw new EntityPropertyError('property (type) cannot be redefined')
+    (props: EntityProps): Entity => {
+        if ('undefined' !== typeof props.type) {
+            throw new EntityPropertyError('property (type) cannot be redefined')
+        }
+
+        const {immutable, mutable, virtual} = schema
+
+        return createProxyFor({
+            immutable: {
+                ...immutable,
+                type: EntityTypeValidator,
+                id: EntityIdValidator,
+                created: EntityCreatedValidator,
+                serialized: EntitySerializedValidator,
+            },
+            mutable,
+            virtual,
+        }, new Entity(type, props))
     }
-
-    const { immutable, mutable, virtual } = schema
-
-    return createProxyFor({
-      immutable: {
-        ...immutable,
-        type: EntityTypeValidator,
-        id: EntityIdValidator,
-        created: EntityCreatedValidator,
-        serialized: EntitySerializedValidator,
-      },
-      mutable,
-      virtual,
-    }, new Entity(type, props))
-  }
 
 /**
  * @template TEntity
@@ -352,25 +364,25 @@ export const createEntity = (type: EntityType, schema: Partial<EntityProxySchema
  * @returns {EntityCreateFn<TEntity>}
  */
 export const createEntityFor = <TEntity extends Entity, TEntityProps extends EntityProps = EntityProps>(_class: EntityConstructor<TEntity>, schema: Partial<EntityProxySchema> = {}): EntityCreateFn<TEntity, TEntityProps> =>
-  (props: TEntityProps): TEntity => {
-    if ('undefined' !== typeof props.type) {
-      throw new EntityPropertyError('property (type) cannot be redefined')
+    (props: TEntityProps): TEntity => {
+        if ('undefined' !== typeof props.type) {
+            throw new EntityPropertyError('property (type) cannot be redefined')
+        }
+
+        const {immutable, mutable, virtual} = schema
+
+        return createProxyFor({
+            immutable: {
+                ...immutable,
+                type: EntityTypeValidator,
+                id: EntityIdValidator,
+                created: EntityCreatedValidator,
+                serialized: EntitySerializedValidator,
+            },
+            mutable,
+            virtual,
+        }, new _class(_class.name, props))
     }
-
-    const { immutable, mutable, virtual } = schema
-
-    return createProxyFor({
-      immutable: {
-        ...immutable,
-        type: EntityTypeValidator,
-        id: EntityIdValidator,
-        created: EntityCreatedValidator,
-        serialized: EntitySerializedValidator,
-      },
-      mutable,
-      virtual,
-    }, new _class(_class.name, props))
-  }
 
 /**
  * The `createEntityDataFor` is used to generate a `EntityData`
@@ -380,10 +392,10 @@ export const createEntityFor = <TEntity extends Entity, TEntityProps extends Ent
  * @returns {EntityData}
  */
 export const createEntityDataFor = (entity: Entity): EntityData => ({
-  type: entity.type,
-  id: entity.id,
-  created: String(entity.created),
-  props: generateEntityPropertyDataFor(entity, isEntityProperty),
+    type: entity.type,
+    id: entity.id,
+    created: String(entity.created),
+    props: generateEntityPropertyDataFor(entity, isEntityProperty),
 })
 
 /**
@@ -406,48 +418,42 @@ export const isEntityProperty = (key: string): boolean => EntityDataKeys.include
  * @returns {EntityPropertyData[]}
  */
 export const generateEntityPropertyDataFor = (entity: Entity, fn: typeof isEntityProperty): EntityPropertyData[] => {
-  const result: EntityPropertyData[] = []
+    const result: EntityPropertyData[] = []
 
-  for (const [ key, v ] of Object.entries(entity)) {
-    if (fn(key) || 'undefined' === typeof v) {
-      continue
-    }
+    for (const [key, v] of Object.entries(entity)) {
+        if (fn(key) || 'undefined' === typeof v) {
+            continue
+        }
 
-    const meta: Partial<EntityPropertyMeta> = {}
-    let value: EntityPropertyDataValue
+        const meta: Partial<EntityPropertyMeta> = {}
+        let value: EntityPropertyDataValue
 
-    if ('boolean' === typeof v) {
-      meta.boolean = true
-      value = Boolean(v)
-    }
-    else if ('string' === typeof v) {
-      meta.string = true
-      value = v
-    }
-    else if ('number' === typeof v) {
-      meta.number = true
-      value = v
-    }
-    else if (v instanceof Date) {
-      meta.date = true
-      value = String(v)
-    }
-    else if (v instanceof Set) {
-      meta.set = true
-      value = stringify([ ...v.values() ]) as string
-    }
-    else if ('object' === typeof v) {
-      meta.object = true
-      value = stringify(v) as string
-    }
-    else {
-      value = String(v)
+        if ('boolean' === typeof v) {
+            meta.boolean = true
+            value = Boolean(v)
+        } else if ('string' === typeof v) {
+            meta.string = true
+            value = v
+        } else if ('number' === typeof v) {
+            meta.number = true
+            value = v
+        } else if (v instanceof Date) {
+            meta.date = true
+            value = String(v)
+        } else if (v instanceof Set) {
+            meta.set = true
+            value = stringify([...v.values()]) as string
+        } else if ('object' === typeof v) {
+            meta.object = true
+            value = stringify(v) as string
+        } else {
+            value = String(v)
+        }
+
+        result.push({key, value, meta})
     }
 
-    result.push({ key, value, meta })
-  }
-
-  return result
+    return result
 }
 
 /**
@@ -458,16 +464,16 @@ export const generateEntityPropertyDataFor = (entity: Entity, fn: typeof isEntit
  * @param {EntityPropertyData[]} props
  */
 export const mapPropertyData = (entity: Entity, props: EntityPropertyData[]): void => {
-  for (const prop of props) {
-    const { key, value, meta } = prop
-    if (key && meta && 'undefined' !== typeof value) {
-      entity[key] = meta.boolean ? Boolean(value) :
-        meta.number ? Number(value) :
-          meta.object ? parse(String(value)) :
-            meta.date ? new Date(String(value)) :
-              meta.set ? new Set(parse(String(value)) as Array<unknown>) : value
+    for (const prop of props) {
+        const {key, value, meta} = prop
+        if (key && meta && 'undefined' !== typeof value) {
+            entity[key] = meta.boolean ? Boolean(value) :
+                meta.number ? Number(value) :
+                    meta.object ? parse(String(value)) :
+                        meta.date ? new Date(String(value)) :
+                            meta.set ? new Set(parse(String(value)) as Array<unknown>) : value
+        }
     }
-  }
 }
 
 /**
