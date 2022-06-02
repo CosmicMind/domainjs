@@ -324,7 +324,7 @@ test('Entity: virtual string', async t => {
     virtual: {
       get fullName(): string {
         const name = this.name as string
-        const result = name.charAt(0).toUpperCase() + name.slice(1);
+        const result = name.charAt(0).toUpperCase() + name.slice(1)
         return `${result} Jonathan`
       },
     },
@@ -352,7 +352,7 @@ test('Entity: update ProxyVirtualError', async t => {
     virtual: {
       get fullName(): string {
         const name = this.name as string
-        const result = name.charAt(0).toUpperCase() + name.slice(1);
+        const result = name.charAt(0).toUpperCase() + name.slice(1)
         return `${result} Jonathan`
       },
     },
@@ -387,7 +387,7 @@ test('Entity: serialized', async t => {
     virtual: {
       get fullName(): string {
         const name = this.name as string
-        const result = name.charAt(0).toUpperCase() + name.slice(1);
+        const result = name.charAt(0).toUpperCase() + name.slice(1)
         return `${result} Jonathan`
       },
     },

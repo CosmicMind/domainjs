@@ -93,7 +93,7 @@ test('Value: virtual string', async t => {
   const createVO = createValue(type, string().defined().strict(true), {
     get fullName(): string {
       const value = this.value as string
-      const result = value.charAt(0).toUpperCase() + value.slice(1);
+      const result = value.charAt(0).toUpperCase() + value.slice(1)
       return `${result} Jonathan`
     },
   })
