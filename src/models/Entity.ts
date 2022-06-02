@@ -336,7 +336,9 @@ export const createEntity = (type: EntityType, schema: Partial<EntityProxySchema
       throw new EntityPropertyError('property (type) cannot be redefined')
     }
 
-    const { immutable, mutable, virtual } = schema
+    const {
+      immutable, mutable, virtual,
+    } = schema
 
     return createProxyFor({
       immutable: {
@@ -369,7 +371,9 @@ export const createEntityFor = <TEntity extends Entity, TEntityProps extends Ent
       throw new EntityPropertyError('property (type) cannot be redefined')
     }
 
-    const { immutable, mutable, virtual } = schema
+    const {
+      immutable, mutable, virtual,
+    } = schema
 
     return createProxyFor({
       immutable: {
@@ -456,7 +460,11 @@ export const generateEntityPropertyDataFor = (entity: Entity, fn: typeof isEntit
       value = String(v)
     }
 
-    result.push({ key, value, meta })
+    result.push({
+      key,
+      value,
+      meta,
+    })
   }
 
   return result
@@ -471,7 +479,9 @@ export const generateEntityPropertyDataFor = (entity: Entity, fn: typeof isEntit
  */
 export const mapPropertyData = (entity: Entity, props: EntityPropertyData[]): void => {
   for (const prop of props) {
-    const { key, value, meta } = prop
+    const {
+      key, value, meta,
+    } = prop
     if (key && meta && 'undefined' !== typeof value) {
       entity[key] = meta.boolean ? Boolean(value) :
         meta.number ? Number(value) :

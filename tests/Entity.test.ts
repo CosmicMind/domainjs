@@ -66,7 +66,11 @@ test('Entity: create Entity', async t => {
   const id = uuidv4()
   const created = new Date()
   const name = 'daniel'
-  const mo = createEntityObject({ id, created, name })
+  const mo = createEntityObject({
+    id,
+    created,
+    name,
+  })
 
   t.true(validateEntityFor(mo, Entity))
   t.is(mo.type, type)
@@ -86,7 +90,11 @@ test('Entity: create EntityObject', async t => {
   const id = uuidv4()
   const created = new Date()
   const name = 'daniel'
-  const mo = createEntityObject({ id, created, name })
+  const mo = createEntityObject({
+    id,
+    created,
+    name,
+  })
 
   t.true(validateEntityFor(mo, EntityObject))
   t.is(mo.type, type)
@@ -102,10 +110,15 @@ test('Entity: create with type set', async t => {
   try {
     const id = uuidv4()
     const created = new Date()
-    const mo = createEntityObject({ id, created, type })
+    const mo = createEntityObject({
+      id,
+      created,
+      type,
+    })
 
     t.true('undefined' === typeof mo)
-  } catch (e) {
+  }
+  catch (e) {
     if (e instanceof Error) {
       t.true(e instanceof FoundationError)
       t.true(e instanceof EntityPropertyError)
@@ -131,10 +144,15 @@ test('Entity: create ProxyTypeError', async t => {
     const id = uuidv4()
     const created = new Date()
     const name = 33
-    const mo = createEntityObject({ id, created, name })
+    const mo = createEntityObject({
+      id,
+      created,
+      name,
+    })
 
     t.true('undefined' === typeof mo)
-  } catch (e) {
+  }
+  catch (e) {
     if (e instanceof Error) {
       t.true(e instanceof FoundationTypeError)
       t.true(e instanceof ProxyTypeError)
@@ -160,11 +178,16 @@ test('Entity: update ProxyTypeError', async t => {
     const id = uuidv4()
     const created = new Date()
     const name = 'daniel'
-    const mo = createEntityObject({ id, created, name })
+    const mo = createEntityObject({
+      id,
+      created,
+      name,
+    })
     mo.name = 38
 
     t.true('undefined' === typeof mo)
-  } catch (e) {
+  }
+  catch (e) {
     if (e instanceof Error) {
       t.true(e instanceof FoundationTypeError)
       t.true(e instanceof ProxyTypeError)
@@ -189,11 +212,16 @@ test('Entity: delete ProxyImmutableError', async t => {
     const id = uuidv4()
     const created = new Date()
     const name = 'daniel'
-    const mo = createEntityObject({ id, created, name })
+    const mo = createEntityObject({
+      id,
+      created,
+      name,
+    })
     delete mo.name
 
     t.true('undefined' === typeof mo)
-  } catch (e) {
+  }
+  catch (e) {
     if (e instanceof Error) {
       t.true(e instanceof FoundationError)
       t.true(e instanceof ProxyImmutableError)
@@ -218,11 +246,16 @@ test('Entity: delete ProxyMutableError', async t => {
     const id = uuidv4()
     const created = new Date()
     const name = 'daniel'
-    const mo = createEntityObject({ id, created, name })
+    const mo = createEntityObject({
+      id,
+      created,
+      name,
+    })
     delete mo.name
 
     t.true('undefined' === typeof mo)
-  } catch (e) {
+  }
+  catch (e) {
     if (e instanceof Error) {
       t.true(e instanceof FoundationError)
       t.true(e instanceof ProxyMutableError)
@@ -248,11 +281,15 @@ test('Entity: delete ProxyVirtualError', async t => {
   try {
     const id = uuidv4()
     const created = new Date()
-    const mo = createEntityObject({ id, created })
+    const mo = createEntityObject({
+      id,
+      created,
+    })
     delete mo.fullName
 
     t.true('undefined' === typeof mo)
-  } catch (e) {
+  }
+  catch (e) {
     if (e instanceof Error) {
       t.true(e instanceof FoundationError)
       t.true(e instanceof ProxyVirtualError)
@@ -277,11 +314,16 @@ test('Entity: defined ProxyImmutableError', async t => {
     const id = uuidv4()
     const created = new Date()
     const name = 'daniel'
-    const mo = createEntityObject({ id, created, name })
+    const mo = createEntityObject({
+      id,
+      created,
+      name,
+    })
     mo.name = 'jonathan'
 
     t.true('undefined' === typeof mo)
-  } catch (e) {
+  }
+  catch (e) {
     if (e instanceof Error) {
       t.true(e instanceof FoundationError)
       t.true(e instanceof ProxyImmutableError)
@@ -306,11 +348,16 @@ test('Entity: ProxyNotDefinedError', async t => {
     const id = uuidv4()
     const created = new Date()
     const name = 'daniel'
-    const mo = createEntityObject({ id, created, name })
+    const mo = createEntityObject({
+      id,
+      created,
+      name,
+    })
     mo.age = 38
 
     t.true('undefined' === typeof mo)
-  } catch (e) {
+  }
+  catch (e) {
     if (e instanceof Error) {
       t.true(e instanceof FoundationError)
       t.true(e instanceof ProxyNotDefinedError)
@@ -341,7 +388,11 @@ test('Entity: virtual string', async t => {
   const id = uuidv4()
   const created = new Date()
   const name = 'daniel'
-  const mo = createEntityObject({ id, created, name })
+  const mo = createEntityObject({
+    id,
+    created,
+    name,
+  })
 
   t.true(validateEntityFor(mo, Entity))
   t.is(mo.type, type)
@@ -370,11 +421,16 @@ test('Entity: update ProxyVirtualError', async t => {
     const id = uuidv4()
     const created = new Date()
     const name = 'daniel'
-    const mo = createEntityObject({ id, created, name })
+    const mo = createEntityObject({
+      id,
+      created,
+      name,
+    })
     mo.fullName = 'Daniel Jonathan'
 
     t.true('undefined' === typeof mo)
-  } catch (e) {
+  }
+  catch (e) {
     if (e instanceof Error) {
       t.true(e instanceof FoundationError)
       t.true(e instanceof ProxyVirtualError)
@@ -405,7 +461,11 @@ test('Entity: serialized', async t => {
   const id = uuidv4()
   const created = new Date()
   const name = 'daniel'
-  const mo = createEntityObject({ id, created, name })
+  const mo = createEntityObject({
+    id,
+    created,
+    name,
+  })
 
   t.is(mo.serialized, `{"type":"${type}","id":"${id}","created":"${created}","props":[{"key":"name","value":"${name}","meta":{"string":true}}]}`)
 })

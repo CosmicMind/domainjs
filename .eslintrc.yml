@@ -33,3 +33,21 @@ rules:
   semi:
     - 2
     - never
+  object-curly-newline:
+    - 2
+    - multiline: true
+      minProperties: 2
+      consistent: true
+  object-property-newline:
+    - 2
+  prefer-arrow-callback:
+    - 2
+  prefer-const:
+    - 2
+  object-shorthand:
+    - 2
+  no-param-reassign:
+    - 2
+    - props: false
+  no-extra-parens:
+    - 2

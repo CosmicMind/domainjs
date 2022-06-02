@@ -76,7 +76,8 @@ test('Value: validation', async t => {
   try {
     const vo = createVO(38)
     t.true('undefined' === typeof vo)
-  } catch (e) {
+  }
+  catch (e) {
     if (e instanceof Error) {
       t.true(e instanceof FoundationTypeError)
       t.true(e instanceof ProxyTypeError)
