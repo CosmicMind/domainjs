@@ -111,7 +111,8 @@ test('Entity: create with type set', async t => {
       t.true(e instanceof EntityPropertyError)
       t.is(e.name, 'EntityPropertyError')
       t.is(e.message, 'property (type) cannot be redefined')
-    } else {
+    }
+    else {
       t.true(false)
     }
   }
@@ -139,7 +140,8 @@ test('Entity: create ProxyTypeError', async t => {
       t.true(e instanceof ProxyTypeError)
       t.is(e.name, 'ProxyTypeError')
       t.is(e.message, errorMessage)
-    } else {
+    }
+    else {
       t.true(false)
     }
   }
@@ -168,7 +170,8 @@ test('Entity: update ProxyTypeError', async t => {
       t.true(e instanceof ProxyTypeError)
       t.is(e.name, 'ProxyTypeError')
       t.is(e.message, errorMessage)
-    } else {
+    }
+    else {
       t.true(false)
     }
   }
@@ -196,7 +199,8 @@ test('Entity: delete ProxyImmutableError', async t => {
       t.true(e instanceof ProxyImmutableError)
       t.is(e.name, 'ProxyImmutableError')
       t.is(e.message, 'property (name) is immutable')
-    } else {
+    }
+    else {
       t.true(false)
     }
   }
@@ -224,7 +228,8 @@ test('Entity: delete ProxyMutableError', async t => {
       t.true(e instanceof ProxyMutableError)
       t.is(e.name, 'ProxyMutableError')
       t.is(e.message, 'property (name) is mutable')
-    } else {
+    }
+    else {
       t.true(false)
     }
   }
@@ -253,7 +258,8 @@ test('Entity: delete ProxyVirtualError', async t => {
       t.true(e instanceof ProxyVirtualError)
       t.is(e.name, 'ProxyVirtualError')
       t.is(e.message, 'property (fullName) is virtual')
-    } else {
+    }
+    else {
       t.true(false)
     }
   }
@@ -281,7 +287,8 @@ test('Entity: defined ProxyImmutableError', async t => {
       t.true(e instanceof ProxyImmutableError)
       t.is(e.name, 'ProxyImmutableError')
       t.is(e.message, 'property (name) is immutable')
-    } else {
+    }
+    else {
       t.true(false)
     }
   }
@@ -309,7 +316,8 @@ test('Entity: ProxyNotDefinedError', async t => {
       t.true(e instanceof ProxyNotDefinedError)
       t.is(e.name, 'ProxyNotDefinedError')
       t.is(e.message, 'property (age) is not defined')
-    } else {
+    }
+    else {
       t.true(false)
     }
   }
@@ -372,7 +380,8 @@ test('Entity: update ProxyVirtualError', async t => {
       t.true(e instanceof ProxyVirtualError)
       t.is(e.name, 'ProxyVirtualError')
       t.is(e.message, 'property (fullName) is virtual')
-    } else {
+    }
+    else {
       t.true(false)
     }
   }

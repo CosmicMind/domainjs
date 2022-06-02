@@ -82,7 +82,8 @@ test('Value: validation', async t => {
       t.true(e instanceof ProxyTypeError)
       t.is(e.name, 'ProxyTypeError')
       t.is(e.message, errorMessage)
-    } else {
+    }
+    else {
       t.true(false)
     }
   }

@@ -431,22 +431,28 @@ export const generateEntityPropertyDataFor = (entity: Entity, fn: typeof isEntit
     if ('boolean' === typeof v) {
       meta.boolean = true
       value = Boolean(v)
-    } else if ('string' === typeof v) {
+    }
+    else if ('string' === typeof v) {
       meta.string = true
       value = v
-    } else if ('number' === typeof v) {
+    }
+    else if ('number' === typeof v) {
       meta.number = true
       value = v
-    } else if (v instanceof Date) {
+    }
+    else if (v instanceof Date) {
       meta.date = true
       value = String(v)
-    } else if (v instanceof Set) {
+    }
+    else if (v instanceof Set) {
       meta.set = true
       value = stringify([ ...v.values() ]) as string
-    } else if ('object' === typeof v) {
+    }
+    else if ('object' === typeof v) {
       meta.object = true
       value = stringify(v) as string
-    } else {
+    }
+    else {
       value = String(v)
     }
 
