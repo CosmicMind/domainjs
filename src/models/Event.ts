@@ -35,11 +35,11 @@
  */
 
 export interface IEvent {
-    get name(): string
+  get name(): string
 }
 
 export abstract class Event implements IEvent {
-    get name(): string {
-        return this.constructor.name
-    }
+  get name(): string {
+    return this.constructor.name
+  }
 }

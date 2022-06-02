@@ -31,17 +31,17 @@
  */
 
 export interface Key<TKey extends string | symbol | number> {
-    key: TKey
+  key: TKey
 }
 
 export interface Value<TValue> {
-    value: TValue
+  value: TValue
 }
 
 export interface Meta<TMeta extends object> {
-    meta: TMeta
+  meta: TMeta
 }
 
 export interface Created<TCreated extends Date> {
-    created: TCreated
+  created: TCreated
 }

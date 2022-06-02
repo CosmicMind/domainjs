@@ -35,5 +35,5 @@ import test from 'ava'
 test('Event: IEvent', async t => {
 
 
-    t.true(true)
+  t.true(true)
 })

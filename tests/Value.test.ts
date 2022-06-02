@@ -31,89 +31,89 @@
  */
 
 import test from 'ava'
-import {string} from 'yup'
+import { string } from 'yup'
 
 import {
-    ProxyTypeError,
-    FoundationTypeError,
+  ProxyTypeError,
+  FoundationTypeError,
 } from '@cosmicverse/foundation'
 
 import {
-    Value,
-    validateValueFor,
-    createValue,
-    createValueFor,
+  Value,
+  validateValueFor,
+  createValue,
+  createValueFor,
 } from '../src'
 
 class ValueObject extends Value {
 }
 
 test('Value: create', async t => {
-    const type = 'Value'
-    const createVO = createValue(type, string().defined().strict(true))
+  const type = 'Value'
+  const createVO = createValue(type, string().defined().strict(true))
 
-    const vo = createVO('daniel')
-    t.true(validateValueFor(vo, Value))
-    t.is(vo.type, type)
-    t.is(vo.value, 'daniel')
+  const vo = createVO('daniel')
+  t.true(validateValueFor(vo, Value))
+  t.is(vo.type, type)
+  t.is(vo.value, 'daniel')
 })
 
 test('Value: create ValueObject', async t => {
-    const type = 'ValueObject'
-    const createVO = createValueFor(ValueObject, string().defined().strict(true))
+  const type = 'ValueObject'
+  const createVO = createValueFor(ValueObject, string().defined().strict(true))
 
-    const vo = createVO('daniel')
-    t.true(validateValueFor(vo, ValueObject))
-    t.is(vo.type, type)
-    t.is(vo.value, 'daniel')
+  const vo = createVO('daniel')
+  t.true(validateValueFor(vo, ValueObject))
+  t.is(vo.type, type)
+  t.is(vo.value, 'daniel')
 })
 
 test('Value: validation', async t => {
-    const type = 'Value'
-    const errorMessage = 'string is invalid'
-    const createVO = createValue(type, string().typeError(errorMessage).defined().strict(true))
+  const type = 'Value'
+  const errorMessage = 'string is invalid'
+  const createVO = createValue(type, string().typeError(errorMessage).defined().strict(true))
 
-    try {
-        const vo = createVO(38)
-        t.true('undefined' === typeof vo)
-    } catch (e) {
-        if (e instanceof Error) {
-            t.true(e instanceof FoundationTypeError)
-            t.true(e instanceof ProxyTypeError)
-            t.is(e.name, 'ProxyTypeError')
-            t.is(e.message, errorMessage)
-        } else {
-            t.true(false)
-        }
+  try {
+    const vo = createVO(38)
+    t.true('undefined' === typeof vo)
+  } catch (e) {
+    if (e instanceof Error) {
+      t.true(e instanceof FoundationTypeError)
+      t.true(e instanceof ProxyTypeError)
+      t.is(e.name, 'ProxyTypeError')
+      t.is(e.message, errorMessage)
+    } else {
+      t.true(false)
     }
+  }
 })
 
 test('Value: virtual string', async t => {
-    const type = 'Value'
-    const createVO = createValue(type, string().defined().strict(true), {
-        get fullName(): string {
-            const value = this.value as string
-            const result = value.charAt(0).toUpperCase() + value.slice(1);
-            return `${result} Jonathan`
-        },
-    })
+  const type = 'Value'
+  const createVO = createValue(type, string().defined().strict(true), {
+    get fullName(): string {
+      const value = this.value as string
+      const result = value.charAt(0).toUpperCase() + value.slice(1);
+      return `${result} Jonathan`
+    },
+  })
 
-    const vo = createVO('daniel')
-    t.true(validateValueFor(vo, Value))
-    t.is(vo.type, type)
-    t.is(vo.value, 'daniel')
-    t.is(vo.fullName, 'Daniel Jonathan')
+  const vo = createVO('daniel')
+  t.true(validateValueFor(vo, Value))
+  t.is(vo.type, type)
+  t.is(vo.value, 'daniel')
+  t.is(vo.fullName, 'Daniel Jonathan')
 })
 
 test('Value: serialized', async t => {
-    const type = 'Value'
-    const createVO = createValue(type, string().defined().strict(true))
+  const type = 'Value'
+  const createVO = createValue(type, string().defined().strict(true))
 
-    const name = 'daniel'
-    const vo = createVO(name)
-    t.true(validateValueFor(vo, Value))
-    t.is(vo.type, type)
-    t.is(vo.value, name)
+  const name = 'daniel'
+  const vo = createVO(name)
+  t.true(validateValueFor(vo, Value))
+  t.is(vo.type, type)
+  t.is(vo.value, name)
 
-    t.is(vo.serialized, `{"type":"${type}","value":"${name}"}`)
+  t.is(vo.serialized, `{"type":"${type}","value":"${name}"}`)
 })

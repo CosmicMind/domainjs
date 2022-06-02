@@ -29,6 +29,7 @@
   },
   "scripts": {
     "lint:exec": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
     "test": "npm run tests:build; npm run tests:exec",
     "tests:build": "vite build --config vite.config.tests.js --mode development",
     "tests:watch": "vite build --config vite.config.tests.js --mode watch",

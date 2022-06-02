@@ -35,5 +35,5 @@ import test from 'ava'
 test('Command: ICommand', async t => {
 
 
-    t.true(true)
+  t.true(true)
 })

@@ -32,17 +32,17 @@
 
 import test from 'ava'
 
-import {uuidv4} from '@cosmicverse/foundation'
+import { uuidv4 } from '@cosmicverse/foundation'
 
-import {createEntityFor} from '../src'
+import { createEntityFor } from '../src'
 
 import {
-    Aggregate,
-    createAggregateFor,
-    validateAggregateFor,
+  Aggregate,
+  createAggregateFor,
+  validateAggregateFor,
 } from '../src'
 
-import {EntityObject} from './Entity.test'
+import { EntityObject } from './Entity.test'
 
 const createEntityObject = createEntityFor(EntityObject)
 
@@ -52,15 +52,15 @@ class AggregateObject extends Aggregate<EntityObject> {
 const createAggregateObject = createAggregateFor(AggregateObject)
 
 test('Aggregate: create Aggregate', async t => {
-    const id = uuidv4()
-    const created = new Date()
+  const id = uuidv4()
+  const created = new Date()
 
-    const eo = createEntityObject({
-        id,
-        created,
-    })
+  const eo = createEntityObject({
+    id,
+    created,
+  })
 
-    const ao = createAggregateObject(eo)
+  const ao = createAggregateObject(eo)
 
-    t.true(validateAggregateFor(ao, AggregateObject))
+  t.true(validateAggregateFor(ao, AggregateObject))
 })
