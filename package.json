@@ -52,6 +52,7 @@
     "@vue/eslint-config-typescript": "^10.0.0",
     "ava": "^4.3.0",
     "eslint": "^8.16.0",
+    "eslint-plugin-yml": "^1.0.0",
     "ts-node": "^10.8.0",
     "tslib": "^2.4.0",
     "vite": "^2.9.9",

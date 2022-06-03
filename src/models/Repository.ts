@@ -35,17 +35,6 @@
  */
 
 /**
- * @template TRepository
- *
- * The `RepositoryCreateFn` is a type definition that is used
- * to generate new `Repository` instances from a given
- * constructor function.
- *
- * @type {() => TRepository}
- */
-export type RepositoryCreateFn<TRepository extends Repository> = () => TRepository
-
-/**
  * The `IRepository` defines the base `Repository` properties.
  *
  * @property {EntityType} type
@@ -69,13 +58,15 @@ export class Repository implements IRepository {
 }
 
 /**
- * The `createRepository` is used to generate a new `Repository`
- * instance.
+ * @template TRepository
  *
- * @returns {RepositoryCreateFn<Repository>}
+ * The `RepositoryCreateFn` is a type definition that is used
+ * to generate new `Repository` instances from a given
+ * constructor function.
+ *
+ * @type {() => TRepository}
  */
-export const createRepository = (): RepositoryCreateFn<Repository> =>
-  createRepositoryFor(Repository)
+export type RepositoryCreateFn<TRepository extends Repository> = () => TRepository
 
 /**
  * @template TRepository
@@ -88,3 +79,13 @@ export const createRepository = (): RepositoryCreateFn<Repository> =>
  */
 export const createRepositoryFor = <TRepository extends Repository>(_class: { new(): TRepository }): RepositoryCreateFn<TRepository> =>
   (): TRepository => new _class()
+
+
+/**
+ * The `createRepository` is used to generate a new `Repository`
+ * instance.
+ *
+ * @returns {RepositoryCreateFn<Repository>}
+ */
+export const createRepository = (): RepositoryCreateFn<Repository> =>
+  createRepositoryFor(Repository)

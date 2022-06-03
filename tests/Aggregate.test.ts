@@ -51,7 +51,7 @@ class AggregateObject extends Aggregate<EntityObject> {
 
 const createAggregateObject = createAggregateFor(AggregateObject)
 
-test('Aggregate: create Aggregate', async t => {
+test('Aggregate: create Aggregate', t => {
   const id = uuidv4()
   const created = new Date()
 

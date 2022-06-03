@@ -32,7 +32,7 @@
 
 import test from 'ava'
 
-test('Command: ICommand', async t => {
+test('Command: ICommand', t => {
 
 
   t.true(true)

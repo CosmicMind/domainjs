@@ -59,20 +59,9 @@ export type ValueType = string
 /**
  * Defines the `ValuePropertyValue` type.
  *
- * @type {string | number | boolean | Date | Record<string, string | number> | (string | number)[] | Set<string | number> | object}
+ * @type {Optional<string | number | boolean | Date | Record<string, string | number> | (string | number)[] | Set<string | number> | object>}
  */
 export type ValuePropertyValue = Optional<string | number | boolean | Date | Record<string, string | number> | (string | number)[] | Set<string | number> | object>
-
-/**
- * @template TValue
- * @template TValueProperty
- *
- * The `ValueCreateFn` is a type definition that is
- * used to generate new `Value` instances from a
- * given constructor function.
- * @type {(value: TValueProperty) => TValue}
- */
-export type ValueCreateFn<TValue extends Value, TValueProperty extends ValuePropertyValue = ValuePropertyValue> = (value: TValueProperty) => TValue
 
 /**
  * @extends {ProxyValidator}
@@ -113,17 +102,6 @@ export interface IValue extends Typeable<ValueType> {
  * @property {ValuePropertyValue} value
  */
 export type ValueData = IValue
-
-/**
- * @template TValue
- *
- * A `constructor` type for `Value` types.
- *
- * @param {ValueType} type
- * @param {ValuePropertyValue} value
- * @returns {TValue}
- */
-export type ValueConstructor<TValue extends Value> = new (type: ValueType, value: ValuePropertyValue) => TValue
 
 /**
  * @implements {IValue, Nameable, Serializable}
@@ -174,6 +152,28 @@ export class Value implements IValue, Serializable {
     this.value = value
   }
 }
+
+/**
+ * @template TValue
+ *
+ * A `constructor` type for `Value` types.
+ *
+ * @param {ValueType} type
+ * @param {ValuePropertyValue} value
+ * @returns {TValue}
+ */
+export type ValueConstructor<TValue extends Value> = new (type: ValueType, value: ValuePropertyValue) => TValue
+
+/**
+ * @template TValue
+ * @template TValueProperty
+ *
+ * The `ValueCreateFn` is a type definition that is
+ * used to generate new `Value` instances from a
+ * given constructor function.
+ * @type {(value: TValueProperty) => TValue}
+ */
+export type ValueCreateFn<TValue extends Value, TValueProperty extends ValuePropertyValue = ValuePropertyValue> = (value: TValueProperty) => TValue
 
 export const ValueTypeErrorMessage = 'Value type is invalid'
 export const ValueTypeValidator = string().min(1).typeError(ValueTypeErrorMessage).defined().strict(true)
@@ -230,10 +230,12 @@ export const createValueFor = <TValue extends Value, TValueProperty extends Valu
  * @param {Value} value
  * @returns {ValueData}
  */
-export const createValueDataFor = (value: Value): ValueData => ({
-  type: value.type,
-  value: value.value,
-})
+export function createValueDataFor(value: Value): ValueData {
+  return {
+    type: value.type,
+    value: value.value,
+  }
+}
 
 /**
  * @template TValue

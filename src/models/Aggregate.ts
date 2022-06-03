@@ -48,17 +48,6 @@ import {
 } from './Entity'
 
 /**
- * @template TAggregate
- *
- * The `AggregateCreateFn` is a type definition that is used
- * to generate new `Aggregate` instances from a given
- * constructor function.
- *
- * @type {(root: TEntity)) => TAggregate}
- */
-export type AggregateCreateFn<TEntity extends Entity, TAggregate extends Aggregate<TEntity>> = (root: TEntity) => TAggregate
-
-/**
  * @extends {Typeable, Identifiable, Serializable}
  * The `IAggregate` defines the base `Aggregate` properties.
  *
@@ -73,17 +62,6 @@ export interface IAggregate extends Typeable<EntityType>, Identifiable<EntityId>
 
   get created(): EntityDate
 }
-
-/**
- * @template TEntity
- * @template TAggregate
- *
- * A `constructor` type for `Aggregate` types.
- *
- * @param {TEntity} root
- * @returns {TAggregate}
- */
-export type AggregateConstructor<TEntity extends Entity, TAggregate extends Aggregate<TEntity>> = new (root: TEntity) => TAggregate
 
 /**
  * @template TEntity
@@ -149,6 +127,28 @@ export class Aggregate<TEntity extends Entity> implements IAggregate {
     this.root = root
   }
 }
+
+/**
+ * @template TEntity
+ * @template TAggregate
+ *
+ * A `constructor` type for `Aggregate` types.
+ *
+ * @param {TEntity} root
+ * @returns {TAggregate}
+ */
+export type AggregateConstructor<TEntity extends Entity, TAggregate extends Aggregate<TEntity>> = new (root: TEntity) => TAggregate
+
+/**
+ * @template TAggregate
+ *
+ * The `AggregateCreateFn` is a type definition that is used
+ * to generate new `Aggregate` instances from a given
+ * constructor function.
+ *
+ * @type {(root: TEntity)) => TAggregate}
+ */
+export type AggregateCreateFn<TEntity extends Entity, TAggregate extends Aggregate<TEntity>> = (root: TEntity) => TAggregate
 
 /**
  * @template TEntity

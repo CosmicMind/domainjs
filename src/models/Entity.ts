@@ -105,17 +105,9 @@ export type EntityDateSerialized = string
 /**
  * Defines the `EntityPropertyValue` type.
  *
- * @type {string | number | boolean | Date | Record<string, string | number> | (string | number)[] | Set<string | number> | object}
+ * @type {Optional<string | number | boolean | Date | Record<string, string | number> | (string | number)[] | Set<string | number> | object>}
  */
-export type EntityPropertyValue =
-    string
-    | number
-    | boolean
-    | Date
-    | Record<string, string | number>
-    | (string | number)[]
-    | Set<string | number>
-    | object
+export type EntityPropertyValue = Optional<string | number | boolean | Date | Record<string, string | number> | (string | number)[] | Set<string | number> | object>
 
 /**
  * The meta type definition for `EntityPropertyData`.
@@ -180,18 +172,6 @@ export type EntityPropertyData =
 export type EntityProps = Identifiable<EntityId> & Created<EntityDate> & { [key: string]: EntityPropertyValue }
 
 /**
- * @template TEntity
- * @template TEntityProps
- *
- * The `EntityCreateFn` is a type definition that is used
- * to generate new `Entity` instances from a given
- * constructor function.
- *
- * @type {(props: TEntityProps) => TEntity}
- */
-export type EntityCreateFn<TEntity extends Entity, TEntityProps extends EntityProps = EntityProps> = (props: TEntityProps) => TEntity
-
-/**
  * The `EntityDataKeys` are used for checks or iterators
  * when processing `Entity` instances or `EntityData` values.
  */
@@ -241,17 +221,6 @@ export type EntityData = Omit<IEntity, 'created'> & {
 }
 
 /**
- * @template TEntity
- *
- * A `constructor` type for `Entity` types.
- *
- * @param {EntityType} type
- * @param {EntityProps} value
- * @returns {TEntity}
- */
-export type EntityConstructor<TEntity extends Entity> = new (type: EntityType, props: EntityProps) => TEntity
-
-/**
  * @implements {IEntity, Serializable}
  *
  * The `Entity` class is the base structure used to
@@ -282,9 +251,9 @@ export class Entity implements IEntity, Serializable {
   /**
    * A reference to the property `key/value` pairs.
    *
-   * @type {Optional<EntityPropertyValue>}
+   * @type {EntityPropertyValue}
    */
-  [key: string]: Optional<EntityPropertyValue>
+  [key: string]: EntityPropertyValue
 
   /**
    * Converts the `Entity` to a serialized value.
@@ -309,6 +278,29 @@ export class Entity implements IEntity, Serializable {
     this.type = type
   }
 }
+
+/**
+ * @template TEntity
+ *
+ * A `constructor` type for `Entity` types.
+ *
+ * @param {EntityType} type
+ * @param {EntityProps} value
+ * @returns {TEntity}
+ */
+export type EntityConstructor<TEntity extends Entity> = new (type: EntityType, props: EntityProps) => TEntity
+
+/**
+ * @template TEntity
+ * @template TEntityProps
+ *
+ * The `EntityCreateFn` is a type definition that is used
+ * to generate new `Entity` instances from a given
+ * constructor function.
+ *
+ * @type {(props: TEntityProps) => TEntity}
+ */
+export type EntityCreateFn<TEntity extends Entity, TEntityProps extends EntityProps = EntityProps> = (props: TEntityProps) => TEntity
 
 export const EntityTypeErrorMessage = 'Entity type is invalid'
 export const EntityTypeValidator = string().min(1).typeError(EntityTypeErrorMessage).defined().strict(true)
@@ -352,55 +344,6 @@ export const createEntity = (type: EntityType, schema: Partial<EntityProxySchema
       virtual,
     }, new Entity(type, props))
   }
-
-/**
- * @template TEntity
- * @template TEntityProps
- * @throws {EntityPropertyError}
- *
- * The `createEntityFor` is used to generate a new `Entity` instance
- * from a given `class` constructor, `type`, and `schema`.
- *
- * @param {EntityConstructor<TEntity>} _class
- * @param {Partial<EntityProxySchema>} [schema={}]
- * @returns {EntityCreateFn<TEntity>}
- */
-export const createEntityFor = <TEntity extends Entity, TEntityProps extends EntityProps = EntityProps>(_class: EntityConstructor<TEntity>, schema: Partial<EntityProxySchema> = {}): EntityCreateFn<TEntity, TEntityProps> =>
-  (props: TEntityProps): TEntity => {
-    if ('undefined' !== typeof props.type) {
-      throw new EntityPropertyError('property (type) cannot be redefined')
-    }
-
-    const {
-      immutable, mutable, virtual,
-    } = schema
-
-    return createProxyFor({
-      immutable: {
-        ...immutable,
-        type: EntityTypeValidator,
-        id: EntityIdValidator,
-        created: EntityCreatedValidator,
-        serialized: EntitySerializedValidator,
-      },
-      mutable,
-      virtual,
-    }, new _class(_class.name, props))
-  }
-
-/**
- * The `createEntityDataFor` is used to generate a `EntityData`
- * instance for a given `Entity` instance.
- *
- * @param {Entity} entity
- * @returns {EntityData}
- */
-export const createEntityDataFor = (entity: Entity): EntityData => ({
-  type: entity.type,
-  id: entity.id,
-  created: String(entity.created),
-  props: generateEntityPropertyDataFor(entity, isEntityProperty),
-})
 
 /**
  * The `isEntityProperty` is used to check if a given property
@@ -468,6 +411,59 @@ export const generateEntityPropertyDataFor = (entity: Entity, fn: typeof isEntit
   }
 
   return result
+}
+
+/**
+ * @template TEntity
+ * @template TEntityProps
+ * @throws {EntityPropertyError}
+ *
+ * The `createEntityFor` is used to generate a new `Entity` instance
+ * from a given `class` constructor, `type`, and `schema`.
+ *
+ * @param {EntityConstructor<TEntity>} _class
+ * @param {Partial<EntityProxySchema>} [schema={}]
+ * @returns {EntityCreateFn<TEntity>}
+ */
+export const createEntityFor = <TEntity extends Entity, TEntityProps extends EntityProps = EntityProps>(_class: EntityConstructor<TEntity>, schema: Partial<EntityProxySchema> = {}): EntityCreateFn<TEntity, TEntityProps> =>
+  (props: TEntityProps): TEntity => {
+    if ('undefined' !== typeof props.type) {
+      throw new EntityPropertyError('property (type) cannot be redefined')
+    }
+
+    const {
+      immutable,
+      mutable,
+      virtual,
+    } = schema
+
+    return createProxyFor({
+      immutable: {
+        ...immutable,
+        type: EntityTypeValidator,
+        id: EntityIdValidator,
+        created: EntityCreatedValidator,
+        serialized: EntitySerializedValidator,
+      },
+      mutable,
+      virtual,
+    }, new _class(_class.name, props))
+  }
+
+/**
+ * The `createEntityDataFor` is used to generate a `EntityData`
+ * instance for a given `Entity` instance.
+ *
+ * @param {Entity} entity
+ * @returns {EntityData}
+ */
+export function createEntityDataFor(entity: Entity): EntityData {
+  return {
+    type: entity.type,
+    id: entity.id,
+    created: String(entity.created),
+    props: generateEntityPropertyDataFor(entity, isEntityProperty),
+  }
 }
 
 /**

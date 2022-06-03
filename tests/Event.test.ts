@@ -32,7 +32,7 @@
 
 import test from 'ava'
 
-test('Event: IEvent', async t => {
+test('Event: IEvent', t => {
 
 
   t.true(true)

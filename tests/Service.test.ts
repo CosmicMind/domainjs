@@ -32,7 +32,7 @@
 
 import test from 'ava'
 
-test('Service: IService', async t => {
+test('Service: IService', t => {
 
 
   t.true(true)

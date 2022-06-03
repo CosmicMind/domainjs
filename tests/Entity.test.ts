@@ -55,7 +55,7 @@ import {
 export class EntityObject extends Entity {
 }
 
-test('Entity: create Entity', async t => {
+test('Entity: create Entity', t => {
   const type = 'Entity'
   const createEntityObject = createEntity(type, {
     mutable: {
@@ -79,7 +79,7 @@ test('Entity: create Entity', async t => {
   t.is(mo.name, name)
 })
 
-test('Entity: create EntityObject', async t => {
+test('Entity: create EntityObject', t => {
   const type = 'EntityObject'
   const createEntityObject = createEntityFor(EntityObject, {
     mutable: {
@@ -103,7 +103,7 @@ test('Entity: create EntityObject', async t => {
   t.is(mo.name, name)
 })
 
-test('Entity: create with type set', async t => {
+test('Entity: create with type set', t => {
   const type = 'Entity'
   const createEntityObject = createEntity(type, {})
 
@@ -131,7 +131,7 @@ test('Entity: create with type set', async t => {
   }
 })
 
-test('Entity: create ProxyTypeError', async t => {
+test('Entity: create ProxyTypeError', t => {
   const type = 'Entity'
   const errorMessage = 'string is invalid'
   const createEntityObject = createEntity(type, {
@@ -165,7 +165,7 @@ test('Entity: create ProxyTypeError', async t => {
   }
 })
 
-test('Entity: update ProxyTypeError', async t => {
+test('Entity: update ProxyTypeError', t => {
   const type = 'Entity'
   const errorMessage = 'string is invalid'
   const createEntityObject = createEntity(type, {
@@ -200,7 +200,7 @@ test('Entity: update ProxyTypeError', async t => {
   }
 })
 
-test('Entity: delete ProxyImmutableError', async t => {
+test('Entity: delete ProxyImmutableError', t => {
   const type = 'Entity'
   const createEntityObject = createEntity(type, {
     immutable: {
@@ -234,7 +234,7 @@ test('Entity: delete ProxyImmutableError', async t => {
   }
 })
 
-test('Entity: delete ProxyMutableError', async t => {
+test('Entity: delete ProxyMutableError', t => {
   const type = 'Entity'
   const createEntityObject = createEntity(type, {
     mutable: {
@@ -268,7 +268,7 @@ test('Entity: delete ProxyMutableError', async t => {
   }
 })
 
-test('Entity: delete ProxyVirtualError', async t => {
+test('Entity: delete ProxyVirtualError', t => {
   const type = 'Entity'
   const createEntityObject = createEntity(type, {
     virtual: {
@@ -302,7 +302,7 @@ test('Entity: delete ProxyVirtualError', async t => {
   }
 })
 
-test('Entity: defined ProxyImmutableError', async t => {
+test('Entity: defined ProxyImmutableError', t => {
   const type = 'Entity'
   const createEntityObject = createEntity(type, {
     immutable: {
@@ -336,7 +336,7 @@ test('Entity: defined ProxyImmutableError', async t => {
   }
 })
 
-test('Entity: ProxyNotDefinedError', async t => {
+test('Entity: ProxyNotDefinedError', t => {
   const type = 'Entity'
   const createEntityObject = createEntity(type, {
     mutable: {
@@ -370,7 +370,7 @@ test('Entity: ProxyNotDefinedError', async t => {
   }
 })
 
-test('Entity: virtual string', async t => {
+test('Entity: virtual string', t => {
   const type = 'Entity'
   const createEntityObject = createEntity(type, {
     mutable: {
@@ -402,7 +402,7 @@ test('Entity: virtual string', async t => {
   t.is(mo.fullName, 'Daniel Jonathan')
 })
 
-test('Entity: update ProxyVirtualError', async t => {
+test('Entity: update ProxyVirtualError', t => {
   const type = 'Entity'
   const createEntityObject = createEntity(type, {
     mutable: {
@@ -443,7 +443,7 @@ test('Entity: update ProxyVirtualError', async t => {
   }
 })
 
-test('Entity: serialized', async t => {
+test('Entity: serialized', t => {
   const type = 'Entity'
   const createEntityObject = createEntity(type, {
     mutable: {

@@ -46,18 +46,6 @@ import { Value } from './Value'
 export type ServiceName = string
 
 /**
- * @template TValue
- * @template TService
- *
- * The `ServiceCreateFn` is a type definition that is used
- * to generate new `Service` instances from a given
- * constructor function.
- *
- * @type {(options: TValue)) => TService}
- */
-export type ServiceCreateFn<TValue extends Value, TService extends Service<TValue>> = (options: TValue) => TService
-
-/**
  * The `IService` defines the base `Service` properties.
  *
  * @property {ServiceName} name
@@ -65,16 +53,6 @@ export type ServiceCreateFn<TValue extends Value, TService extends Service<TValu
 export interface IService extends Nameable<ServiceName> {
   get name(): ServiceName
 }
-
-/**
- * @template TValue
- * @template TService
- *
- * A `constructor` type for `Service` types.
- *
- * @returns {TService}
- */
-export type ServiceConstructor<TValue extends Value, TService extends Service<TValue>> = new (options: TValue) => TService
 
 /**
  * @template TValue
@@ -111,6 +89,28 @@ export class Service<TValue extends Value> implements IService {
     this.options = options
   }
 }
+
+/**
+ * @template TValue
+ * @template TService
+ *
+ * A `constructor` type for `Service` types.
+ *
+ * @returns {TService}
+ */
+export type ServiceConstructor<TValue extends Value, TService extends Service<TValue>> = new (options: TValue) => TService
+
+/**
+ * @template TValue
+ * @template TService
+ *
+ * The `ServiceCreateFn` is a type definition that is used
+ * to generate new `Service` instances from a given
+ * constructor function.
+ *
+ * @type {(options: TValue)) => TService}
+ */
+export type ServiceCreateFn<TValue extends Value, TService extends Service<TValue>> = (options: TValue) => TService
 
 /**
  * @template TValue

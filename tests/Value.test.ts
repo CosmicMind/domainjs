@@ -48,7 +48,7 @@ import {
 class ValueObject extends Value {
 }
 
-test('Value: create', async t => {
+test('Value: create', t => {
   const type = 'Value'
   const createVO = createValue(type, string().defined().strict(true))
 
@@ -58,7 +58,7 @@ test('Value: create', async t => {
   t.is(vo.value, 'daniel')
 })
 
-test('Value: create ValueObject', async t => {
+test('Value: create ValueObject', t => {
   const type = 'ValueObject'
   const createVO = createValueFor(ValueObject, string().defined().strict(true))
 
@@ -68,7 +68,7 @@ test('Value: create ValueObject', async t => {
   t.is(vo.value, 'daniel')
 })
 
-test('Value: validation', async t => {
+test('Value: validation', t => {
   const type = 'Value'
   const errorMessage = 'string is invalid'
   const createVO = createValue(type, string().typeError(errorMessage).defined().strict(true))
@@ -90,7 +90,7 @@ test('Value: validation', async t => {
   }
 })
 
-test('Value: virtual string', async t => {
+test('Value: virtual string', t => {
   const type = 'Value'
   const createVO = createValue(type, string().defined().strict(true), {
     get fullName(): string {
@@ -107,7 +107,7 @@ test('Value: virtual string', async t => {
   t.is(vo.fullName, 'Daniel Jonathan')
 })
 
-test('Value: serialized', async t => {
+test('Value: serialized', t => {
   const type = 'Value'
   const createVO = createValue(type, string().defined().strict(true))
 

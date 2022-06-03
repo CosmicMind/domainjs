@@ -32,7 +32,7 @@
 
 import test from 'ava'
 
-test('Repository: IRepository', async t => {
+test('Repository: IRepository', t => {
 
 
   t.true(true)
