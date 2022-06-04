@@ -16,17 +16,19 @@ rules:
     - 2
   eqeqeq:
     - 2
+  camelcase:
+    - 2
   no-console:
     - 2
   comma-dangle:
-    - error
+    - 2
     - arrays: never
       objects: always-multiline
       imports: always-multiline
       exports: always-multiline
       functions: never
   indent:
-    - error
+    - 2
     - 2
   object-curly-spacing:
     - 2
