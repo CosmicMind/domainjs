@@ -40,41 +40,28 @@ import { Value } from './Value'
 
 /**
  * Defines the `ServiceName` type.
- *
- * @type {string}
  */
 export type ServiceName = string
 
 /**
  * The `IService` defines the base `Service` properties.
- *
- * @property {ServiceName} name
  */
 export interface IService extends Nameable<ServiceName> {
   get name(): ServiceName
 }
 
 /**
- * @template TValue
- * @implements {IService}
- *
  * The `Service` class is the base structure used to
  * generate domain services.
  */
-export class Service<TValue extends Value> implements IService {
+export class Service<V extends Value> implements IService {
   /**
-   * @protected
-   *
    * A reference to the options `Options` instance.
-   *
-   * @type {TValue}
    */
-  protected options: TValue
+  protected options: V
 
   /**
    * A reference to the `name` value.
-   *
-   * @type {ServiceName}
    */
   get name(): ServiceName {
     return this.constructor.name
@@ -82,57 +69,32 @@ export class Service<TValue extends Value> implements IService {
 
   /**
    * @constructor
-   *
-   * @param {TValue} options
    */
-  constructor(options: TValue) {
+  constructor(options: V) {
     this.options = options
   }
 }
 
 /**
- * @template TValue
- * @template TService
- *
  * A `constructor` type for `Service` types.
- *
- * @returns {TService}
  */
-export type ServiceConstructor<TValue extends Value, TService extends Service<TValue>> = new (options: TValue) => TService
+export type ServiceConstructor<V extends Value, S extends Service<V>> = new (options: V) => S
 
 /**
- * @template TValue
- * @template TService
- *
  * The `ServiceCreateFn` is a type definition that is used
  * to generate new `Service` instances from a given
  * constructor function.
- *
- * @type {(options: TValue)) => TService}
  */
-export type ServiceCreateFn<TValue extends Value, TService extends Service<TValue>> = (options: TValue) => TService
+export type ServiceCreateFn<V extends Value, S extends Service<V>> = (options: V) => S
 
 /**
- * @template TValue
- * @template TService
- *
  * The `createServiceFor` is used to generate a new `Service`
  * instance from a given `class` constructor.
- *
- * @param {ServiceConstructor<TService>} _class
- * @returns {ServiceCreateFn<TService>}
  */
-export const createServiceFor = <TValue extends Value, TService extends Service<TValue>>(_class: ServiceConstructor<TValue, TService>): ServiceCreateFn<TValue, TService> =>
-  (options: TValue): TService => new _class(options)
+export const createServiceFor = <V extends Value, S extends Service<V>>(_class: ServiceConstructor<V, S>): ServiceCreateFn<V, S> =>
+  (options: V): S => new _class(options)
 
 /**
- * @template TValue
- * @template TService
- *
  * The `validateServiceFor` is ued to validate a given `Service`.
- *
- * @param {TService} service
- * @param {ServiceConstructor<TService>} _class
- * @returns {boolean}
  */
-export const validateServiceFor = <TValue extends Value, TService extends Service<TValue>>(service: TService, _class: ServiceConstructor<TValue, TService>): boolean => service instanceof _class
+export const validateServiceFor = <V extends Value, S extends Service<V>>(service: S, _class: ServiceConstructor<V, S>): boolean => service instanceof _class

@@ -48,12 +48,7 @@ import {
 } from './Entity'
 
 /**
- * @extends {Typeable, Identifiable, Serializable}
  * The `IAggregate` defines the base `Aggregate` properties.
- *
- * @property {EntityType} type
- * @property {EntityId} id
- * @property {EntityDate} created
  */
 export interface IAggregate extends Typeable<EntityType>, Identifiable<EntityId>, Serializable {
   get type(): EntityType
@@ -64,27 +59,20 @@ export interface IAggregate extends Typeable<EntityType>, Identifiable<EntityId>
 }
 
 /**
- * @template TEntity
+ * @template E
  * @implements {IAggregate}
  *
  * The `Aggregate` class is the base structure used to
  * generate domain aggregates.
  */
-export class Aggregate<TEntity extends Entity> implements IAggregate {
+export class Aggregate<E extends Entity> implements IAggregate {
   /**
-   * @template TEntity
-   * @protected
-   *
    * A reference to the root `Entity` instance.
-   *
-   * @type {TEntity}
    */
-  protected root: TEntity
+  protected root: E
 
   /**
    * A reference to the root `Entity` type.
-   *
-   * @type {EntityType}
    */
   get type(): EntityType {
     return this.root.type
@@ -92,8 +80,6 @@ export class Aggregate<TEntity extends Entity> implements IAggregate {
 
   /**
    * A reference to the root `Entity` type.
-   *
-   * @type {EntityType}
    */
   get id(): EntityId {
     return this.root.id
@@ -101,8 +87,6 @@ export class Aggregate<TEntity extends Entity> implements IAggregate {
 
   /**
    * A reference to the root `Entity` type.
-   *
-   * @type {EntityType}
    */
   get created(): EntityDate {
     return this.root.created
@@ -111,8 +95,6 @@ export class Aggregate<TEntity extends Entity> implements IAggregate {
   /**
    * A `serialized` representation of the
    * root `Entity`.
-   *
-   * @type {string}
    */
   get serialized(): string {
     return this.root.serialized
@@ -120,57 +102,34 @@ export class Aggregate<TEntity extends Entity> implements IAggregate {
 
   /**
    * @constructor
-   *
-   * @param {TEntity} root
    */
-  constructor(root: TEntity) {
+  constructor(root: E) {
     this.root = root
   }
 }
 
 /**
- * @template TEntity
- * @template TAggregate
- *
  * A `constructor` type for `Aggregate` types.
- *
- * @param {TEntity} root
- * @returns {TAggregate}
  */
-export type AggregateConstructor<TEntity extends Entity, TAggregate extends Aggregate<TEntity>> = new (root: TEntity) => TAggregate
+export type AggregateConstructor<E extends Entity, A extends Aggregate<E>> = new (root: E) => A
 
 /**
- * @template TAggregate
+ * @template A
  *
  * The `AggregateCreateFn` is a type definition that is used
  * to generate new `Aggregate` instances from a given
  * constructor function.
- *
- * @type {(root: TEntity)) => TAggregate}
  */
-export type AggregateCreateFn<TEntity extends Entity, TAggregate extends Aggregate<TEntity>> = (root: TEntity) => TAggregate
+export type AggregateCreateFn<E extends Entity, A extends Aggregate<E>> = (root: E) => A
 
 /**
- * @template TEntity
- * @template TAggregate
- *
  * The `createAggregateFor` is used to generate a new `Aggregate`
  * instance from a given `class` constructor.
- *
- * @param {AggregateConstructor<TEntity, TAggregate>} _class
- * @returns {AggregateCreateFn<TAggregate>}
  */
-export const createAggregateFor = <TEntity extends Entity, TAggregate extends Aggregate<TEntity>>(_class: AggregateConstructor<TEntity, TAggregate>): AggregateCreateFn<TEntity, TAggregate> =>
-  (root: TEntity): TAggregate => new _class(root)
+export const createAggregateFor = <E extends Entity, A extends Aggregate<E>>(_class: AggregateConstructor<E, A>): AggregateCreateFn<E, A> =>
+  (root: E): A => new _class(root)
 
 /**
- * @template TEntity
- * @template TAggregate
- *
  * The `validateAggregateFor` is ued to validate a given `Aggregate`.
- *
- * @param {TAggregate} aggregate
- * @param {AggregateConstructor<TEntity, TAggregate>} _class
- * @returns {boolean}
  */
-export const validateAggregateFor = <TEntity extends Entity, TAggregate extends Aggregate<TEntity>>(aggregate: TAggregate, _class: AggregateConstructor<TEntity, TAggregate>): boolean => aggregate instanceof _class
+export const validateAggregateFor = <E extends Entity, A extends Aggregate<E>>(aggregate: A, _class: AggregateConstructor<E, A>): boolean => aggregate instanceof _class

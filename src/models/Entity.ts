@@ -76,36 +76,26 @@ export class EntityPropertyError extends FoundationError {
 
 /**
  * Defines the `EntityType` type.
- *
- * @type {string}
  */
 export type EntityType = string
 
 /**
  * Defines the `EntityId` type.
- *
- * @type {string}
  */
 export type EntityId = string
 
 /**
  * Defines the `EntityDate` type.
- *
- * @type {Date}
  */
 export type EntityDate = Date
 
 /**
  * Defines the `EntityDateSerialized` type.
- *
- * @type {string}
  */
 export type EntityDateSerialized = string
 
 /**
  * Defines the `EntityPropertyValue` type.
- *
- * @type {Optional<string | number | boolean | Date | Record<string, string | number> | (string | number)[] | Set<string | number> | object>}
  */
 export type EntityPropertyValue = Optional<string | number | boolean | Date | Record<string, string | number> | (string | number)[] | Set<string | number> | object>
 
@@ -116,13 +106,6 @@ export type EntityPropertyValue = Optional<string | number | boolean | Date | Re
  * objects have been serialized and transmitted, in
  * order to reconstruct the object with the correct
  * value types.
- *
- * @property {boolean} boolean
- * @property {boolean} string
- * @property {boolean} number
- * @property {boolean} object
- * @property {boolean} date
- * @property {boolean} set
  */
 export type EntityPropertyMeta = {
   boolean: boolean
@@ -135,29 +118,21 @@ export type EntityPropertyMeta = {
 
 /**
  * Defines the `EntityPropertyDataKey` type.
- *
- * @type {string}
  */
 export type EntityPropertyDataKey = string
 
 /**
  * Defines the `EntityPropertyDataValue` type.
- *
- * @type {string | number | boolean}
  */
 export type EntityPropertyDataValue = string | number | boolean
 
 /**
  * Defines the `EntityPropertyDataMeta` type.
- *
- * @type {Partial<EntityPropertyMeta>}
  */
 export type EntityPropertyDataMeta = Partial<EntityPropertyMeta>
 
 /**
  * Defines the `EntityPropertyData` type.
- *
- * @type {Key<string> & Value<string> & Meta<Partial<EntityPropertyMeta>>}
  */
 export type EntityPropertyData =
   Key<EntityPropertyDataKey>
@@ -166,8 +141,6 @@ export type EntityPropertyData =
 
 /**
  * Defines the `EntityProps` type.
- *
- * @type {Identifiable<EntityId> & Created<EntityDate> & { [key: string]: EntityPropertyValue }}
  */
 export type EntityProps = Identifiable<EntityId> & Created<EntityDate> & { [key: string]: EntityPropertyValue }
 
@@ -181,10 +154,6 @@ export const EntityDataKeys = [ 'type', 'id', 'created', 'props' ]
  * The `EntityProxySchema` extends `ProxySchema`.
  * This is done to organize the definitions within
  * modules.
- *
- * @property {ProxyImmutable} immutable
- * @property {ProxyMutable} mutable
- * @property {ProxyVirtual} virtual
  */
 export interface EntityProxySchema extends ProxySchema {
   immutable: ProxyImmutable
@@ -193,27 +162,15 @@ export interface EntityProxySchema extends ProxySchema {
 }
 
 /**
- * @extends {Typeable, Identifiable}
- *
  * The `IEntity` defines the base `Entity` properties.
- *
- * @property {EntityType} type
- * @property {EntityDate} created
  */
 export interface IEntity extends Typeable<EntityType>, Identifiable<EntityId> {
   created: EntityDate
 }
 
 /**
- * @extends {Omit<IEntity, 'created'>}
- *
  * The `EntityData` is used to recreate the instance after
  * being serialized.
- *
- * @property {EntityType} type
- * @property {EntityId} id
- * @property {EntityDateSerialized} created
- * @property {EntityPropertyData[]} props
  */
 export type EntityData = Omit<IEntity, 'created'> & {
   created: EntityDateSerialized
@@ -229,36 +186,26 @@ export type EntityData = Omit<IEntity, 'created'> & {
 export class Entity implements IEntity, Serializable {
   /**
    * A reference to the `type` value.
-   *
-   * @type {EntityType}
    */
   readonly type: EntityType
 
   /**
    * A reference to the `id` value.
-   *
-   * @type {EntityId}
    */
   readonly id: EntityId
 
   /**
    * A reference to the `created` value.
-   *
-   * @type {EntityDate}
    */
   readonly created: EntityDate
 
   /**
    * A reference to the property `key/value` pairs.
-   *
-   * @type {EntityPropertyValue}
    */
   [key: string]: EntityPropertyValue
 
   /**
    * Converts the `Entity` to a serialized value.
-   *
-   * @type {string}
    */
   get serialized(): string {
     return stringify(createEntityDataFor(this)) as string
@@ -266,9 +213,6 @@ export class Entity implements IEntity, Serializable {
 
   /**
    * @constructor
-   *
-   * @param {EntityType} type
-   * @param {EntityProps} props
    */
   constructor(type: EntityType, props: EntityProps) {
     this.id = props.id
@@ -280,27 +224,16 @@ export class Entity implements IEntity, Serializable {
 }
 
 /**
- * @template TEntity
- *
  * A `constructor` type for `Entity` types.
- *
- * @param {EntityType} type
- * @param {EntityProps} value
- * @returns {TEntity}
  */
-export type EntityConstructor<TEntity extends Entity> = new (type: EntityType, props: EntityProps) => TEntity
+export type EntityConstructor<E extends Entity> = new (type: EntityType, props: EntityProps) => E
 
 /**
- * @template TEntity
- * @template TEntityProps
- *
  * The `EntityCreateFn` is a type definition that is used
  * to generate new `Entity` instances from a given
  * constructor function.
- *
- * @type {(props: TEntityProps) => TEntity}
  */
-export type EntityCreateFn<TEntity extends Entity, TEntityProps extends EntityProps = EntityProps> = (props: TEntityProps) => TEntity
+export type EntityCreateFn<E extends Entity, EProps extends EntityProps = EntityProps> = (props: EProps) => E
 
 export const EntityTypeErrorMessage = 'Entity type is invalid'
 export const EntityTypeValidator = string().min(1).typeError(EntityTypeErrorMessage).defined().strict(true)
@@ -317,10 +250,6 @@ export const EntitySerializedValidator = string().min(1).typeError(EntitySeriali
 /**
  * The `createEntity` is used to generate a new `Entity` instance
  * from a given `type` and `schema`.
- *
- * @param {EntityType} type
- * @param {Partial<EntityProxySchema>} [schema={}]
- * @returns {EntityCreateFn<Entity>}
  */
 export const createEntity = (type: EntityType, schema: Partial<EntityProxySchema> = {}): EntityCreateFn<Entity> =>
   (props: EntityProps): Entity => {
@@ -349,9 +278,6 @@ export const createEntity = (type: EntityType, schema: Partial<EntityProxySchema
  * The `isEntityProperty` is used to check if a given property
  * is in the `EntityDataKeys` value. This is used to avoid
  * treating `key/value` pairs as `EntityDataKeys`.
- *
- * @param {string} key
- * @returns {boolean}
  */
 export const isEntityProperty = (key: string): boolean => EntityDataKeys.includes(key)
 
@@ -359,10 +285,6 @@ export const isEntityProperty = (key: string): boolean => EntityDataKeys.include
  * The `generateEntityPropertyDataFor` is used to create an
  * array of `EntityPropertyData` literals. These are
  * when serializing `Entity` instances.
- *
- * @param {Entity} entity
- * @param {typeof isEntityProperty} fn
- * @returns {EntityPropertyData[]}
  */
 export const generateEntityPropertyDataFor = (entity: Entity, fn: typeof isEntityProperty): EntityPropertyData[] => {
   const result: EntityPropertyData[] = []
@@ -414,19 +336,11 @@ export const generateEntityPropertyDataFor = (entity: Entity, fn: typeof isEntit
 }
 
 /**
- * @template TEntity
- * @template TEntityProps
- * @throws {EntityPropertyError}
- *
  * The `createEntityFor` is used to generate a new `Entity` instance
  * from a given `class` constructor, `type`, and `schema`.
- *
- * @param {EntityConstructor<TEntity>} _class
- * @param {Partial<EntityProxySchema>} [schema={}]
- * @returns {EntityCreateFn<TEntity>}
  */
-export const createEntityFor = <TEntity extends Entity, TEntityProps extends EntityProps = EntityProps>(_class: EntityConstructor<TEntity>, schema: Partial<EntityProxySchema> = {}): EntityCreateFn<TEntity, TEntityProps> =>
-  (props: TEntityProps): TEntity => {
+export const createEntityFor = <E extends Entity, EProps extends EntityProps = EntityProps>(_class: EntityConstructor<E>, schema: Partial<EntityProxySchema> = {}): EntityCreateFn<E, EProps> =>
+  (props: EProps): E => {
     if ('undefined' !== typeof props.type) {
       throw new EntityPropertyError('property (type) cannot be redefined')
     }
@@ -453,9 +367,6 @@ export const createEntityFor = <TEntity extends Entity, TEntityProps extends Ent
 /**
  * The `createEntityDataFor` is used to generate a `EntityData`
  * instance for a given `Entity` instance.
- *
- * @param {Entity} entity
- * @returns {EntityData}
  */
 export function createEntityDataFor(entity: Entity): EntityData {
   return {
@@ -469,9 +380,6 @@ export function createEntityDataFor(entity: Entity): EntityData {
 /**
  * The `mapPropertyData` is used to map serialized property
  * `key/value` pairs to a given `Entity` instance
- *
- * @param {Entity} entity
- * @param {EntityPropertyData[]} props
  */
 export const mapPropertyData = (entity: Entity, props: EntityPropertyData[]): void => {
   for (const prop of props) {
@@ -489,12 +397,6 @@ export const mapPropertyData = (entity: Entity, props: EntityPropertyData[]): vo
 }
 
 /**
- * @template TEntity
- *
  * The `validateEntityFor` is ued to validate a given `Entity`.
- *
- * @param {TEntity} entity
- * @param {EntityConstructor<TEntity>} _class
- * @returns {boolean}
  */
-export const validateEntityFor = <TEntity extends Entity>(entity: TEntity, _class: EntityConstructor<TEntity>): boolean => entity instanceof _class
+export const validateEntityFor = <E extends Entity>(entity: E, _class: EntityConstructor<E>): boolean => entity instanceof _class

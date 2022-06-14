@@ -51,21 +51,15 @@ import {
 
 /**
  * Defines the `ValueType` type.
- *
- * @type {string}
  */
 export type ValueType = string
 
 /**
  * Defines the `ValuePropertyValue` type.
- *
- * @type {Optional<string | number | boolean | Date | Record<string, string | number> | (string | number)[] | Set<string | number> | object>}
  */
 export type ValuePropertyValue = Optional<string | number | boolean | Date | Record<string, string | number> | (string | number)[] | Set<string | number> | object>
 
 /**
- * @extends {ProxyValidator}
- *
  * The `ValueValidator` extends the
  * `ProxyValidator`. This is done to organize
  * the definitions within modules better.
@@ -73,8 +67,6 @@ export type ValuePropertyValue = Optional<string | number | boolean | Date | Rec
 export type ValueValidator = ProxyValidator
 
 /**
- * @extends {ProxyVirtual}
- *
  * The `ValueVirtual` extends the
  * `ProxyVirtual`. This is done to organize
  * the definitions within modules better.
@@ -82,24 +74,15 @@ export type ValueValidator = ProxyValidator
 export type ValueVirtual = ProxyVirtual
 
 /**
- * @extends {Typeable}
  * The `IValue` defines the base `Value` properties.
- *
- * @property {ValueType} type
- * @property {ValuePropertyValue} value
  */
 export interface IValue extends Typeable<ValueType> {
   value: ValuePropertyValue
 }
 
 /**
- * @extends {IValue}
- *
  * The `ValueData` is used to recreate the instance after
  * being serialized.
- *
- * @property {ValueType} type
- * @property {ValuePropertyValue} value
  */
 export type ValueData = IValue
 
@@ -112,30 +95,22 @@ export type ValueData = IValue
 export class Value implements IValue, Serializable {
   /**
    * A reference to the `type` value.
-   *
-   * @type {ValueType}
    */
   readonly type: ValueType
 
   /**
    * A reference to the `value` value.
-   *
-   * @type {ValuePropertyValue}
    */
   readonly value: ValuePropertyValue
 
   /**
    * This allows for keys to be defined within the
    * `virtual` definition.
-   *
-   * @type {ValuePropertyValue}
    */
   readonly [key: string]: ValuePropertyValue
 
   /**
    * Converts the `Value` to a serialized value.
-   *
-   * @type {string}
    */
   get serialized(): string {
     return stringify(createValueDataFor(this)) as string
@@ -143,9 +118,6 @@ export class Value implements IValue, Serializable {
 
   /**
    * @constructor
-   *
-   * @param {ValueType} type
-   * @param {ValuePropertyValue} value
    */
   constructor(type: ValueType, value: ValuePropertyValue) {
     this.type = type
@@ -154,26 +126,18 @@ export class Value implements IValue, Serializable {
 }
 
 /**
- * @template TValue
+ * @template V
  *
  * A `constructor` type for `Value` types.
- *
- * @param {ValueType} type
- * @param {ValuePropertyValue} value
- * @returns {TValue}
  */
-export type ValueConstructor<TValue extends Value> = new (type: ValueType, value: ValuePropertyValue) => TValue
+export type ValueConstructor<V extends Value> = new (type: ValueType, value: ValuePropertyValue) => V
 
 /**
- * @template TValue
- * @template TValueProperty
- *
  * The `ValueCreateFn` is a type definition that is
  * used to generate new `Value` instances from a
  * given constructor function.
- * @type {(value: TValueProperty) => TValue}
  */
-export type ValueCreateFn<TValue extends Value, TValueProperty extends ValuePropertyValue = ValuePropertyValue> = (value: TValueProperty) => TValue
+export type ValueCreateFn<V extends Value, VProperty extends ValuePropertyValue = ValuePropertyValue> = (value: VProperty) => V
 
 export const ValueTypeErrorMessage = 'Value type is invalid'
 export const ValueTypeValidator = string().min(1).typeError(ValueTypeErrorMessage).defined().strict(true)
@@ -181,11 +145,6 @@ export const ValueTypeValidator = string().min(1).typeError(ValueTypeErrorMessag
 /**
  * The `createValue` is used to generate a new `Value` instance
  * from a given `type`, 'value', and partial `schema`.
- *
- * @param {ValueType} type
- * @param {ValueValidator} value
- * @param {ValueVirtual} virtual
- * @returns {ValueCreateFn<Value>}
  */
 export const createValue = (type: ValueType, value: ValueValidator, virtual?: ValueVirtual): ValueCreateFn<Value> => {
   const schema = {
@@ -200,18 +159,10 @@ export const createValue = (type: ValueType, value: ValueValidator, virtual?: Va
 }
 
 /**
- * @template TValue
- * @template TValueProperty
- *
  * The `createValueFor` is used to generate a new `Value` instance
  * from a given `class` constructor, `type`, and partial `schema`.
- *
- * @param {ValueConstructor<TValue>} _class
- * @param {ValueValidator} value
- * @param {ValueVirtual} virtual
- * @returns {ValueCreateFn<TValue>}
  */
-export const createValueFor = <TValue extends Value, TValueProperty extends ValuePropertyValue = ValuePropertyValue>(_class: ValueConstructor<TValue>, value: ValueValidator, virtual?: ValueVirtual): ValueCreateFn<TValue, TValueProperty> => {
+export const createValueFor = <V extends Value, VProperty extends ValuePropertyValue = ValuePropertyValue>(_class: ValueConstructor<V>, value: ValueValidator, virtual?: ValueVirtual): ValueCreateFn<V, VProperty> => {
   const schema = {
     immutable: {
       type: ValueTypeValidator,
@@ -219,16 +170,12 @@ export const createValueFor = <TValue extends Value, TValueProperty extends Valu
     },
     virtual,
   }
-
-  return (value: TValueProperty): TValue => createProxyFor(schema, new _class(_class.name, value))
+  return (value: VProperty): V => createProxyFor(schema, new _class(_class.name, value))
 }
 
 /**
  * The `createValueDataFor` is used to generate a `ValueData`
  * instance for a given `Value` instance.
- *
- * @param {Value} value
- * @returns {ValueData}
  */
 export function createValueDataFor(value: Value): ValueData {
   return {
@@ -238,12 +185,6 @@ export function createValueDataFor(value: Value): ValueData {
 }
 
 /**
- * @template TValue
- *
  * The `validateValueFor` is ued to validate a given `Value`.
- *
- * @param {TValue} value
- * @param {ValueConstructor<TValue>} _class
- * @returns {boolean}
  */
-export const validateValueFor = <TValue extends Value>(value: TValue, _class: ValueConstructor<TValue>): boolean => value instanceof _class
+export const validateValueFor = <V extends Value>(value: V, _class: ValueConstructor<V>): boolean => value instanceof _class
