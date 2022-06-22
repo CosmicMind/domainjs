@@ -22,6 +22,8 @@ rules:
     - 2
   no-console:
     - 2
+  no-lonely-if:
+    - 2
   comma-dangle:
     - 2
     - arrays: never
