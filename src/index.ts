@@ -31,57 +31,14 @@
  */
 
 export type {
-  IValue,
-  ValueType,
-  ValuePropertyValue,
-} from './models/Value'
-
-export {
-  Value,
-  createValue,
-  createValueFor,
-  validateValueFor,
-} from './models/Value'
-
-export type {
-  IEntity,
-  EntityType,
-  EntityId,
-  EntityDate,
-  EntityPropertyValue,
-} from './models/Entity'
-
-export {
   Entity,
-  createEntity,
-  createEntityFor,
-  validateEntityFor,
-  EntityPropertyError,
 } from './models/Entity'
 
-export type { IAggregate } from './models/Aggregate'
+export {
+  createEntity,
+} from './models/Entity'
 
 export {
   Aggregate,
-  createAggregateFor,
-  validateAggregateFor,
+  createAggregate,
 } from './models/Aggregate'
-
-export type { ICommand } from './models/Command'
-export { Command } from './models/Command'
-
-export type { IRepository } from './models/Repository'
-
-export {
-  Repository,
-  createRepository,
-  createRepositoryFor,
-} from './models/Repository'
-
-export type { IService } from './models/Service'
-
-export {
-  Service,
-  createServiceFor,
-  validateServiceFor,
-} from './models/Service'

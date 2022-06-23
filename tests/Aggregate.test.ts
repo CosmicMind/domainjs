@@ -34,33 +34,42 @@ import test from 'ava'
 
 import { uuidv4 } from '@cosmicverse/foundation'
 
-import { createEntityFor } from '../src'
-
 import {
+  Entity,
   Aggregate,
-  createAggregateFor,
-  validateAggregateFor,
+  createAggregate,
 } from '../src'
 
-import { EntityObject } from './Entity.test'
-
-const createEntityObject = createEntityFor(EntityObject)
-
-class AggregateObject extends Aggregate<EntityObject> {
+interface UserEntity extends Entity {
+  name: string
+  version: number
 }
 
-const createAggregateObject = createAggregateFor(AggregateObject)
+class UserAggregate extends Aggregate<UserEntity> {
+  get name(): string {
+    return this.root.name
+  }
 
-test('Aggregate: create Aggregate', t => {
+  get version(): number {
+    return this.root.version
+  }
+}
+
+test('Aggregate: createAggregate', t => {
   const id = uuidv4()
   const created = new Date()
+  const name = 'name'
+  const version = 1
 
-  const eo = createEntityObject({
+  const a1 = createAggregate(UserAggregate, {
     id,
     created,
+    name,
+    version,
   })
 
-  const ao = createAggregateObject(eo)
-
-  t.true(validateAggregateFor(ao, AggregateObject))
+  t.is(a1.id, id)
+  t.is(a1.created, created)
+  t.is(a1.name, name)
+  t.is(a1.version, version)
 })

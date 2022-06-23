@@ -31,105 +31,32 @@
  */
 
 /**
- * @module Aggregate
+ * @module Entity
  */
-
-import {
-  Identifiable,
-  Typeable,
-  Serializable,
-} from '@cosmicverse/patterns'
 
 import {
   Entity,
-  EntityType,
-  EntityId,
-  EntityDate,
+  createEntity,
 } from './Entity'
 
-/**
- * The `IAggregate` defines the base `Aggregate` properties.
- */
-export interface IAggregate extends Typeable<EntityType>, Identifiable<EntityId>, Serializable {
-  get type(): EntityType
-
-  get id(): EntityId
-
-  get created(): EntityDate
-}
-
-/**
- * @template E
- * @implements {IAggregate}
- *
- * The `Aggregate` class is the base structure used to
- * generate domain aggregates.
- */
-export class Aggregate<E extends Entity> implements IAggregate {
-  /**
-   * A reference to the root `Entity` instance.
-   */
+export class Aggregate<E extends Entity> {
   protected root: E
 
-  /**
-   * A reference to the root `Entity` type.
-   */
-  get type(): EntityType {
-    return this.root.type
-  }
-
-  /**
-   * A reference to the root `Entity` type.
-   */
-  get id(): EntityId {
+  get id(): typeof this.root.id {
     return this.root.id
   }
 
-  /**
-   * A reference to the root `Entity` type.
-   */
-  get created(): EntityDate {
+  get created(): typeof this.root.created {
     return this.root.created
   }
 
-  /**
-   * A `serialized` representation of the
-   * root `Entity`.
-   */
-  get serialized(): string {
-    return this.root.serialized
-  }
-
-  /**
-   * @constructor
-   */
   constructor(root: E) {
     this.root = root
   }
 }
 
-/**
- * A `constructor` type for `Aggregate` types.
- */
 export type AggregateConstructor<E extends Entity, A extends Aggregate<E>> = new (root: E) => A
 
-/**
- * @template A
- *
- * The `AggregateCreateFn` is a type definition that is used
- * to generate new `Aggregate` instances from a given
- * constructor function.
- */
-export type AggregateCreateFn<E extends Entity, A extends Aggregate<E>> = (root: E) => A
-
-/**
- * The `createAggregateFor` is used to generate a new `Aggregate`
- * instance from a given `class` constructor.
- */
-export const createAggregateFor = <E extends Entity, A extends Aggregate<E>>(_class: AggregateConstructor<E, A>): AggregateCreateFn<E, A> =>
-  (root: E): A => new _class(root)
-
-/**
- * The `validateAggregateFor` is ued to validate a given `Aggregate`.
- */
-export const validateAggregateFor = <E extends Entity, A extends Aggregate<E>>(aggregate: A, _class: AggregateConstructor<E, A>): boolean => aggregate instanceof _class
+export function createAggregate<E extends Entity, A extends Aggregate<E>>(_class: AggregateConstructor<E, A>, root: E): A {
+  return new _class(createEntity(root))
+}
