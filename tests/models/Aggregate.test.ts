@@ -61,16 +61,18 @@ class UserAggregate extends Aggregate<UserEntity> {
 
 const nameHandler = {
   validate: (value: string): boolean => 0 < value.length,
-  update: (newValue: string, oldValue: string, state: Readonly<UserEntity>): void => {
-    console.log('update', newValue, oldValue, state)
-  },
-  trace: (target: Readonly<UserEntity>): void => {
-    console.log('trace', target)
+  updated: (newValue: string, oldValue: string, state: Readonly<UserEntity>): void => {
+    console.log('update', oldValue, newValue, state)
   },
 }
 
 const createUser = createAggregateFor(UserAggregate, {
-  name: [ nameHandler ],
+  trace: (target: UserAggregate): void => {
+    console.log(target)
+  },
+  properties: {
+    name: nameHandler,
+  },
 })
 
 test('Aggregate: createAggregate', t => {
