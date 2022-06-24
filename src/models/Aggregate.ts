@@ -31,10 +31,10 @@
  */
 
 /**
- * @module Entity
+ * @module Aggregate
  */
 
-import { ProxyPropertyHandler } from '@cosmicverse/patterns'
+import { ProxyTargetLifecycleHandlers } from '@cosmicverse/patterns'
 
 import {
   Entity,
@@ -59,7 +59,7 @@ export class Aggregate<E extends Entity> {
 
 export type AggregateConstructor<E extends Entity, A extends Aggregate<E>> = new (root: E) => A
 
-export function createAggregateFor<E extends Entity, A extends Aggregate<E>>(_class: AggregateConstructor<E, A>, handlers: ProxyPropertyHandler<E> = {}): (root: E) => A {
-  const createEntity = createEntityFor<E>(handlers)
+export function createAggregateFor<E extends Entity, A extends Aggregate<E>>(_class: AggregateConstructor<E, A>, handler: ProxyTargetLifecycleHandlers<E> = {}): (root: E) => A {
+  const createEntity = createEntityFor<E>(handler)
   return (root: E) => new _class(createEntity(root))
 }

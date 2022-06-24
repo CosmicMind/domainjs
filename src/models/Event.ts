@@ -30,6 +30,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export * from './models/Aggregate.test'
-export * from './models/Entity.test'
-export * from './models/Value.test'
+/**
+ * @module Event
+ */
+
+import {
+  createProxy,
+  ProxyTargetLifecycleHandlers,
+} from '@cosmicverse/patterns'
+
+export interface Event {
+  readonly id: string
+  readonly created: Date
+}
+
+export const createEventFor = <E extends Event>(handler: ProxyTargetLifecycleHandlers<E> = {}): (entity: E) => E =>
+  (entity: E) => createProxy(entity, handler)

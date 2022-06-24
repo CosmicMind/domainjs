@@ -30,6 +30,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export * from './models/Aggregate.test'
-export * from './models/Entity.test'
-export * from './models/Value.test'
+import test from 'ava'
+
+import { string } from 'yup'
+
+import {
+  Value,
+  createValueFor,
+} from '../../src'
+
+class Email implements Value<string> {
+  readonly value: string
+  constructor(value: string) {
+    this.value = value
+  }
+}
+
+const createEmailValue = createValueFor<Email>({
+  properties: {
+    value: {
+      validate: (value: string): boolean => 'string' === typeof string().email().strict(true).validateSync(value),
+    },
+  },
+})
+
+test('Value: createEmailValue', t => {
+  const email = 'me@domain.com'
+  const emailValue = createEmailValue(email)
+
+  t.is(emailValue.value, email)
+})

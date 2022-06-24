@@ -30,6 +30,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export * from './models/Aggregate.test'
-export * from './models/Entity.test'
-export * from './models/Value.test'
+/**
+ * @module Value
+ */
+
+import { TypesForKeys } from '@cosmicverse/foundation'
+
+import {
+  createProxy,
+  ProxyTargetLifecycleHandlers,
+} from '@cosmicverse/patterns'
+
+export type Value<T> = {
+  readonly value: T
+}
+
+export type ValueType<T extends Value<unknown>> = TypesForKeys<T, 'value'>
+
+export const createValueFor = <T extends Value<unknown>>(handler: ProxyTargetLifecycleHandlers<T>): (value: ValueType<T>) => T =>
+  (value: ValueType<T>): T => createProxy({ value } as T, handler)
