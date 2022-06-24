@@ -37,8 +37,8 @@ import { uuidv4 } from '@cosmicverse/foundation'
 import {
   Entity,
   Aggregate,
-  createAggregate,
-} from '../src'
+  createAggregateFor,
+} from '../../src'
 
 interface UserEntity extends Entity {
   name: string
@@ -53,20 +53,40 @@ class UserAggregate extends Aggregate<UserEntity> {
   get version(): number {
     return this.root.version
   }
+
+  updateName(): void {
+    this.root.name = 'daniel'
+  }
 }
+
+const nameHandler = {
+  validate: (value: string): boolean => 0 < value.length,
+  update: (newValue: string, oldValue: string, state: Readonly<UserEntity>): void => {
+    console.log('update', newValue, oldValue, state)
+  },
+  trace: (target: Readonly<UserEntity>): void => {
+    console.log('trace', target)
+  },
+}
+
+const createUser = createAggregateFor(UserAggregate, {
+  name: [ nameHandler ],
+})
 
 test('Aggregate: createAggregate', t => {
   const id = uuidv4()
   const created = new Date()
-  const name = 'name'
+  const name = 'daniel'
   const version = 1
 
-  const a1 = createAggregate(UserAggregate, {
+  const a1 = createUser({
     id,
     created,
-    name,
+    name: 'jonathan',
     version,
   })
+
+  a1.updateName()
 
   t.is(a1.id, id)
   t.is(a1.created, created)

@@ -35,16 +35,14 @@
  */
 
 import {
-  Identifiable,
   createProxy,
   ProxyPropertyHandler,
 } from '@cosmicverse/patterns'
 
-export interface Entity<ID extends string | number | symbol = string, CREATED extends string | Date = Date> extends Identifiable<ID> {
-  readonly id: ID
-  readonly created: CREATED
+export interface Entity {
+  readonly id: string
+  readonly created: Date
 }
 
-export function createEntity<T extends Entity>(entity: T, handlers: ProxyPropertyHandler<T> = {}): T {
-  return createProxy(entity, handlers)
-}
+export const createEntityFor = <E extends Entity>(handlers: ProxyPropertyHandler<E> = {}): (entity: E) => E =>
+  (entity: E) => createProxy(entity, handlers)

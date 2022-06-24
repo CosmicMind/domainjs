@@ -35,10 +35,10 @@ export type {
 } from './models/Entity'
 
 export {
-  createEntity,
+  createEntityFor,
 } from './models/Entity'
 
 export {
   Aggregate,
-  createAggregate,
+  createAggregateFor,
 } from './models/Aggregate'
