@@ -44,12 +44,28 @@ class Email implements Value<string> {
   constructor(value: string) {
     this.value = value
   }
+  updateValue(): void {
+    console.log('HERE', 'amazing')
+  }
 }
 
-const createEmailValue = createValueFor<Email>({
+const createEmailValue = createValueFor(Email, {
+  created: (target: Readonly<Email>): void => {
+    console.log('CREATED', target)
+  },
+  updated: (newTarget: Readonly<Email>, oldTarget: Readonly<Email>): void => {
+    console.log('here')
+    console.log('UPDATED', newTarget, oldTarget)
+  },
+  trace: (target: Readonly<Email>): void => {
+    console.log('TRACE', target)
+  },
   properties: {
     value: {
       validate: (value: string): boolean => 'string' === typeof string().email().strict(true).validateSync(value),
+      updated: (newValue: string, oldValue: string, state: Readonly<Email>): void => {
+        console.log('newValue', newValue, 'oldValue', oldValue, 'state', state)
+      },
     },
   },
 })
@@ -57,6 +73,7 @@ const createEmailValue = createValueFor<Email>({
 test('Value: createEmailValue', t => {
   const email = 'me@domain.com'
   const emailValue = createEmailValue(email)
-
+  emailValue.updateValue()
+  console.log('emailValue', emailValue)
   t.is(emailValue.value, email)
 })

@@ -34,32 +34,21 @@
  * @module Aggregate
  */
 
-import { ProxyTargetLifecycleHandlers } from '@cosmicverse/patterns'
-
 import {
-  Entity,
-  createEntityFor,
-} from './Entity'
+  createProxy,
+  ProxyTargetLifecycleHandler,
+} from '@cosmicverse/patterns'
 
-export class Aggregate<E extends Entity> {
-  protected root: E
+import { Entity } from './Entity'
 
-  get id(): typeof this.root.id {
-    return this.root.id
-  }
-
-  get created(): typeof this.root.created {
-    return this.root.created
-  }
-
-  constructor(root: E) {
-    this.root = root
-  }
+export interface Aggregate<E extends Entity> {
+  readonly root: E
 }
 
-export type AggregateConstructor<E extends Entity, A extends Aggregate<E>> = new (root: E) => A
+export type AggregateType<A> = A extends Aggregate<infer E> ? E : A
 
-export function createAggregateFor<E extends Entity, A extends Aggregate<E>>(_class: AggregateConstructor<E, A>, handler: ProxyTargetLifecycleHandlers<E> = {}): (root: E) => A {
-  const createEntity = createEntityFor<E>(handler)
-  return (root: E) => new _class(createEntity(root))
+export type AggregateConstructor<A extends Aggregate<Entity>> = new (root: AggregateType<A>) => A
+
+export function createAggregateFor<A extends Aggregate<Entity>>(_class: AggregateConstructor<A>, handler: ProxyTargetLifecycleHandler<AggregateType<A>> = {}): (root: AggregateType<A>) => A {
+  return (root: AggregateType<A>): A => new _class(createProxy(root, handler))
 }

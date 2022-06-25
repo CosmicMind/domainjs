@@ -43,10 +43,7 @@ export {
   createEntityFor,
 } from './models/Entity'
 
-export type {
-  Value,
-} from './models/Value'
-
 export {
+  Value,
   createValueFor,
 } from './models/Value'

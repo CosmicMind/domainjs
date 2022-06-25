@@ -36,7 +36,7 @@
 
 import {
   createProxy,
-  ProxyTargetLifecycleHandlers,
+  ProxyTargetLifecycleHandler,
 } from '@cosmicverse/patterns'
 
 export interface Event {
@@ -44,5 +44,5 @@ export interface Event {
   readonly created: Date
 }
 
-export const createEventFor = <E extends Event>(handler: ProxyTargetLifecycleHandlers<E> = {}): (entity: E) => E =>
+export const createEventFor = <E extends Event>(handler: ProxyTargetLifecycleHandler<E> = {}): (entity: E) => E =>
   (entity: E) => createProxy(entity, handler)

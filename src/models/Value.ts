@@ -34,18 +34,19 @@
  * @module Value
  */
 
-import { TypesForKeys } from '@cosmicverse/foundation'
-
 import {
   createProxy,
-  ProxyTargetLifecycleHandlers,
+  ProxyTargetLifecycleHandler,
 } from '@cosmicverse/patterns'
 
-export type Value<T> = {
+export interface Value<T> {
   readonly value: T
 }
 
-export type ValueType<T extends Value<unknown>> = TypesForKeys<T, 'value'>
+export type ValueType<V> = V extends Value<infer T> ? T : V
 
-export const createValueFor = <T extends Value<unknown>>(handler: ProxyTargetLifecycleHandlers<T>): (value: ValueType<T>) => T =>
-  (value: ValueType<T>): T => createProxy({ value } as T, handler)
+export type ValueConstructor<V extends Value<unknown>> = new (value: ValueType<V>) => V
+
+export function createValueFor<V extends Value<unknown>>(_class: ValueConstructor<V>, handler: ProxyTargetLifecycleHandler<V> = {}): (value: ValueType<V>) => V {
+  return (value: ValueType<V>): V => createProxy(new _class(value), handler)
+}

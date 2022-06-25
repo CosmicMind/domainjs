@@ -45,13 +45,27 @@ interface UserEntity extends Entity {
   version: number
 }
 
-class UserAggregate extends Aggregate<UserEntity> {
+class UserAggregate implements Aggregate<UserEntity> {
+  readonly root: UserEntity
+
+  get id(): string {
+    return this.root.id
+  }
+
+  get created(): Date {
+    return this.root.created
+  }
+
   get name(): string {
     return this.root.name
   }
 
   get version(): number {
     return this.root.version
+  }
+
+  constructor(root: UserEntity) {
+    this.root = root
   }
 
   updateName(): void {
@@ -67,8 +81,8 @@ const nameHandler = {
 }
 
 const createUser = createAggregateFor(UserAggregate, {
-  trace: (target: UserAggregate): void => {
-    console.log(target)
+  trace: (target: Readonly<UserEntity>): void => {
+    console.log('createUser', target)
   },
   properties: {
     name: nameHandler,
