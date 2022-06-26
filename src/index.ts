@@ -39,11 +39,18 @@ export type {
   Entity,
   EntityLifecycle,
 } from './models/Entity'
+
 export {
   EntityError,
   defineEntity,
-  createEntity,
 } from './models/Entity'
 
-export type { Value } from './models/Value'
-export { defineValue } from './models/Value'
+export type {
+  Value,
+  ValueLifecycle,
+} from './models/Value'
+
+export { 
+  ValueError,
+  defineValue,
+} from './models/Value'

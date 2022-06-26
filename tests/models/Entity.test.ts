@@ -32,12 +32,9 @@
 
 import test from 'ava'
 
-import { guardFor } from '@cosmicverse/foundation'
-
 import {
   Entity,
   defineEntity,
-  createEntity,
 } from '../../src'
 
 interface User extends Entity {
@@ -56,57 +53,6 @@ const createUser = defineEntity<User>({
       validate: (value: string): boolean => 2 < value.length,
     },
   },
-})
-
-interface EmailValue {
-  value: string
-}
-
-type Member = User & {
-  readonly email: EmailValue
-}
-
-test('Entity: createEntity', t => {
-  const id = '123'
-  const created = new Date()
-  const name = 'daniel'
-  const email = createEntity({
-    value: 'my@email.com',
-  }, {
-    properties: {
-      value: {
-        validate(value: string, state: Readonly<EmailValue>): boolean {
-          return 5 < value.length && value !== state.value
-        },
-      },
-    },
-  })
-
-  const target: Member = {
-    id,
-    created,
-    name,
-    email,
-  }
-
-  const proxy = createEntity(target, {
-    properties: {
-      email: {
-        validate(value: EmailValue): boolean {
-          return guardFor(value)
-        },
-      },
-    },
-  })
-
-  t.is(email.value, proxy.email.value)
-
-  proxy.email.value = 'address@domain.com'
-
-  t.is(proxy.id, id)
-  t.is(proxy.created, created)
-  t.is(proxy.name, name)
-  t.is('address@domain.com', proxy.email.value)
 })
 
 test('Entity: interface', t => {

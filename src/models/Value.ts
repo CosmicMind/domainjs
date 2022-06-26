@@ -94,7 +94,7 @@ export function createValueHandler<T extends Value<unknown>, V extends ValueType
  */
 export const createValue = <T extends Value<unknown>>(target: T, handler: ValueLifecycle<T> = {}): T | never => {
   if (false === handler.validate?.(target.value as ValueType<T>, {} as Readonly<T>)) {
-    throw new ValueError(`value: ${String(target.value)} is invalid`)
+    throw new ValueError(`value is invalid`)
   }
 
   const state = clone(target) as Readonly<T>

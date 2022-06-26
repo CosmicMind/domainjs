@@ -32,10 +32,14 @@
 
 import test from 'ava'
 
-import { string } from 'yup'
+import {
+  string,
+  ValidationError,
+} from 'yup'
 
 import {
   Value,
+  ValueError,
   defineValue,
 } from '../../src'
 
@@ -55,7 +59,7 @@ const createEmailValue = defineValue(Email, {
   // },
 
   validate: (value: string): boolean => {
-    return 'string' === typeof string().email().strict(true).validateSync(value)
+    return 'string' === typeof string().email('email is invalid').strict(true).validateSync(value)
   },
 
   // created: (email: Email): void => {
@@ -63,11 +67,54 @@ const createEmailValue = defineValue(Email, {
   // },
 })
 
+class Version implements Value<number> {
+  readonly value: number
+  constructor(value: number) {
+    this.value = value
+  }
+}
+
+const createVersionValue = defineValue(Version, {
+  validate: (value: number): boolean => 0 < value,
+})
+
 test('Value: create value', t => {
   const e1 = 'susan@domain.com'
   const v1 = createEmailValue(e1)
 
   t.is(v1.value, e1)
+})
+
+test('Value: ValueError', t => {
+  try {
+    createVersionValue(0)
+    t.false(true)
+  }
+  catch (error) {
+    if (error instanceof ValueError) {
+      t.is(error.name, 'ValueError')
+      t.is(error.message, 'value is invalid')
+    }
+    else {
+      t.false(true)
+    }
+  }
+})
+
+test('Value: ValidationError', t => {
+  try {
+    createEmailValue('123')
+    t.false(true)
+  }
+  catch (error) {
+    if (error instanceof ValidationError) {
+      t.is(error.name, 'ValidationError')
+      t.is(error.message, 'email is invalid')
+    }
+    else {
+      t.false(true)
+    }
+  }
 })
 
 test('Value: get computed value', t => {
