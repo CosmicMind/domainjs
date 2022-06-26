@@ -35,8 +35,15 @@ export {
   defineAggregate,
 } from './models/Aggregate'
 
-export type { Entity } from './models/Entity'
-export { defineEntity } from './models/Entity'
+export type {
+  Entity,
+  EntityLifecycle,
+} from './models/Entity'
+export {
+  EntityError,
+  defineEntity,
+  createEntity,
+} from './models/Entity'
 
 export type { Value } from './models/Value'
 export { defineValue } from './models/Value'

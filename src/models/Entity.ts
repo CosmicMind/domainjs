@@ -40,6 +40,11 @@ import {
   FoundationError,
 } from '@cosmicverse/foundation'
 
+export interface Entity {
+  readonly id: string
+  readonly created: Date
+}
+
 /**
  * The `ProxyPropertyKey` defines the allowable keys for
  * a given type `T`.
@@ -73,10 +78,10 @@ export type EntityLifecycle<T> = {
 export class EntityError extends FoundationError {}
 
 /**
- * The `createEntityProxyHandler` prepares the `EntityLifecycle` for
+ * The `createEntityHandler` prepares the `EntityLifecycle` for
  * the given `handler`.
  */
-export function createEntityProxyHandler<T extends object>(target: T, handler: EntityLifecycle<T>): ProxyHandler<T> {
+export function createEntityHandler<T extends object>(target: T, handler: EntityLifecycle<T>): ProxyHandler<T> {
   let state = clone(target) as Readonly<T>
 
   return {
@@ -114,10 +119,10 @@ export function createEntityProxyHandler<T extends object>(target: T, handler: E
 }
 
 /**
- * The `createEntityProxy` creates a new `Proxy` instance with the
+ * The `createEntity` creates a new `Proxy` instance with the
  * given `target` and `handler`.
  */
-export const createEntityProxy = <T extends object>(target: T, handler: EntityLifecycle<T> = {}): T | never => {
+export const createEntity = <T extends object>(target: T, handler: EntityLifecycle<T> = {}): T | never => {
   if (guardFor(target)) {
     const properties = handler.properties
 
@@ -137,13 +142,8 @@ export const createEntityProxy = <T extends object>(target: T, handler: EntityLi
     handler.trace?.(state)
   }
 
-  return new Proxy(target, createEntityProxyHandler(target, handler))
-}
-
-export interface Entity {
-  readonly id: string
-  readonly created: Date
+  return new Proxy(target, createEntityHandler(target, handler))
 }
 
 export const defineEntity = <E extends Entity>(handler: EntityLifecycle<E> = {}): (entity: E) => E =>
-  (entity: E) => createEntityProxy(entity, handler)
+  (entity: E) => createEntity(entity, handler)

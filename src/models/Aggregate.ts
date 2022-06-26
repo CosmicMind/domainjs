@@ -37,7 +37,7 @@
 import {
   Entity,
   EntityLifecycle,
-  createEntityProxy,
+  createEntity,
 } from './Entity'
 
 export interface Aggregate<E extends Entity> {
@@ -49,5 +49,5 @@ export type AggregateType<A> = A extends Aggregate<infer E> ? E : A
 export type AggregateConstructor<A extends Aggregate<Entity>> = new (root: AggregateType<A>) => A
 
 export function defineAggregate<A extends Aggregate<Entity>>(_class: AggregateConstructor<A>, handler: EntityLifecycle<AggregateType<A>> = {}): (root: AggregateType<A>) => A {
-  return (root: AggregateType<A>): A => new _class(createEntityProxy(root, handler))
+  return (root: AggregateType<A>): A => new _class(createEntity(root, handler))
 }

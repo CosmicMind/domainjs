@@ -89,10 +89,10 @@ export function createValueHandler<T extends Value<unknown>, V extends ValueType
 }
 
 /**
- * The `createValueProxy` creates a new `Proxy` instance with the
+ * The `createValue` creates a new `Proxy` instance with the
  * given `target` and `handler`.
  */
-export const createValueProxy = <T extends Value<unknown>>(target: T, handler: ValueLifecycle<T> = {}): T | never => {
+export const createValue = <T extends Value<unknown>>(target: T, handler: ValueLifecycle<T> = {}): T | never => {
   if (false === handler.validate?.(target.value as ValueType<T>, {} as Readonly<T>)) {
     throw new ValueError(`value: ${String(target.value)} is invalid`)
   }
@@ -108,5 +108,5 @@ export const createValueProxy = <T extends Value<unknown>>(target: T, handler: V
  * The `defineValue` sets a new ValueLifecycle to the given `Value`.
  */
 export function defineValue<V extends Value<unknown>>(_class: ValueConstructor<V>, handler: ValueLifecycle<V> = {}): (value: ValueType<V>) => V {
-  return (value: ValueType<V>): V => createValueProxy(new _class(value), handler)
+  return (value: ValueType<V>): V => createValue(new _class(value), handler)
 }
