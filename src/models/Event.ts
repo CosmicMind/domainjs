@@ -34,3 +34,29 @@
  * @module Event
  */
 
+import { Observable } from '@cosmicverse/patterns'
+
+export type Event<T> = {
+  readonly id: string
+  readonly correlationId: string
+  readonly created: Date
+  readonly message: T
+}
+
+export type EventTopics = {
+  readonly [K: string]: Event<unknown>
+}
+
+export type EventTypeFor<E> = E extends Event<infer T> ? T : E
+
+export type EventFn<E extends Event<unknown>> = (event: E) => void
+
+export abstract class EventProvider<T extends EventTopics> extends Observable<T> {
+  protected publish<K extends keyof T>(topic: K, event: T[K]): Promise<T[K]> {
+    return super.publish(topic, event)
+  }
+
+  protected publishSync<K extends keyof T>(topic: K, event: T[K]): void {
+    return super.publishSync(topic, event)
+  }
+}

@@ -47,17 +47,17 @@ export interface Value<T> {
 /**
  * Infers the given type `T` for `Value<T>`.
  */
-export type ValueType<V> = V extends Value<infer T> ? T : V
+export type ValueTypeFor<V> = V extends Value<infer T> ? T : V
 
 /**
  * The constructor that the `defineValue` is willing to accept
  * as an implemented `Value<T>`.
  */
-export type ValueConstructor<V extends Value<unknown>> = new (value: ValueType<V>) => V
+export type ValueConstructor<V extends Value<unknown>> = new (value: ValueTypeFor<V>) => V
 
 export type ValueLifecycle<T> = {
   trace?(target: T): void
-  validate?(value: ValueType<T>, state: T): boolean | never
+  validate?(value: ValueTypeFor<T>, state: T): boolean | never
   created?(target: T): void
 }
 
@@ -70,7 +70,7 @@ export class ValueError extends FoundationError {}
  * The `createValueHandler` prepares the `ValueLifecycle` for
  * the given `handler`.
  */
-export function createValueHandler<T extends Value<unknown>, V extends ValueType<T> = ValueType<T>>(target: T, handler: ValueLifecycle<T>): ProxyHandler<T> {
+export function createValueHandler<T extends Value<unknown>, V extends ValueTypeFor<T> = ValueTypeFor<T>>(target: T, handler: ValueLifecycle<T>): ProxyHandler<T> {
   const state = clone(target) as Readonly<T>
 
   return {
@@ -93,7 +93,7 @@ export function createValueHandler<T extends Value<unknown>, V extends ValueType
  * given `target` and `handler`.
  */
 export const createValue = <T extends Value<unknown>>(target: T, handler: ValueLifecycle<T> = {}): T | never => {
-  if (false === handler.validate?.(target.value as ValueType<T>, {} as Readonly<T>)) {
+  if (false === handler.validate?.(target.value as ValueTypeFor<T>, {} as Readonly<T>)) {
     throw new ValueError(`value is invalid`)
   }
 
@@ -107,5 +107,5 @@ export const createValue = <T extends Value<unknown>>(target: T, handler: ValueL
 /**
  * The `defineValue` sets a new ValueLifecycle to the given `Value`.
  */
-export const defineValue = <V extends Value<unknown>>(_class: ValueConstructor<V>, handler: ValueLifecycle<V> = {}): (value: ValueType<V>) => V =>
-  (value: ValueType<V>): V => createValue(new _class(value), handler)
+export const defineValue = <V extends Value<unknown>>(_class: ValueConstructor<V>, handler: ValueLifecycle<V> = {}): (value: ValueTypeFor<V>) => V =>
+  (value: ValueTypeFor<V>): V => createValue(new _class(value), handler)

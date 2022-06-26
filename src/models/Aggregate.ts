@@ -36,17 +36,29 @@
 
 import {
   Entity,
-  EntityLifecycle,
   createEntity,
+  EntityLifecycle,
 } from './Entity'
 
-export interface Aggregate<E extends Entity> {
-  readonly root: E
+import {
+  EventTopics,
+  EventProvider,
+} from './Event'
+
+const sentinel: EventTopics = {}
+
+export abstract class Aggregate<E extends Entity, T extends EventTopics = typeof sentinel> extends EventProvider<T> {
+  protected root: E
+
+  constructor(root: E) {
+    super()
+    this.root = root
+  }
 }
 
-export type AggregateType<A> = A extends Aggregate<infer E> ? E : A
+export type AggregateTypeFor<A> = A extends Aggregate<infer E> ? E : A
 
-export type AggregateConstructor<A extends Aggregate<Entity>> = new (root: AggregateType<A>) => A
+export type AggregateConstructor<A extends Aggregate<Entity>> = new (root: AggregateTypeFor<A>) => A
 
-export const defineAggregate = <A extends Aggregate<Entity>>(_class: AggregateConstructor<A>, handler: EntityLifecycle<AggregateType<A>> = {}): (root: AggregateType<A>) => A =>
-  (root: AggregateType<A>): A => new _class(createEntity(root, handler))
+export const defineAggregate = <A extends Aggregate<Entity>>(_class: AggregateConstructor<A>, handler: EntityLifecycle<AggregateTypeFor<A>> = {}): (root: AggregateTypeFor<A>) => A =>
+  (root: AggregateTypeFor<A>): A => new _class(createEntity(root, handler))

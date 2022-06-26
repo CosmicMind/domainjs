@@ -45,9 +45,7 @@ interface UserEntity extends Entity {
   version: number
 }
 
-class UserAggregate implements Aggregate<UserEntity> {
-  readonly root: UserEntity
-
+class UserAggregate extends Aggregate<UserEntity> {
   get id(): string {
     return this.root.id
   }
@@ -62,10 +60,6 @@ class UserAggregate implements Aggregate<UserEntity> {
 
   get version(): number {
     return this.root.version
-  }
-
-  constructor(root: UserEntity) {
-    this.root = root
   }
 
   updateName(): void {
