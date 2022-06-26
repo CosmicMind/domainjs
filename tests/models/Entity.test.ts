@@ -34,6 +34,7 @@ import test from 'ava'
 
 import {
   Entity,
+  EntityError,
   defineEntity,
 } from '../../src'
 
@@ -84,7 +85,19 @@ test('Entity: partial validator', t => {
     name: 'jonathan',
   })
 
-  u1.name = ''
+  try {
+    u1.name = ''
+    t.false(true)
+  }
+  catch (error) {
+    if (error instanceof EntityError) {
+      t.is(error.name, 'EntityError')
+      t.is(error.message, 'name is invalid')
+    }
+    else {
+      t.false(true)
+    }
+  }
 
   t.is(u1.id, id)
   t.is(u1.created, created)

@@ -31,5 +31,6 @@
  */
 
 export * from './models/Aggregate.test'
+export * from './models/Event.test'
 export * from './models/Entity.test'
 export * from './models/Value.test'

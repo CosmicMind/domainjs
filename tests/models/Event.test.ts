@@ -30,37 +30,56 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * @module Aggregate
- */
+import test from 'ava'
+
+import { guardFor } from '@cosmicverse/foundation'
 
 import {
   Entity,
-  EntityLifecycle,
-  defineEntity,
-} from './Entity'
+  Event,
+  defineEvent,
+} from '../../src'
 
-import {
-  EventTopics,
-  EventProvider,
-} from './Event'
+interface User extends Entity {
+  name: string
+}
 
-const sentinel: EventTopics = {}
+const createUserEvent = defineEvent<Event<User>>({
+  properties: {
+    id: {
+      validate: (value: string): boolean => 2 < value.length,
+    },
+    correlationId: {
+      validate: (value: string): boolean => 2 < value.length,
+    },
+    created: {
+      validate: (value: Date): boolean => value instanceof Date,
+    },
+    message: {
+      validate: (value: User): boolean => guardFor(value),
+    },
+  },
+})
 
-export abstract class Aggregate<E extends Entity, T extends EventTopics = typeof sentinel> extends EventProvider<T> {
-  protected root: E
-
-  constructor(root: E) {
-    super()
-    this.root = root
+test('Event: interface', t => {
+  const id = '123'
+  const correlationId = '456'
+  const created = new Date()
+  const message = {
+    id,
+    created,
+    name: 'daniel',
   }
-}
 
-export type AggregateTypeFor<A> = A extends Aggregate<infer E> ? E : A
+  const e1 = createUserEvent({
+    id,
+    correlationId,
+    created,
+    message,
+  })
 
-export type AggregateConstructor<A extends Aggregate<Entity>> = new (root: AggregateTypeFor<A>) => A
-
-export function defineAggregate<A extends Aggregate<Entity>>(_class: AggregateConstructor<A>, handler: EntityLifecycle<AggregateTypeFor<A>> = {}): (root: AggregateTypeFor<A>) => A {
-  const createEntity = defineEntity<AggregateTypeFor<A>>(handler)
-  return (root: AggregateTypeFor<A>): A => new _class(createEntity(root))
-}
+  t.is(e1.id, id)
+  t.is(e1.correlationId, correlationId)
+  t.is(e1.created, created)
+  t.is(e1.message, message)
+})

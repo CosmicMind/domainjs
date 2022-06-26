@@ -30,6 +30,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+export type {
+  AggregateTypeFor,
+  AggregateConstructor,
+} from './models/Aggregate'
+
 export {
   Aggregate,
   defineAggregate,
@@ -37,6 +42,7 @@ export {
 
 export type {
   Event,
+  EventTypeFor,
   EventLifecycle,
   EventPropertyLifecycle,
   EventPropertyLifecycleMap,
@@ -61,10 +67,12 @@ export {
 
 export type {
   Value,
+  ValueTypeFor,
+  ValueConstructor,
   ValueLifecycle,
 } from './models/Value'
 
-export { 
+export {
   ValueError,
   defineValue,
 } from './models/Value'
