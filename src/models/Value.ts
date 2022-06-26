@@ -67,10 +67,17 @@ export type ValueLifecycle<T> = {
 export class ValueError extends FoundationError {}
 
 /**
+ * The `defineValue` sets a new ValueLifecycle to the given `Value`.
+ */
+export const defineValue = <V extends Value<unknown>>(_class: ValueConstructor<V>, handler: ValueLifecycle<V> = {}): (value: ValueTypeFor<V>) => V =>
+  (value: ValueTypeFor<V>): V => createValue(new _class(value), handler)
+
+
+/**
  * The `createValueHandler` prepares the `ValueLifecycle` for
  * the given `handler`.
  */
-export function createValueHandler<T extends Value<unknown>, V extends ValueTypeFor<T> = ValueTypeFor<T>>(target: T, handler: ValueLifecycle<T>): ProxyHandler<T> {
+function createValueHandler<T extends Value<unknown>, V extends ValueTypeFor<T> = ValueTypeFor<T>>(target: T, handler: ValueLifecycle<T>): ProxyHandler<T> {
   const state = clone(target) as Readonly<T>
 
   return {
@@ -78,10 +85,8 @@ export function createValueHandler<T extends Value<unknown>, V extends ValueType
      * The `set` updates the given property with the given value.
      */
     set(target: T, prop: 'value', value: V): boolean | never {
-      if (guardFor(handler, 'validate')) {
-        if (!handler.validate?.(value, state)) {
-          throw new ValueError(`${String(prop)} is invalid`)
-        }
+      if (false === handler.validate?.(value, state)) {
+        throw new ValueError(`${String(prop)} is invalid`)
       }
       return Reflect.set(target, prop, value)
     },
@@ -92,20 +97,16 @@ export function createValueHandler<T extends Value<unknown>, V extends ValueType
  * The `createValue` creates a new `Proxy` instance with the
  * given `target` and `handler`.
  */
-export const createValue = <T extends Value<unknown>>(target: T, handler: ValueLifecycle<T> = {}): T | never => {
-  if (false === handler.validate?.(target.value as ValueTypeFor<T>, {} as Readonly<T>)) {
-    throw new ValueError(`value is invalid`)
-  }
+function createValue<T extends Value<unknown>>(target: T, handler: ValueLifecycle<T> = {}): T | never {
+  if (guardFor(target)) {
+    if (false === handler.validate?.(target.value as ValueTypeFor<T>, {} as Readonly<T>)) {
+      throw new ValueError(`value is invalid`)
+    }
 
-  const state = clone(target) as Readonly<T>
-  handler.created?.(state)
-  handler.trace?.(state)
+    const state = clone(target) as Readonly<T>
+    handler.created?.(state)
+    handler.trace?.(state)
+  }
 
   return new Proxy(target, createValueHandler(target, handler))
 }
-
-/**
- * The `defineValue` sets a new ValueLifecycle to the given `Value`.
- */
-export const defineValue = <V extends Value<unknown>>(_class: ValueConstructor<V>, handler: ValueLifecycle<V> = {}): (value: ValueTypeFor<V>) => V =>
-  (value: ValueTypeFor<V>): V => createValue(new _class(value), handler)

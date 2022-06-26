@@ -46,10 +46,10 @@ export interface Entity {
 }
 
 /**
- * The `ProxyPropertyKey` defines the allowable keys for
+ * The `EntityPropertyKey` defines the allowable keys for
  * a given type `T`.
  */
-export type ProxyPropertyKey<T> = keyof T extends string | symbol ? keyof T : never
+export type EntityPropertyKey<T> = keyof T extends string | symbol ? keyof T : never
 
 export type EntityPropertyLifecycle<T, V> = {
   validate?(value: Readonly<V>, state: Readonly<T>): boolean | never
@@ -77,43 +77,39 @@ export type EntityLifecycle<T> = {
  */
 export class EntityError extends FoundationError {}
 
+export const defineEntity = <E extends Entity>(handler: EntityLifecycle<E> = {}): (entity: E) => E =>
+  (entity: E) => createEntity(entity, handler)
+
 /**
  * The `createEntityHandler` prepares the `EntityLifecycle` for
  * the given `handler`.
  */
-export function createEntityHandler<T extends object>(target: T, handler: EntityLifecycle<T>): ProxyHandler<T> {
+function createEntityHandler<T extends object>(target: T, handler: EntityLifecycle<T>): ProxyHandler<T> {
   let state = clone(target) as Readonly<T>
 
   return {
     /**
      * The `set` updates the given property with the given value.
      */
-    set<P extends ProxyPropertyKey<T>, V extends T[P]>(target: T, prop: P, value: V): boolean | never {
+    set<P extends EntityPropertyKey<T>, V extends T[P]>(target: T, prop: P, value: V): boolean | never {
       const h = handler.properties?.[prop]
 
-      if (guardFor(h, 'validate', 'updated')) {
-        if (!h.validate?.(value, state)) {
-          throw new EntityError(`${String(prop)} is invalid`)
-        }
+      if (false === h?.validate?.(value, state)) {
+        throw new EntityError(`${String(prop)} is invalid`)
       }
 
-      if (guardFor(target, prop)) {
-        const oldValue = target[prop]
-        const oldTarget = state
-        const ret = Reflect.set(target, prop, value)
+      const oldValue = target[prop]
+      const oldTarget = state
+      const ret = Reflect.set(target, prop, value)
 
-        state = clone(target) as Readonly<T>
+      state = clone(target) as Readonly<T>
 
-        h?.updated?.(value, oldValue, state)
+      h?.updated?.(value, oldValue, state)
 
-        handler.updated?.(state, oldTarget)
-        handler.trace?.(state)
+      handler.updated?.(state, oldTarget)
+      handler.trace?.(state)
 
-        return ret
-      }
-      else {
-        return false
-      }
+      return ret
     },
   }
 }
@@ -122,17 +118,14 @@ export function createEntityHandler<T extends object>(target: T, handler: Entity
  * The `createEntity` creates a new `Proxy` instance with the
  * given `target` and `handler`.
  */
-export const createEntity = <T extends object>(target: T, handler: EntityLifecycle<T> = {}): T | never => {
+function createEntity<T extends object>(target: T, handler: EntityLifecycle<T> = {}): T | never {
   if (guardFor(target)) {
     const properties = handler.properties
 
     if (guardFor(properties)) {
       for (const prop in properties) {
-        const h = properties[prop]
-        if (guardFor(h, 'validate', 'updated')) {
-          if (!properties[prop]?.validate?.(target[prop], {} as Readonly<T>)) {
-            throw new EntityError(`${String(prop)} is invalid`)
-          }
+        if (false === properties[prop]?.validate?.(target[prop], {} as Readonly<T>)) {
+          throw new EntityError(`${String(prop)} is invalid`)
         }
       }
     }
@@ -144,6 +137,3 @@ export const createEntity = <T extends object>(target: T, handler: EntityLifecyc
 
   return new Proxy(target, createEntityHandler(target, handler))
 }
-
-export const defineEntity = <E extends Entity>(handler: EntityLifecycle<E> = {}): (entity: E) => E =>
-  (entity: E) => createEntity(entity, handler)

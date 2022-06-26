@@ -36,8 +36,22 @@ export {
 } from './models/Aggregate'
 
 export type {
+  Event,
+  EventLifecycle,
+  EventPropertyLifecycle,
+  EventPropertyLifecycleMap,
+} from './models/Event'
+
+export {
+  EventError,
+  defineEvent,
+} from './models/Event'
+
+export type {
   Entity,
   EntityLifecycle,
+  EntityPropertyLifecycle,
+  EntityPropertyLifecycleMap,
 } from './models/Entity'
 
 export {
