@@ -37,7 +37,7 @@ import { uuidv4 } from '@cosmicverse/foundation'
 import {
   Entity,
   Aggregate,
-  createAggregateFor,
+  defineAggregate,
 } from '../../src'
 
 interface UserEntity extends Entity {
@@ -75,15 +75,15 @@ class UserAggregate implements Aggregate<UserEntity> {
 
 const nameHandler = {
   validate: (value: string): boolean => 0 < value.length,
-  updated: (newValue: string, oldValue: string, state: Readonly<UserEntity>): void => {
-    console.log('update', oldValue, newValue, state)
-  },
+  // updated: (newValue: string, oldValue: string, state: Readonly<UserEntity>): void => {
+  //   console.log('update', oldValue, newValue, state)
+  // },
 }
 
-const createUser = createAggregateFor(UserAggregate, {
-  trace: (target: Readonly<UserEntity>): void => {
-    console.log('createUser', target)
-  },
+const createUser = defineAggregate(UserAggregate, {
+  // trace: (target: Readonly<UserEntity>): void => {
+  //   console.log('createUser', target)
+  // },
   properties: {
     name: nameHandler,
   },

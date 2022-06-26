@@ -32,8 +32,6 @@
 
 import test from 'ava'
 
-test('Service: IService', t => {
-
-
+test('Entity: empty', t => {
   t.true(true)
 })

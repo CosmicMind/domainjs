@@ -30,6 +30,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// export * from './models/Aggregate.test'
-// export * from './models/Entity.test'
+export * from './models/Aggregate.test'
+export * from './models/Entity.test'
 export * from './models/Value.test'
