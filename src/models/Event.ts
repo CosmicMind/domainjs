@@ -34,15 +34,3 @@
  * @module Event
  */
 
-import {
-  createProxy,
-  ProxyTargetLifecycleHandler,
-} from '@cosmicverse/patterns'
-
-export interface Event {
-  readonly id: string
-  readonly created: Date
-}
-
-export const createEventFor = <E extends Event>(handler: ProxyTargetLifecycleHandler<E> = {}): (entity: E) => E =>
-  (entity: E) => createProxy(entity, handler)

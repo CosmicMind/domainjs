@@ -107,6 +107,5 @@ export const createValue = <T extends Value<unknown>>(target: T, handler: ValueL
 /**
  * The `defineValue` sets a new ValueLifecycle to the given `Value`.
  */
-export function defineValue<V extends Value<unknown>>(_class: ValueConstructor<V>, handler: ValueLifecycle<V> = {}): (value: ValueType<V>) => V {
-  return (value: ValueType<V>): V => createValue(new _class(value), handler)
-}
+export const defineValue = <V extends Value<unknown>>(_class: ValueConstructor<V>, handler: ValueLifecycle<V> = {}): (value: ValueType<V>) => V =>
+  (value: ValueType<V>): V => createValue(new _class(value), handler)
