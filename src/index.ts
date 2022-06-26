@@ -30,20 +30,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export {
-  Aggregate,
-  createAggregateFor,
-} from './models/Aggregate'
+// export {
+//   Aggregate,
+//   createAggregateFor,
+// } from './models/Aggregate'
+
+// export type {
+//   Entity,
+// } from './models/Entity'
+
+// export {
+//   createEntityFor,
+// } from './models/Entity'
 
 export type {
-  Entity,
-} from './models/Entity'
-
-export {
-  createEntityFor,
-} from './models/Entity'
-
-export {
   Value,
-  createValueFor,
+} from './models/Value'
+
+export {
+  defineValue,
 } from './models/Value'

@@ -36,44 +36,60 @@ import { string } from 'yup'
 
 import {
   Value,
-  createValueFor,
+  defineValue,
 } from '../../src'
 
 class Email implements Value<string> {
   readonly value: string
+  get domainAddress(): string {
+    return this.value.split('@')[1]
+  }
   constructor(value: string) {
     this.value = value
   }
-  updateValue(): void {
-    console.log('HERE', 'amazing')
-  }
 }
 
-const createEmailValue = createValueFor(Email, {
-  created: (target: Readonly<Email>): void => {
-    console.log('CREATED', target)
+const createEmailValue = defineValue(Email, {
+  // trace: (email: Email): void => {
+  //   console.log('trace', email)
+  // },
+
+  validate: (value: string): boolean => {
+    return 'string' === typeof string().email().strict(true).validateSync(value)
   },
-  updated: (newTarget: Readonly<Email>, oldTarget: Readonly<Email>): void => {
-    console.log('here')
-    console.log('UPDATED', newTarget, oldTarget)
-  },
-  trace: (target: Readonly<Email>): void => {
-    console.log('TRACE', target)
-  },
-  properties: {
-    value: {
-      validate: (value: string): boolean => 'string' === typeof string().email().strict(true).validateSync(value),
-      updated: (newValue: string, oldValue: string, state: Readonly<Email>): void => {
-        console.log('newValue', newValue, 'oldValue', oldValue, 'state', state)
-      },
-    },
-  },
+
+  // created: (email: Email): void => {
+  //   console.log('created', email)
+  // },
 })
 
-test('Value: createEmailValue', t => {
-  const email = 'me@domain.com'
-  const emailValue = createEmailValue(email)
-  emailValue.updateValue()
-  console.log('emailValue', emailValue)
-  t.is(emailValue.value, email)
+test('Value: create value', t => {
+  const e1 = 'susan@domain.com'
+  const v1 = createEmailValue(e1)
+
+  t.is(v1.value, e1)
+})
+
+test('Value: get computed value', t => {
+  const e1 = 'susan@domain.com'
+  const v1 = createEmailValue(e1)
+
+  const e2 = 'bob@domain.com'
+  const v2 = createEmailValue(e2)
+
+  t.is(v1.value, e1)
+  t.is(v2.value, e2)
+  t.is(v1.domainAddress, v2.domainAddress)
+})
+
+test('Value: delete value', t => {
+  const e1 = 'susan@domain.com'
+  const v1 = createEmailValue(e1)
+
+  const e2 = 'bob@domain.com'
+  const v2 = createEmailValue(e2)
+
+  t.is(v1.value, e1)
+  t.is(v2.value, e2)
+  t.is(v1.domainAddress, v2.domainAddress)
 })
