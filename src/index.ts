@@ -42,6 +42,7 @@ export {
 
 export type {
   Event,
+  EventTopics,
   EventTypeFor,
   EventLifecycle,
   EventPropertyLifecycle,

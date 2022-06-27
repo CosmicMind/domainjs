@@ -32,20 +32,40 @@
 
 import test from 'ava'
 
-import { uuidv4 } from '@cosmicverse/foundation'
+import { 
+  uuidv4,
+  guardFor,
+} from '@cosmicverse/foundation'
 
 import {
   Entity,
   Aggregate,
   defineAggregate,
+  Event,
+  EventTopics,
+  defineEvent,
 } from '../../src'
 
-interface UserEntity extends Entity {
+interface User extends Entity {
   name: string
   version: number
 }
 
-class UserAggregate extends Aggregate<UserEntity> {
+type UserEvent = Event<User>
+
+const createUserEvent = defineEvent<UserEvent>({
+  properties: {
+    message: {
+      validate: (event: UserEvent): boolean => guardFor(event),
+    },
+  },
+})
+
+interface UserTopics extends EventTopics {
+  version: UserEvent
+}
+
+class UserAggregate extends Aggregate<User, UserTopics> {
   get id(): string {
     return this.root.id
   }
@@ -59,6 +79,12 @@ class UserAggregate extends Aggregate<UserEntity> {
   }
 
   get version(): number {
+    this.publish('version', createUserEvent({
+      id: '123',
+      correlationId: '456',
+      created: new Date(),
+      message: this.root,
+    }))
     return this.root.version
   }
 
@@ -69,13 +95,13 @@ class UserAggregate extends Aggregate<UserEntity> {
 
 const nameHandler = {
   validate: (value: string): boolean => 0 < value.length,
-  // updated: (newValue: string, oldValue: string, state: Readonly<UserEntity>): void => {
+  // updated: (newValue: string, oldValue: string, state: Readonly<User>): void => {
   //   console.log('update', oldValue, newValue, state)
   // },
 }
 
 const createUser = defineAggregate(UserAggregate, {
-  // trace: (target: Readonly<UserEntity>): void => {
+  // trace: (target: Readonly<User>): void => {
   //   console.log('createUser', target)
   // },
   properties: {
@@ -94,6 +120,10 @@ test('Aggregate: createAggregate', t => {
     created,
     name: 'jonathan',
     version,
+  })
+
+  a1.subscribe('version', (event: UserEvent) => {
+    console.log('subscriber', event)
   })
 
   a1.updateName()

@@ -57,15 +57,7 @@ export type EventTypeFor<E> = E extends Event<infer T> ? T : E
 
 export type EventFn<E extends Event<unknown>> = (event: E) => void
 
-export abstract class EventProvider<T extends EventTopics> extends Observable<T> {
-  protected publish<K extends keyof T>(topic: K, event: T[K]): Promise<T[K]> {
-    return super.publish(topic, event)
-  }
-
-  protected publishSync<K extends keyof T>(topic: K, event: T[K]): void {
-    return super.publishSync(topic, event)
-  }
-}
+export abstract class EventProvider<T extends EventTopics> extends Observable<T> {}
 
 
 /**
@@ -75,7 +67,7 @@ export abstract class EventProvider<T extends EventTopics> extends Observable<T>
 export type EventPropertyKey<T> = keyof T extends string | symbol ? keyof T : never
 
 export type EventPropertyLifecycle<T, V> = {
-  validate?(value: Readonly<V>, state: Readonly<T>): boolean | never
+  validate?(event: T, state: T): boolean | never
 }
 
 /**
@@ -87,8 +79,8 @@ export type EventPropertyLifecycleMap<T> = {
 }
 
 export type EventLifecycle<T> = {
-  trace?(target: Readonly<T>): void
-  created?(target: Readonly<T>): void
+  trace?(target: T): void
+  created?(target: T): void
   properties?: EventPropertyLifecycleMap<T>
 }
 
@@ -105,7 +97,7 @@ export const defineEvent = <E extends Event<unknown>>(handler: EventLifecycle<E>
  * the given `handler`.
  */
 function createEventHandler<T extends object>(target: T, handler: EventLifecycle<T>): ProxyHandler<T> {
-  let state = clone(target) as Readonly<T>
+  let state = clone(target) as T
 
   return {
     /**
@@ -120,7 +112,7 @@ function createEventHandler<T extends object>(target: T, handler: EventLifecycle
 
       const ret = Reflect.set(target, prop, value)
 
-      state = clone(target) as Readonly<T>
+      state = clone(target) as T
       handler.trace?.(state)
 
       return ret
