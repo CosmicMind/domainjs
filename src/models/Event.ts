@@ -40,7 +40,10 @@ import {
   FoundationError,
 } from '@cosmicverse/foundation'
 
-import { Observable } from '@cosmicverse/patterns'
+import {
+  Observable,
+  ObservableTopics,
+} from '@cosmicverse/patterns'
 
 export type Event<T> = {
   readonly id: string
@@ -49,7 +52,7 @@ export type Event<T> = {
   readonly message: T
 }
 
-export type EventTopics = {
+export type EventTopics = ObservableTopics & {
   readonly [K: string]: Event<unknown>
 }
 
@@ -59,7 +62,6 @@ export type EventFn<E extends Event<unknown>> = (event: E) => void
 
 export abstract class EventProvider<T extends EventTopics> extends Observable<T> {}
 
-
 /**
  * The `EventPropertyKey` defines the allowable keys for
  * a given type `T`.
@@ -67,7 +69,7 @@ export abstract class EventProvider<T extends EventTopics> extends Observable<T>
 export type EventPropertyKey<T> = keyof T extends string | symbol ? keyof T : never
 
 export type EventPropertyLifecycle<T, V> = {
-  validate?(event: T, state: T): boolean | never
+  validate?(value: V, state: T): boolean | never
 }
 
 /**

@@ -40,7 +40,7 @@ import {
   FoundationError,
 } from '@cosmicverse/foundation'
 
-export interface Value<T> {
+export type Value<T> = {
   readonly value: T
 }
 

@@ -40,7 +40,7 @@ import {
   FoundationError,
 } from '@cosmicverse/foundation'
 
-export interface Entity {
+export type Entity = {
   readonly id: string
   readonly created: Date
 }

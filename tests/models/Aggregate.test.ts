@@ -32,7 +32,10 @@
 
 import test from 'ava'
 
-import { 
+import { string } from 'yup'
+
+import {
+  logger,
   uuidv4,
   guardFor,
 } from '@cosmicverse/foundation'
@@ -44,25 +47,42 @@ import {
   Event,
   EventTopics,
   defineEvent,
+  Value,
+  defineValue,
 } from '../../src'
+
+class EmailValue implements Value<string> {
+  readonly value: string
+  get domainAddress(): string {
+    return this.value.split('@')[1]
+  }
+  constructor(value: string) {
+    this.value = value
+  }
+}
+
+const createEmailValue = defineValue(EmailValue, {
+  validate: (value: string): boolean => 'string' === typeof string().email('email is invalid').strict(true).validateSync(value),
+})
 
 interface User extends Entity {
   name: string
   version: number
+  email: EmailValue
 }
 
-type UserEvent = Event<User>
+type UserRegisterEvent = Event<User>
 
-const createUserEvent = defineEvent<UserEvent>({
+const createUserAggregateRegisterEvent = defineEvent<UserRegisterEvent>({
   properties: {
     message: {
-      validate: (event: UserEvent): boolean => guardFor(event),
+      validate: (value: User): boolean => guardFor(value),
     },
   },
 })
 
 interface UserTopics extends EventTopics {
-  version: UserEvent
+  'register-user-account': UserRegisterEvent
 }
 
 class UserAggregate extends Aggregate<User, UserTopics> {
@@ -79,33 +99,31 @@ class UserAggregate extends Aggregate<User, UserTopics> {
   }
 
   get version(): number {
-    this.publish('version', createUserEvent({
+    return this.root.version
+  }
+
+  registerAccount(): void {
+    this.root.name = 'daniel'
+    this.publish('register-user-account', createUserAggregateRegisterEvent({
       id: '123',
       correlationId: '456',
       created: new Date(),
       message: this.root,
     }))
-    return this.root.version
-  }
-
-  updateName(): void {
-    this.root.name = 'daniel'
   }
 }
 
-const nameHandler = {
-  validate: (value: string): boolean => 0 < value.length,
-  // updated: (newValue: string, oldValue: string, state: Readonly<User>): void => {
-  //   console.log('update', oldValue, newValue, state)
-  // },
-}
-
-const createUser = defineAggregate(UserAggregate, {
+const createUserAggregate = defineAggregate(UserAggregate, {
   // trace: (target: Readonly<User>): void => {
-  //   console.log('createUser', target)
+  //   console.log('createUserAggregate', target)
   // },
   properties: {
-    name: nameHandler,
+    name: {
+      validate: (value: string): boolean => 0 < value.length,
+      // updated: (newValue: string, oldValue: string, state: Readonly<User>): void => {
+      //   console.log('update', oldValue, newValue, state)
+      // },
+    },
   },
 })
 
@@ -115,18 +133,19 @@ test('Aggregate: createAggregate', t => {
   const name = 'daniel'
   const version = 1
 
-  const a1 = createUser({
+  const a1 = createUserAggregate({
     id,
     created,
     name: 'jonathan',
     version,
+    email: createEmailValue('susan@domain.com'),
   })
 
-  a1.subscribe('version', (event: UserEvent) => {
-    console.log('subscriber', event)
+  a1.subscribe('register-user-account', (event: UserRegisterEvent) => {
+    logger.log(event.message)
   })
 
-  a1.updateName()
+  a1.registerAccount()
 
   t.is(a1.id, id)
   t.is(a1.created, created)
