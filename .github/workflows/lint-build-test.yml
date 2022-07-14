@@ -4,10 +4,10 @@ on: [ push ]
 
 jobs:
   lint:
-    uses: cosmicverse/actions/.github/workflows/lint.yml@main
+    uses: cosmicmind/actions/.github/workflows/lint.yml@main
   build:
     needs: lint
-    uses: cosmicverse/actions/.github/workflows/build.yml@main
+    uses: cosmicmind/actions/.github/workflows/build.yml@main
   test:
     needs: build
-    uses: cosmicverse/actions/.github/workflows/test.yml@main
+    uses: cosmicmind/actions/.github/workflows/test.yml@main

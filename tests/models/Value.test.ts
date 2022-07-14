@@ -1,7 +1,7 @@
 /**
  * BSD 3-Clause License
  *
- * Copyright (c) 2022, Daniel Jonathan <daniel at cosmicverse dot org>
+ * Copyright (c) 2022, Daniel Jonathan <daniel at cosmicmind dot org>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,18 +53,10 @@ class Email implements Value<string> {
   }
 }
 
-const createEmailValue = defineValue(Email, {
-  // trace: (email: Email): void => {
-  //   console.log('trace', email)
-  // },
-
+const createEmail = defineValue(Email, {
   validate: (value: string): boolean => {
     return 'string' === typeof string().email('email is invalid').strict(true).validateSync(value)
   },
-
-  // created: (email: Email): void => {
-  //   console.log('created', email)
-  // },
 })
 
 class Version implements Value<number> {
@@ -80,7 +72,7 @@ const createVersionValue = defineValue(Version, {
 
 test('Value: create value', t => {
   const e1 = 'susan@domain.com'
-  const v1 = createEmailValue(e1)
+  const v1 = createEmail(e1)
 
   t.is(v1.value, e1)
 })
@@ -103,7 +95,7 @@ test('Value: ValueError', t => {
 
 test('Value: ValidationError', t => {
   try {
-    createEmailValue('123')
+    createEmail('123')
     t.false(true)
   }
   catch (error) {
@@ -119,24 +111,36 @@ test('Value: ValidationError', t => {
 
 test('Value: get computed value', t => {
   const e1 = 'susan@domain.com'
-  const v1 = createEmailValue(e1)
+  const v1 = createEmail(e1)
 
   const e2 = 'bob@domain.com'
-  const v2 = createEmailValue(e2)
+  const v2 = createEmail(e2)
 
   t.is(v1.value, e1)
   t.is(v2.value, e2)
   t.is(v1.domainAddress, v2.domainAddress)
 })
 
-test('Value: delete value', t => {
+test('Value: ValueLifecycle', t => {
   const e1 = 'susan@domain.com'
-  const v1 = createEmailValue(e1)
 
-  const e2 = 'bob@domain.com'
-  const v2 = createEmailValue(e2)
+  const createValue = defineValue(Email, {
+    trace: (email: Email): void => {
+      t.is(e1, email.value)
+    },
+
+    validate: (value: string): boolean => {
+      t.is(e1, value)
+      return 'string' === typeof string().email('email is invalid').strict(true).validateSync(value)
+    },
+
+    created: (email: Email): void => {
+      t.is(e1, email.value)
+    },
+  })
+
+  const v1 = createValue(e1)
 
   t.is(v1.value, e1)
-  t.is(v2.value, e2)
-  t.is(v1.domainAddress, v2.domainAddress)
+  t.is(v1.domainAddress, e1.split('@')[1])
 })

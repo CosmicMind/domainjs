@@ -1,7 +1,7 @@
 /**
  * BSD 3-Clause License
  *
- * Copyright (c) 2022, Daniel Jonathan <daniel at cosmicverse dot org>
+ * Copyright (c) 2022, Daniel Jonathan <daniel at cosmicmind dot org>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,12 +38,9 @@ import {
   clone,
   guardFor,
   FoundationError,
-} from '@cosmicverse/foundation'
+} from '@cosmicmind/foundation'
 
-export type Entity = {
-  readonly id: string
-  readonly created: Date
-}
+export type Entity = {}
 
 /**
  * The `EntityPropertyKey` defines the allowable keys for
@@ -78,7 +75,7 @@ export type EntityLifecycle<T> = {
 export class EntityError extends FoundationError {}
 
 export const defineEntity = <E extends Entity>(handler: EntityLifecycle<E> = {}): (entity: E) => E =>
-  (entity: E) => createEntity(entity, handler)
+  (entity: E): E => createEntity(entity, handler)
 
 /**
  * The `createEntityHandler` prepares the `EntityLifecycle` for

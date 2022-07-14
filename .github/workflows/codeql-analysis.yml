@@ -8,4 +8,4 @@ on:
 
 jobs:
   codeql-analysis:
-    uses: cosmicverse/actions/.github/workflows/codeql-analysis.yml@main
+    uses: cosmicmind/actions/.github/workflows/codeql-analysis.yml@main

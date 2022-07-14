@@ -1,7 +1,7 @@
 /**
  * BSD 3-Clause License
  *
- * Copyright (c) 2022, Daniel Jonathan <daniel at cosmicverse dot org>
+ * Copyright (c) 2022, Daniel Jonathan <daniel at cosmicmind dot org>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,5 +34,3 @@ export * from './models/Aggregate.test'
 export * from './models/Event.test'
 export * from './models/Entity.test'
 export * from './models/Value.test'
-
-export * from './search/Query.test'

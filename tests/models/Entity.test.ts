@@ -1,7 +1,7 @@
 /**
  * BSD 3-Clause License
  *
- * Copyright (c) 2022, Daniel Jonathan <daniel at cosmicverse dot org>
+ * Copyright (c) 2022, Daniel Jonathan <daniel at cosmicmind dot org>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,6 +32,8 @@
 
 import test from 'ava'
 
+import { guardFor } from '@cosmicmind/foundation';
+
 import {
   Entity,
   EntityError,
@@ -39,6 +41,8 @@ import {
 } from '../../src'
 
 interface User extends Entity {
+  readonly id: string
+  readonly created: Date
   name: string
 }
 
@@ -102,4 +106,58 @@ test('Entity: partial validator', t => {
   t.is(u1.id, id)
   t.is(u1.created, created)
   t.not(name, u1.name)
+})
+
+test('Entity: EntityLifecycle', t => {
+  const id = '123'
+  const created = new Date()
+  const name = 'daniel'
+
+  const createEntity = defineEntity<User>({
+    trace(target: User) {
+      t.true(guardFor(target))
+    },
+    created(target: User) {
+      t.true(guardFor(target))
+    },
+    updated(newTarget: User, oldTarget: User) {
+      t.true(guardFor(newTarget))
+      t.true(guardFor(oldTarget))
+      t.is(newTarget.name, 'jonathan')
+      t.is(name, oldTarget.name)
+    },
+    properties: {
+      id: {
+        validate: (value: string): boolean => {
+          t.is(value, id)
+          return 2 < value.length
+        },
+      },
+      created: {
+        validate: (value: Date): boolean => {
+          t.is(value, created)
+          return value instanceof Date
+        },
+      },
+      name: {
+        validate: (value: string): boolean => {
+          t.true(2 < value.length)
+          return 2 < value.length
+        },
+      },
+    },
+  })
+
+  const u1 = createEntity({
+    id,
+    created,
+    name,
+  })
+
+  t.is(u1.id, id)
+  t.is(u1.created, created)
+
+  u1.name = 'jonathan'
+
+  t.is('jonathan', u1.name)
 })
