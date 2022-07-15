@@ -65,17 +65,17 @@ test('Entity: interface', t => {
   const created = new Date()
   const name = 'daniel'
 
-  const u1 = createUser({
+  const e1 = createUser({
     id,
     created,
     name: 'jonathan',
   })
 
-  u1.name = 'daniel'
+  e1.name = 'daniel'
 
-  t.is(u1.id, id)
-  t.is(u1.created, created)
-  t.is(u1.name, name)
+  t.is(e1.id, id)
+  t.is(e1.created, created)
+  t.is(e1.name, name)
 })
 
 test('Entity: partial validator', t => {
@@ -83,14 +83,14 @@ test('Entity: partial validator', t => {
   const created = new Date()
   const name = 'daniel'
 
-  const u1 = createUser({
+  const e1 = createUser({
     id,
     created,
     name: 'jonathan',
   })
 
   try {
-    u1.name = ''
+    e1.name = ''
     t.false(true)
   }
   catch (error) {
@@ -103,9 +103,9 @@ test('Entity: partial validator', t => {
     }
   }
 
-  t.is(u1.id, id)
-  t.is(u1.created, created)
-  t.not(name, u1.name)
+  t.is(e1.id, id)
+  t.is(e1.created, created)
+  t.not(name, e1.name)
 })
 
 test('Entity: EntityLifecycle', t => {
@@ -148,16 +148,16 @@ test('Entity: EntityLifecycle', t => {
     },
   })
 
-  const u1 = createEntity({
+  const e1 = createEntity({
     id,
     created,
     name,
   })
 
-  t.is(u1.id, id)
-  t.is(u1.created, created)
+  t.is(e1.id, id)
+  t.is(e1.created, created)
 
-  u1.name = 'jonathan'
+  e1.name = 'jonathan'
 
-  t.is('jonathan', u1.name)
+  t.is('jonathan', e1.name)
 })

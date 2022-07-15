@@ -60,7 +60,7 @@ export type EventTypeFor<E> = E extends Event<infer T> ? T : E
 
 export type EventFn<E extends Event<unknown>> = (event: E) => void
 
-export abstract class EventProvider<T extends EventTopics> extends Observable<T> {}
+export abstract class EventObservable<T extends EventTopics> extends Observable<T> {}
 
 /**
  * The `EventPropertyKey` defines the allowable keys for

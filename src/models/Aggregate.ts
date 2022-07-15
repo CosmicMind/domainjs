@@ -42,12 +42,12 @@ import {
 
 import {
   EventTopics,
-  EventProvider,
+  EventObservable,
 } from './Event'
 
 const sentinel: EventTopics = {}
 
-export abstract class Aggregate<E extends Entity, T extends EventTopics = typeof sentinel> extends EventProvider<T> {
+export abstract class Aggregate<E extends Entity, T extends EventTopics = typeof sentinel> extends EventObservable<T> {
   protected root: E
 
   constructor(root: E) {

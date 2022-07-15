@@ -35,7 +35,6 @@ import test from 'ava'
 import { string } from 'yup'
 
 import {
-  logger,
   uuidv4,
   guardFor,
 } from '@cosmicmind/foundation'
@@ -51,7 +50,7 @@ import {
   defineValue,
 } from '../../src'
 
-class EmailValue implements Value<string> {
+class Email implements Value<string> {
   readonly value: string
   get domainAddress(): string {
     return this.value.split('@')[1]
@@ -61,14 +60,16 @@ class EmailValue implements Value<string> {
   }
 }
 
-const createEmailValue = defineValue(EmailValue, {
+const createEmail = defineValue(Email, {
   validate: (value: string): boolean => 'string' === typeof string().email('email is invalid').strict(true).validateSync(value),
 })
 
 interface User extends Entity {
+  readonly id: string
+  readonly created: Date
   name: string
   version: number
-  email: EmailValue
+  email: Email
 }
 
 type UserRegisterEvent = Event<User>
@@ -81,7 +82,8 @@ const createUserAggregateRegisterEvent = defineEvent<UserRegisterEvent>({
   },
 })
 
-interface UserTopics extends EventTopics {
+type UserTopics = EventTopics & {
+  'register-user-account-sync': UserRegisterEvent
   'register-user-account': UserRegisterEvent
 }
 
@@ -102,9 +104,25 @@ class UserAggregate extends Aggregate<User, UserTopics> {
     return this.root.version
   }
 
-  registerAccount(): void {
-    this.root.name = 'daniel'
-    this.publish('register-user-account', createUserAggregateRegisterEvent({
+  get _root(): User {
+    return this.root
+  }
+
+  updateName(): void {
+    this.root.name = 'jonathan'
+  }
+
+  registerAccountSync(): void {
+    this.publishSync('register-user-account-sync', createUserAggregateRegisterEvent({
+      id: '123',
+      correlationId: '456',
+      created: new Date(),
+      message: this.root,
+    }))
+  }
+
+  registerAccount(): Promise<UserRegisterEvent> {
+    return this.publish('register-user-account', createUserAggregateRegisterEvent({
       id: '123',
       correlationId: '456',
       created: new Date(),
@@ -113,42 +131,83 @@ class UserAggregate extends Aggregate<User, UserTopics> {
   }
 }
 
-const createUserAggregate = defineAggregate(UserAggregate, {
-  // trace: (target: Readonly<User>): void => {
-  //   console.log('createUserAggregate', target)
-  // },
-  properties: {
-    name: {
-      validate: (value: string): boolean => 0 < value.length,
-      // updated: (newValue: string, oldValue: string, state: Readonly<User>): void => {
-      //   console.log('update', oldValue, newValue, state)
-      // },
-    },
-  },
-})
-
-test('Aggregate: createAggregate', t => {
+test('Aggregate: createAggregate', async t => {
   const id = uuidv4()
   const created = new Date()
   const name = 'daniel'
   const version = 1
+  const email = 'susan@domain.com'
 
-  const a1 = createUserAggregate({
+  const createAggregate = defineAggregate(UserAggregate, {
+    trace(target: User) {
+      t.true(guardFor(target))
+    },
+    created(target: User) {
+      t.true(guardFor(target))
+    },
+    updated(newTarget: User, oldTarget: User) {
+      t.true(guardFor(newTarget))
+      t.true(guardFor(oldTarget))
+      t.is(newTarget.name, 'jonathan')
+      t.is(name, oldTarget.name)
+    },
+    properties: {
+      id: {
+        validate: (value: string): boolean => {
+          t.is(value, id)
+          return 2 < value.length
+        },
+      },
+      created: {
+        validate: (value: Date): boolean => {
+          t.is(value, created)
+          return value instanceof Date
+        },
+      },
+      name: {
+        validate: (value: string): boolean => {
+          t.true(2 < value.length)
+          return 2 < value.length
+        },
+      },
+      version: {
+        validate(value: number): boolean {
+          t.true(0 < value)
+          return 0 < value
+        },
+      },
+      email: {
+        validate(value: Email): boolean {
+          t.is(email, value.value)
+          return email === value.value
+        },
+      },
+    },
+  })
+
+  const a1 = createAggregate({
     id,
     created,
-    name: 'jonathan',
+    name,
     version,
-    email: createEmailValue('susan@domain.com'),
+    email: createEmail(email),
+  })
+
+  a1.subscribe('register-user-account-sync', (event: UserRegisterEvent) => {
+    t.is(event.message, a1._root)
   })
 
   a1.subscribe('register-user-account', (event: UserRegisterEvent) => {
-    logger.log(event.message)
+    t.is(event.message, a1._root)
   })
 
-  a1.registerAccount()
+  a1.updateName()
+
+  a1.registerAccountSync()
+  await a1.registerAccount()
 
   t.is(a1.id, id)
   t.is(a1.created, created)
-  t.is(a1.name, name)
+  t.is(a1.name, 'jonathan')
   t.is(a1.version, version)
 })
