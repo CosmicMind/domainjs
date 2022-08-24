@@ -11,8 +11,16 @@ extends:
   - 'plugin:@typescript-eslint/eslint-recommended'
   - 'plugin:@typescript-eslint/recommended'
   - 'plugin:yml/standard'
+overrides:
+  -
+    files: '**/*.js'
+    rules:
+      '@typescript-eslint/no-inferrable-types':
+        - 0
+      '@typescript-eslint/explicit-function-return-type':
+        - 0
 rules:
-  '@typescript-eslint/no-inferrable-types': 
+  '@typescript-eslint/no-inferrable-types':
     - 2
   '@typescript-eslint/explicit-function-return-type':
     - 2
