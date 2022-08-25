@@ -41,7 +41,6 @@ const entry = main
 const formats = [ 'es' ]
 const external = [
   'ava',
-  'dotenv',
   'eslint',
   'lib0',
   'yup',
