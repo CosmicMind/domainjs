@@ -34,7 +34,6 @@ import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 const main = 'tests/index.ts'
-const outDir = process.env.npm_out_dir
 const fileName = format => `lib.${format}.tests.js`
 const name = process.env.npm_package_name
 const entry = main
@@ -54,15 +53,14 @@ const isDev = mode => 'development' === mode || isWatch(mode)
 
 export default ({ mode }) => {
   const manifest = false
-  const emptyOutDir = false
+  const emptyOutDir = true
   const cssCodeSplit = true
   const sourcemap = false
 
-  const minify = isDev(mode) ? false : 'terser'
+  const minify = !isDev(mode)
   const watch = isWatch(mode)
 
   return defineConfig({
-    outDir,
     plugins: [
       tsconfigPaths()
     ],
