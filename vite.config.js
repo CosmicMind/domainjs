@@ -43,8 +43,8 @@ const external = [
   'eslint',
   'lib0',
   'yup',
-  '@libs/foundation',
-  '@libs/patterns'
+  '@cosmicmind/lib-foundation',
+  '@cosmicmind/lib-patterns'
 ]
 const globals = {}
 

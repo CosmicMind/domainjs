@@ -38,7 +38,7 @@ import {
   clone,
   guardFor,
   FoundationError,
-} from '@libs/foundation'
+} from '@cosmicmind/lib-foundation'
 
 export type Entity = {}
 

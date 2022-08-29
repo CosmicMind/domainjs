@@ -37,7 +37,7 @@ import { string } from 'yup'
 import {
   uuidv4,
   guardFor,
-} from '@libs/foundation'
+} from '@cosmicmind/lib-foundation'
 
 import {
   Entity,

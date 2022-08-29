@@ -1,5 +1,5 @@
 {
-  "name": "@libs/domain",
+  "name": "@cosmicmind/lib-domain",
   "version": "0.0.1-rc-o",
   "description": "A framework for building applications with Domain-driven design in TypeScript.",
   "keywords": [],
@@ -62,8 +62,8 @@
     "yup": "^0.32.11"
   },
   "dependencies": {
-    "@libs/foundation": "^0.0.1-rc-zn",
-    "@libs/patterns": "^0.0.1-rc-a",
+    "@cosmicmind/lib-foundation": "^0.0.1-rc-zn",
+    "@cosmicmind/lib-patterns": "^0.0.1-rc-a",
     "dotenv": "^16.0.1"
   }
 }
