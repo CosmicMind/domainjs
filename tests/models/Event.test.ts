@@ -32,7 +32,7 @@
 
 import test from 'ava'
 
-import { guardFor } from '@cosmicmind/foundation'
+import { guardFor } from '@libs/foundation'
 
 import {
   Entity,

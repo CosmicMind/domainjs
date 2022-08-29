@@ -38,12 +38,12 @@ import {
   clone,
   guardFor,
   FoundationError,
-} from '@cosmicmind/foundation'
+} from '@libs/foundation'
 
 import {
   Observable,
   ObservableTopics,
-} from '@cosmicmind/patterns'
+} from '@libs/patterns'
 
 export type Event<T> = {
   readonly id: string

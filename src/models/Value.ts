@@ -38,7 +38,7 @@ import {
   clone,
   guardFor,
   FoundationError,
-} from '@cosmicmind/foundation'
+} from '@libs/foundation'
 
 export type Value<T> = {
   readonly value: T
