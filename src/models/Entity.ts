@@ -40,7 +40,7 @@ import {
   FoundationError,
 } from '@cosmicmind/lib-foundation'
 
-export type Entity = {}
+export type Entity = Record<string, unknown>
 
 /**
  * The `EntityPropertyKey` defines the allowable keys for
