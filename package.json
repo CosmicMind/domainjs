@@ -34,12 +34,14 @@
     "tests:build": "vite build --config vite.config.tests.js --mode development",
     "tests:watch": "vite build --config vite.config.tests.js --mode watch",
     "tests:exec": "c8 ava dist/lib.es.tests.js",
-    "dev:build": "vite build --config vite.config.js --mode development",
+    "dev:build:lib": "vite build --config vite.config.lib.js --mode development",
+    "dev:build": "npm run dev:build:lib",
     "dev:watch": "vite build --config vite.config.js --mode watch",
+    "prod:build:lib": "vite build --config vite.config.lib.js --mode production",
+    "prod:build": "npm run prod:build:lib",
     "package:build": "npm i --package-lock-only && vite build --config vite.config.js --mode development",
     "package:watch": "vite build --config vite.config.js --mode watch",
-    "package:publish": "npm publish --access public",
-    "prod:build": "vite build --config vite.config.js --mode production"
+    "package:publish": "npm publish --access public"
   },
   "devDependencies": {
     "@microsoft/eslint-formatter-sarif": "^3.0.0",
