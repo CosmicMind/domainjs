@@ -40,7 +40,6 @@ const entry = main
 const formats = [ 'es' ]
 const external = [
   'ava',
-  'lib0',
   'yup',
   '@cosmicmind/lib-foundation',
   '@cosmicmind/lib-patterns'

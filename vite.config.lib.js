@@ -39,8 +39,6 @@ import dts from 'vite-plugin-dts'
 const name = process.env.npm_package_name
 const formats = [ 'es' ]
 const external = [
-  'lib0',
-  'yup',
   '@cosmicmind/lib-foundation',
   '@cosmicmind/lib-patterns'
 ]
