@@ -51,7 +51,7 @@ const isDev = mode => 'development' === mode || isWatch(mode)
 
 export default ({ mode }) => {
   const manifest = false
-  const emptyOutDir = true
+  const emptyOutDir = false
   const cssCodeSplit = true
   const sourcemap = false
 

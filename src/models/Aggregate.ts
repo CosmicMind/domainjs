@@ -50,7 +50,7 @@ const sentinel: EventTopics = {}
 export abstract class Aggregate<E extends Entity, T extends EventTopics = typeof sentinel> extends EventObservable<T> {
   protected root: E
 
-  constructor(root: E) {
+  protected constructor(root: E) {
     super()
     this.root = root
   }
