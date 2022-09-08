@@ -8,7 +8,7 @@ on:
 
 jobs:
   lint:
-    uses: cosmicmind/github-actions/.github/workflows/lint.yml@main
+    uses: cosmicmind/github-actions/.github/workflows/lint.yml@release
   codeql:
     needs: lint
-    uses: cosmicmind/github-actions/.github/workflows/codeql.yml@main
+    uses: cosmicmind/github-actions/.github/workflows/codeql.yml@release

@@ -7,13 +7,13 @@ on:
 
 jobs:
   lint:
-    uses: cosmicmind/github-actions/.github/workflows/lint.yml@main
+    uses: cosmicmind/github-actions/.github/workflows/lint.yml@release
   codeql:
     needs: lint
-    uses: cosmicmind/github-actions/.github/workflows/codeql.yml@main
+    uses: cosmicmind/github-actions/.github/workflows/codeql.yml@release
   dev-build:
     needs: codeql
-    uses: cosmicmind/github-actions/.github/workflows/dev-build.yml@main
+    uses: cosmicmind/github-actions/.github/workflows/dev-build.yml@release
   test:
     needs: dev-build
-    uses: cosmicmind/github-actions/.github/workflows/test.yml@main
+    uses: cosmicmind/github-actions/.github/workflows/test.yml@release

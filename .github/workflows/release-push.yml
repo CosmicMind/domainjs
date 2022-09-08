@@ -7,6 +7,6 @@ on:
 
 jobs:
   package-publish:
-    uses: cosmicmind/github-actions/.github/workflows/package-publish.yml@main
+    uses: cosmicmind/github-actions/.github/workflows/package-publish.yml@release
     secrets:
       npm_token: ${{ secrets.npm_token }}
