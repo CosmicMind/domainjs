@@ -5,7 +5,7 @@
   "keywords": [],
   "author": {
     "name": "Daniel Jonathan",
-    "email": "daniel@cosmicmind.com"
+    "email": "daniel@cosmicverse.org"
   },
   "license": "BSD-3-Clause",
   "repository": {
@@ -63,7 +63,7 @@
     "yup": "^0.32.11"
   },
   "dependencies": {
-    "@cosmicmind/lib-foundation": "^0.0.1-rc-zn",
+    "@cosmicmind/lib-foundation": "^0.0.1-rc-11722-1",
     "@cosmicmind/lib-patterns": "^0.0.1-rc-a"
   }
 }
