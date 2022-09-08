@@ -1,0 +1,19 @@
+name: Release Pull Request
+
+on:
+  pull_request:
+    branches:
+      - release
+
+jobs:
+  lint:
+    uses: cosmicmind/github-actions/.github/workflows/lint.yml@main
+  codeql:
+    needs: lint
+    uses: cosmicmind/github-actions/.github/workflows/codeql.yml@main
+  release-build:
+    needs: codeql
+    uses: cosmicmind/github-actions/.github/workflows/release-build.yml@main
+  test:
+    needs: release-build
+    uses: cosmicmind/github-actions/.github/workflows/test.yml@main

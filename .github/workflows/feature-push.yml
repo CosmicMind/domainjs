@@ -1,0 +1,14 @@
+name: Feature Push
+
+on:
+  push:
+    branches-ignore:
+      - dev
+      - release
+
+jobs:
+  lint:
+    uses: cosmicmind/github-actions/.github/workflows/lint.yml@main
+  codeql:
+    needs: lint
+    uses: cosmicmind/github-actions/.github/workflows/codeql.yml@main

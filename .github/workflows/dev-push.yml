@@ -1,0 +1,13 @@
+name: Dev Push
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  dev-build:
+    uses: cosmicmind/github-actions/.github/workflows/dev-build.yml@main
+  test:
+    needs: dev-build
+    uses: cosmicmind/github-actions/.github/workflows/test.yml@main
