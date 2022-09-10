@@ -1,6 +1,6 @@
 {
-  "name": "@cosmicmind/lib-domain",
-  "version": "v0.0.1-rc-11722-1",
+  "name": "@cosmicmind/domain",
+  "version": "0.0.1-rc-11722-2",
   "description": "A framework for building applications with Domain-driven design in TypeScript.",
   "keywords": [],
   "author": {
@@ -10,7 +10,7 @@
   "license": "BSD-3-Clause",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cosmicmind/lib-domain.git"
+    "url": "https://github.com/cosmicmind/domain.git"
   },
   "type": "module",
   "main": "dist/lib.es.js",
@@ -34,13 +34,12 @@
     "tests:build": "vite build --config vite.config.tests.js --mode development",
     "tests:watch": "vite build --config vite.config.tests.js --mode watch",
     "tests:exec": "c8 ava dist/lib.es.tests.js",
-    "dev:build:lib": "vite build --config vite.config.lib.js --mode development",
-    "dev:build": "npm run dev:build:lib",
+    "dev:build": "vite build --config vite.config.lib.js --mode development",
     "dev:watch": "vite build --config vite.config.lib.js --mode watch",
     "release:build:lib": "vite build --config vite.config.lib.js --mode production",
     "release:build": "npm run release:build:lib",
     "package:build": "npm run release:build",
-    "package:publish": "npm publish --access public"
+    "package:publish": "npm publish"
   },
   "devDependencies": {
     "@microsoft/eslint-formatter-sarif": "^3.0.0",
@@ -63,7 +62,6 @@
     "yup": "^0.32.11"
   },
   "dependencies": {
-    "@cosmicmind/lib-foundation": "^0.0.1-rc-11722-1",
-    "@cosmicmind/lib-patterns": "^0.0.1-rc-a"
+    
   }
 }

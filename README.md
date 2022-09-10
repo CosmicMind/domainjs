@@ -109,13 +109,13 @@ Let it be said, solving these kinds of problems, and much more challenging ones 
 ###### Install from the command line:
 
 ```zsh
-$ npm install @cosmicmind/lib-domain yup
+$ npm install @cosmicmind/domain yup
 ```
 
 ###### Install via package.json:
 
 ```json
-"@cosmicmind/lib-domain": "0.0.1-rc-j"
+"@cosmicmind/domain": "0.0.1-rc-j"
 ```
 
 In order to validate our data, we will use [YUP](https://github.com/jquense/yup). Please read the documentation for YUP
@@ -134,7 +134,7 @@ import {string} from 'yup'
 import {
     Value,
     createValueFor,
-} from '@cosmicmind/lib-domain'
+} from '@cosmicmind/domain'
 
 export class Email extends Value {
 }

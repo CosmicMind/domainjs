@@ -41,8 +41,8 @@ const formats = [ 'es' ]
 const external = [
   'ava',
   'yup',
-  '@cosmicmind/lib-foundation',
-  '@cosmicmind/lib-patterns'
+  '@cosmicverse/foundation',
+  '@cosmicverse/patterns'
 ]
 const globals = {}
 

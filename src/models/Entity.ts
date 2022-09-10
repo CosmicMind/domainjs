@@ -38,7 +38,7 @@ import {
   clone,
   guardFor,
   FoundationError,
-} from '@cosmicmind/lib-foundation'
+} from '@cosmicverse/foundation'
 
 export type Entity = Record<string, unknown>
 
