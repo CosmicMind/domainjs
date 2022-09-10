@@ -1,5 +1,5 @@
 {
-  "name": "@cosmicmind/domain",
+  "name": "@cosmicverse/domain",
   "version": "0.0.1-rc-11722-2",
   "description": "A framework for building applications with Domain-driven design in TypeScript.",
   "keywords": [],
@@ -24,9 +24,6 @@
     "README.md",
     "tsconfig.json"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
     "lint:exec": "eslint . --ext .ts",
     "lint:fix": "eslint . --fix --ext .ts",
@@ -62,6 +59,7 @@
     "yup": "^0.32.11"
   },
   "dependencies": {
-    
+    "@cosmicverse/foundation": "^0.0.1-rc-11722-5",
+    "@cosmicverse/patterns": "^0.0.1-rc-11722-2"
   }
 }
