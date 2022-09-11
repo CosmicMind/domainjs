@@ -1,6 +1,5 @@
 .DS_Store
 node_modules
-package.json.lerna_backup
 dist
 coverage
 .idea
