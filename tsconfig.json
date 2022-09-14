@@ -32,8 +32,8 @@
     "outDir": "dist"
   },
   "include": [
-    "src/**/*",
-    "tests/**/*"
+    "src/**/*.ts",
+    "tests/**/*.ts"
   ],
   "exclude": [
     "dist",
