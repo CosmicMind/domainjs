@@ -85,8 +85,6 @@ rules:
     - 2
   no-undef-init:
     - 2
-  no-undefined:
-    - 2
   no-underscore-dangle:
     - 2
     - allowAfterThis: true
