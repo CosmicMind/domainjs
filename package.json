@@ -59,7 +59,7 @@
     "yup": "^0.32.11"
   },
   "dependencies": {
-    "@cosmicverse/foundation": "^0.0.1-rc-11722-5",
-    "@cosmicverse/patterns": "^0.0.1-rc-11722-2"
+    "@cosmicverse/foundation": "latest",
+    "@cosmicverse/patterns": "latest"
   }
 }
