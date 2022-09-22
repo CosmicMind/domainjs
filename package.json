@@ -1,6 +1,6 @@
 {
   "name": "@cosmicverse/domain",
-  "version": "0.0.1-rc-092122-2",
+  "version": "0.0.1-rc-092122-3",
   "description": "A framework for building applications with Domain-driven design in TypeScript.",
   "keywords": [],
   "author": {
@@ -13,7 +13,7 @@
     "url": "https://github.com/cosmicmind/domain.git"
   },
   "type": "module",
-  "main": "dist/lib.es.js",
+  "main": "src/index.ts",
   "module": "dist/lib.es.js",
   "types": "dist/index.d.ts",
   "files": [

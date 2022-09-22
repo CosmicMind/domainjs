@@ -9,6 +9,7 @@ import dts from 'vite-plugin-dts'
 const name = process.env.npm_package_name
 const formats = [ 'es' ]
 const external = [
+  'yup',
   '@cosmicverse/foundation',
   '@cosmicverse/patterns'
 ]
