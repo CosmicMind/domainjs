@@ -17,7 +17,7 @@ import {
 
 const sentinel: EventTopics = {}
 
-export class Aggregate<E extends Entity = Entity, T extends EventTopics = typeof sentinel> extends EventObservable<T> {
+export class Aggregate<E extends Entity, T extends EventTopics = typeof sentinel> extends EventObservable<T> {
   protected root: E
 
   constructor(root: E) {
@@ -30,7 +30,7 @@ export type AggregateTypeFor<A> = A extends Aggregate<infer E> ? E : A
 
 export type AggregateConstructor<A extends Aggregate<Entity>> = new (root: AggregateTypeFor<A>) => A
 
-export function defineAggregate<A extends Aggregate<Entity>>(_class: new (root: AggregateTypeFor<A>) => A, handler: EntityLifecycle<AggregateTypeFor<A>> = {}): (root: AggregateTypeFor<A>) => A {
+export function defineAggregate<A extends Aggregate<Entity>>(_class: AggregateConstructor<A>, handler: EntityLifecycle<AggregateTypeFor<A>> = {}): (root: AggregateTypeFor<A>) => A {
   const createEntity = defineEntity<AggregateTypeFor<A>>(handler)
   return (root: AggregateTypeFor<A>): A => new _class(createEntity(root))
 }

@@ -1,6 +1,6 @@
 {
   "name": "@cosmicverse/domain",
-  "version": "0.0.1-rc-092122-1",
+  "version": "0.0.1-rc-092122-2",
   "description": "A framework for building applications with Domain-driven design in TypeScript.",
   "keywords": [],
   "author": {
