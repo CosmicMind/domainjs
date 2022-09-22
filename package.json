@@ -13,7 +13,7 @@
     "url": "https://github.com/cosmicmind/domain.git"
   },
   "type": "module",
-  "main": "src/index.ts",
+  "main": "dist/lib.es.js",
   "module": "dist/lib.es.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -29,8 +29,7 @@
     "tests:build": "vite build --config vite.config.tests.js --mode development",
     "tests:watch": "vite build --config vite.config.tests.js --mode watch",
     "tests:exec": "c8 ava dist/lib.es.tests.js",
-    "dev:build:lib": "vite build --config vite.config.lib.js --mode development",
-    "dev:build": "npm run dev:build:lib",
+    "dev:build": "vite build --config vite.config.lib.js --mode development",
     "dev:watch:lib": "vite build --config vite.config.lib.js --mode watch",
     "prod:build:lib": "vite build --config vite.config.lib.js --mode production",
     "prod:build": "npm run prod:build:lib",
