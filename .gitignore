@@ -6,5 +6,5 @@ secret*
 .idea
 .vscode
 *.local
-*.log
+*.log*
 *.icloud
