@@ -29,7 +29,7 @@
     "tests:build": "vite build --config vite.config.tests.js --mode development",
     "tests:watch": "vite build --config vite.config.tests.js --mode watch",
     "tests:exec": "c8 ava dist/lib.es.tests.js",
-    "dev:build": "vite build --mode development",
+    "build": "vite build --mode development",
     "dev:watch": "vite build --mode watch",
     "prod:build:lib": "vite build --mode production",
     "prod:build": "npm run prod:build:lib",
