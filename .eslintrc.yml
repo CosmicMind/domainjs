@@ -3,16 +3,25 @@ env:
   node: true
   browser: true
   es6: true
-parser: '@typescript-eslint/parser'
+parser: vue-eslint-parser
+parserOptions:
+  parser: '@typescript-eslint/parser'
+  sourceType: module
+  ecmaVersion: 2022
+  ecmaFeatures:
+    jsx: true
 plugins:
-  - '@typescript-eslint'
+  - vue
 extends:
-  - 'eslint:recommended'
-  - 'plugin:@typescript-eslint/eslint-recommended'
-  - 'plugin:@typescript-eslint/recommended'
-  - 'plugin:yml/standard'
+  - eslint:recommended
+  - plugin:@typescript-eslint/eslint-recommended
+  - plugin:@typescript-eslint/recommended
+  - plugin:yml/standard
+  - plugin:vue/vue3-recommended
 overrides:
-  - files: '**/*.js'
+  - files:
+    - '**/*.js'
+    - '**/*.jsx'
     rules:
       '@typescript-eslint/no-inferrable-types':
         - 0
@@ -143,4 +152,4 @@ rules:
     - 2
   require-await:
     - 2
-  
+    
