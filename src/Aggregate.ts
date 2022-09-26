@@ -8,12 +8,12 @@ import {
   Entity,
   EntityLifecycle,
   defineEntity,
-} from './Entity'
+} from '@/Entity'
 
 import {
   EventTopics,
   EventObservable,
-} from './Event'
+} from '@/Event'
 
 const sentinel: EventTopics = {}
 

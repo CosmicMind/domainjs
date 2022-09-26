@@ -1,65 +1,54 @@
-// Copyright (C) 2022, CosmicMind, Inc. <http://cosmicmind.com>. All rights reserved.
+import {
+  URL,
+  fileURLToPath,
+} from 'node:url'
 
-import { join } from 'path'
+import {
+  defineConfig,
+  LibraryFormats,
+} from 'vite'
 
-import { defineConfig } from 'vite'
-import tsconfigPaths from 'vite-tsconfig-paths'
 import dts from 'vite-plugin-dts'
 
-const name = process.env.npm_package_name
-const formats = [ 'es' ]
+const packageName = process.env.npm_package_name
+const packageVersion = JSON.stringify(process.env.npm_package_version)
+
 const external = [
   'yup',
   '@cosmicverse/foundation',
   '@cosmicverse/patterns'
 ]
 const globals = {}
+const emptyOutDir = true
+const formats: LibraryFormats[] = [ 'es' ]
 
-const dirname = process.cwd()
-const dirPath = (path = '') => join(dirname, path)
-const srcDir = (path = '') => join(dirPath('src'), path)
-const rootDir = srcDir()
-const assetsDir = false
-const publicDir = false
-const outDir = dirPath('dist')
-const entry = 'index.ts'
-const fileName = format => `lib.${format}.js`
+export default defineConfig(({ mode }) => {
+  const watch = 'watch' === mode ? {
+    include: [
+      'src/**/*'
+    ],
+  }: undefined
 
-const isWatch = mode => 'watch' === mode
-const isDev = mode => 'development' === mode || isWatch(mode)
-
-export default ({ mode }) => {
-  const manifest = false
-  const emptyOutDir = true
-  const cssCodeSplit = true
-  const sourcemap = false
-
-  const minify = !isDev(mode)
-  const watch = isWatch(mode)
-
-  return defineConfig({
-    root: rootDir,
-    assetsDir,
-    publicDir,
+  return {
+    define: {
+      '__PACKAGE_NAME__': packageVersion,
+      '__PACKAGE_VERSION__': packageVersion,
+    },
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+      },
+    },
     plugins: [
-      tsconfigPaths({
-        root: dirPath(),
-      }),
-      dts({
-        root: dirPath(),
-      })
+      dts()
     ],
     build: {
-      manifest,
-      outDir,
       emptyOutDir,
-      cssCodeSplit,
-      sourcemap,
       lib: {
-        name,
-        entry,
+        name: packageName,
+        entry: 'src/index.ts',
         formats,
-        fileName,
+        fileName: 'lib.es',
       },
       rollupOptions: {
         external,
@@ -67,8 +56,7 @@ export default ({ mode }) => {
           globals,
         },
       },
-      minify,
       watch,
     },
-  })
-}
+  }
+})

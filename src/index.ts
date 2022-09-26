@@ -3,12 +3,12 @@
 export type {
   AggregateTypeFor,
   AggregateConstructor,
-} from './models/Aggregate'
+} from '@/Aggregate'
 
 export {
   Aggregate,
   defineAggregate,
-} from './models/Aggregate'
+} from '@/Aggregate'
 
 export type {
   Event,
@@ -17,33 +17,33 @@ export type {
   EventLifecycle,
   EventPropertyLifecycle,
   EventPropertyLifecycleMap,
-} from './models/Event'
+} from '@/Event'
 
 export {
   EventError,
   defineEvent,
-} from './models/Event'
+} from '@/Event'
 
 export type {
   Entity,
   EntityLifecycle,
   EntityPropertyLifecycle,
   EntityPropertyLifecycleMap,
-} from './models/Entity'
+} from '@/Entity'
 
 export {
   EntityError,
   defineEntity,
-} from './models/Entity'
+} from '@/Entity'
 
 export type {
   Value,
   ValueTypeFor,
   ValueConstructor,
   ValueLifecycle,
-} from './models/Value'
+} from '@/Value'
 
 export {
   ValueError,
   defineValue,
-} from './models/Value'
+} from '@/Value'

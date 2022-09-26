@@ -2,7 +2,8 @@
   "maxNodeModuleJsDepth": 5,
   "compilerOptions": {
     "types": [
-      "node"
+      "node",
+      "jsdom"
     ],
     "target": "es2022",
     "module": "es2022",
@@ -24,25 +25,36 @@
     "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
     "removeComments": true,
+    "jsx": "preserve",
+    "isolatedModules": true,
     "lib": [
-      "es2022"
+      "es2022",
+      "dom",
+      "dom.iterable",
+      "webworker"
     ],
     "rootDir": ".",
     "baseUrl": ".",
-    "outDir": "dist"
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
   },
   "include": [
     "src/**/*.ts",
-    "tests/**/*.ts"
+    "src/**/*.js",
+    "src/**/*.vue",
+    "vite.config*.ts",
+    "typings/**/*.d.ts"
   ],
   "exclude": [
     "dist",
-    "node_modules",
-    "typings"
+    "tests",
+    "node_modules"
   ],
   "typeRoots": [
-    "typings",
     "@types",
-    "node_modules/@types"
+    "typings"
   ]
 }
