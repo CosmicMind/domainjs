@@ -42,11 +42,10 @@
     }
   },
   "include": [
-    "src/**/*.ts",
+     "src/**/*.ts",
     "src/**/*.js",
     "src/**/*.vue",
-    "vite.config*.ts",
-    "typings/**/*.d.ts"
+    "vite.config*.ts"
   ],
   "exclude": [
     "dist",
