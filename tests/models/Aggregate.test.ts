@@ -7,7 +7,7 @@ import { string } from 'yup'
 import {
   uuidv4,
   guardFor,
-} from '@cosmicverse/foundation'
+} from '@cosmicmind/foundation'
 
 import {
   Entity,

@@ -8,9 +8,9 @@ on:
 
 jobs:
   lint:
-    uses: cosmicverse/actions/.github/workflows/lint.yml@release
+    uses: cosmicmind/actions/.github/workflows/lint.yml@release
     secrets:
       npm_token: ${{ secrets.npm_token }}
   codeql:
     needs: lint
-    uses: cosmicverse/actions/.github/workflows/codeql.yml@release
+    uses: cosmicmind/actions/.github/workflows/codeql.yml@release

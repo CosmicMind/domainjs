@@ -2,7 +2,7 @@
 
 import test from 'ava'
 
-import { guardFor } from '@cosmicverse/foundation'
+import { guardFor } from '@cosmicmind/foundation'
 
 import {
   Entity,

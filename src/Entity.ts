@@ -8,7 +8,7 @@ import {
   clone,
   guardFor,
   FoundationError,
-} from '@cosmicverse/foundation'
+} from '@cosmicmind/foundation'
 
 export type Entity = Record<string, unknown>
 

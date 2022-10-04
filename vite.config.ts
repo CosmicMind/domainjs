@@ -15,8 +15,8 @@ const packageVersion = JSON.stringify(process.env.npm_package_version)
 
 const external = [
   'yup',
-  '@cosmicverse/foundation',
-  '@cosmicverse/patterns'
+  '@cosmicmind/foundation',
+  '@cosmicmind/patterns'
 ]
 const globals = {}
 const emptyOutDir = true

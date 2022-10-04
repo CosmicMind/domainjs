@@ -1,11 +1,11 @@
 {
-  "name": "@cosmicverse/domain",
+  "name": "@cosmicmind/domain",
   "version": "0.0.1-rc-092122-3",
   "description": "A framework for building applications with Domain-driven design in TypeScript.",
   "keywords": [],
   "author": {
     "name": "Daniel Jonathan",
-    "email": "daniel@cosmicverse.org"
+    "email": "daniel@cosmicmind.org"
   },
   "license": "UNLICENSED",
   "repository": {
@@ -60,7 +60,7 @@
     "yup": "^0.32.11"
   },
   "dependencies": {
-    "@cosmicverse/foundation": "latest",
-    "@cosmicverse/patterns": "latest"
+    "@cosmicmind/foundation": "latest",
+    "@cosmicmind/patterns": "latest"
   }
 }
