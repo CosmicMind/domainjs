@@ -1,6 +1,6 @@
 {
   "name": "@cosmicmind/domain",
-  "version": "0.0.1-rc-092122-3",
+  "version": "0.0.1-rc-100422-1",
   "description": "A framework for building applications with Domain-driven design in TypeScript.",
   "keywords": [],
   "author": {
@@ -60,7 +60,7 @@
     "yup": "^0.32.11"
   },
   "dependencies": {
-    "@cosmicmind/foundation": "latest",
-    "@cosmicmind/patterns": "latest"
+    "@cosmicmind/foundation": "workspace:0.0.1-rc-100422-1",
+    "@cosmicmind/patterns": "workspace:0.0.1-rc-100422-1"
   }
 }
