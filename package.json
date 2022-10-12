@@ -30,10 +30,7 @@
     "build:watch": "vite build --mode watch",
     "build:release": "vite build --mode production",
     "package:publish": "npm publish",
-    "test": "run-s lint test:build test:unit",
-    "test:build": "vite build --config vite.config.tests.js --mode development",
-    "test:watch": "vite build --config vite.config.tests.js --mode watch",
-    "test:unit": "vitest --environment jsdom",
+    "test:unit": "vitest run --environment jsdom",
     "test:coverage": "vitest run --coverage"
   },
   "devDependencies": {
@@ -60,7 +57,7 @@
     "yup": "^0.32.11"
   },
   "dependencies": {
-    "@cosmicmind/foundation": "workspace:*",
-    "@cosmicmind/patterns": "workspace:*"
+    "@cosmicmind/foundation": "^0.0.1-rc-100422-1",
+    "@cosmicmind/patterns": "^0.0.1-rc-100422-1"
   }
 }
