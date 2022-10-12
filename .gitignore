@@ -2,9 +2,9 @@
 node_modules
 dist
 coverage
-secret*
+.fleet
 .idea
 .vscode
 *.local
-*.log*
+*.log
 *.icloud
