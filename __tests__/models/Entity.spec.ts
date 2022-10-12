@@ -80,7 +80,7 @@ describe('Entity', () => {
 
     expect(e1.id).toBe(id)
     expect(e1.created).toBe(created)
-    expect(name).toBe(e1.name)
+    expect(name).not.toBe(e1.name)
   })
 
   it('EntityLifecycle', () => {
