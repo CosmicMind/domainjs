@@ -87,7 +87,7 @@ function createEntityHandler<T extends object>(target: T, handler: EntityLifecyc
  */
 function createEntity<T extends object>(target: T, handler: EntityLifecycle<T> = {}): T | never {
   if (guardFor(target)) {
-    const properties = handler.properties
+    const { properties } = handler
 
     if (guardFor(properties)) {
       for (const prop in properties) {

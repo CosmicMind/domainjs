@@ -98,7 +98,7 @@ function createEventHandler<T extends object>(target: T, handler: EventLifecycle
  */
 function createEvent<T extends object>(target: T, handler: EventLifecycle<T> = {}): T | never {
   if (guardFor(target)) {
-    const properties = handler.properties
+    const { properties } = handler
 
     if (guardFor(properties)) {
       for (const prop in properties) {
