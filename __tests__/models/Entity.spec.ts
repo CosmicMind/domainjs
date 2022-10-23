@@ -21,7 +21,7 @@ interface User extends Entity {
 }
 
 const createUser = defineEntity<User>({
-  properties: {
+  attributes: {
     id: {
       validate: (value: string): boolean => 2 < value.length,
     },
@@ -101,7 +101,7 @@ describe('Entity', () => {
         expect(newTarget.name).toBe('jonathan')
         expect(name).toBe(oldTarget.name)
       },
-      properties: {
+      attributes: {
         id: {
           validate: (value: string): boolean => {
             expect(value).toBe(id)

@@ -33,27 +33,27 @@ export type EventFn<E extends Event<unknown>> = (event: E) => void
 export abstract class EventObservable<T extends EventTopics> extends Observable<T> {}
 
 /**
- * The `EventPropertyKey` defines the allowable keys for
+ * The `EventAttributeKey` defines the allowable keys for
  * a given type `T`.
  */
-export type EventPropertyKey<T> = keyof T extends string | symbol ? keyof T : never
+export type EventAttributeKey<T> = keyof T extends string | symbol ? keyof T : never
 
-export type EventPropertyLifecycle<T, V> = {
+export type EventAttributeLifecycle<T, V> = {
   validate?(value: V, state: T): boolean | never
 }
 
 /**
- * The `EventPropertyLifecycleMap` defined the key-value
- * pairs used in handling property events.
+ * The `EventAttributeLifecycleMap` defined the key-value
+ * pairs used in handling attribute events.
  */
-export type EventPropertyLifecycleMap<T> = {
-  [P in keyof T]?: EventPropertyLifecycle<T, T[P]>
+export type EventAttributeLifecycleMap<T> = {
+  [P in keyof T]?: EventAttributeLifecycle<T, T[P]>
 }
 
 export type EventLifecycle<T> = {
   trace?(target: T): void
   created?(target: T): void
-  properties?: EventPropertyLifecycleMap<T>
+  attributes?: EventAttributeLifecycleMap<T>
 }
 
 /**
@@ -73,16 +73,16 @@ function createEventHandler<T extends object>(target: T, handler: EventLifecycle
 
   return {
     /**
-     * The `set` updates the given property with the given value.
+     * The `set` updates the given attribute with the given value.
      */
-    set<P extends EventPropertyKey<T>, V extends T[P]>(target: T, prop: P, value: V): boolean | never {
-      const h = handler.properties?.[prop]
+    set<A extends EventAttributeKey<T>, V extends T[A]>(target: T, attr: A, value: V): boolean | never {
+      const h = handler.attributes?.[attr]
 
       if (false === h?.validate?.(value, state)) {
-        throw new EventError(`${String(prop)} is invalid`)
+        throw new EventError(`${String(attr)} is invalid`)
       }
 
-      const ret = Reflect.set(target, prop, value)
+      const ret = Reflect.set(target, attr, value)
 
       state = clone(target) as T
       handler.trace?.(state)
@@ -98,12 +98,12 @@ function createEventHandler<T extends object>(target: T, handler: EventLifecycle
  */
 function createEvent<T extends object>(target: T, handler: EventLifecycle<T> = {}): T | never {
   if (guardFor(target)) {
-    const { properties } = handler
+    const { attributes } = handler
 
-    if (guardFor(properties)) {
-      for (const prop in properties) {
-        if (false === properties[prop]?.validate?.(target[prop], {} as Readonly<T>)) {
-          throw new EventError(`${String(prop)} is invalid`)
+    if (guardFor(attributes)) {
+      for (const attr in attributes) {
+        if (false === attributes[attr]?.validate?.(target[attr], {} as Readonly<T>)) {
+          throw new EventError(`${String(attr)} is invalid`)
         }
       }
     }

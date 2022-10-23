@@ -19,7 +19,7 @@ interface User extends Entity {
 }
 
 const createUserEvent = defineEvent<Event<User>>({
-  properties: {
+  attributes: {
     id: {
       validate: (value: string): boolean => 2 < value.length,
     },
@@ -76,7 +76,7 @@ describe('Event', () => {
       created(target: Event<User>) {
         expect(guardFor(target)).toBeTruthy()
       },
-      properties: {
+      attributes: {
         id: {
           validate: (value: string): boolean => {
             expect(value).toBe(id)

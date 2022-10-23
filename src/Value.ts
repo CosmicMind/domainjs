@@ -52,13 +52,13 @@ function createValueHandler<T extends Value<unknown>, V extends ValueTypeFor<T> 
 
   return {
     /**
-     * The `set` updates the given property with the given value.
+     * The `set` updates the given attribute with the given value.
      */
-    set(target: T, prop: 'value', value: V): boolean | never {
+    set(target: T, attr: 'value', value: V): boolean | never {
       if (false === handler.validate?.(value, state)) {
-        throw new ValueError(`${String(prop)} is invalid`)
+        throw new ValueError(`${String(attr)} is invalid`)
       }
-      return Reflect.set(target, prop, value)
+      return Reflect.set(target, attr, value)
     },
   }
 }

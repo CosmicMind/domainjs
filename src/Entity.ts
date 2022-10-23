@@ -13,30 +13,30 @@ import {
 export type Entity = Record<string, unknown>
 
 /**
- * The `EntityPropertyKey` defines the allowable keys for
+ * The `EntityAttributeKey` defines the allowable keys for
  * a given type `T`.
  */
-export type EntityPropertyKey<T> = keyof T extends string | symbol ? keyof T : never
+export type EntityAttributeKey<T> = keyof T extends string | symbol ? keyof T : never
 
-export type EntityPropertyLifecycle<T, V> = {
+export type EntityAttributeLifecycle<T, V> = {
   validate?(value: Readonly<V>, state: Readonly<T>): boolean | never
   updated?(newValue: Readonly<V>, oldValue: Readonly<V>, state: Readonly<T>): void
   deleted?(value: Readonly<V>, state: Readonly<T>): void
 }
 
 /**
- * The `EntityPropertyLifecycleMap` defined the key-value
- * pairs used in handling property events.
+ * The `EntityAttributeLifecycleMap` defined the key-value
+ * pairs used in handling attribute events.
  */
-export type EntityPropertyLifecycleMap<T> = {
-  [P in keyof T]?: EntityPropertyLifecycle<T, T[P]>
+export type EntityAttributeLifecycleMap<T> = {
+  [P in keyof T]?: EntityAttributeLifecycle<T, T[P]>
 }
 
 export type EntityLifecycle<T> = {
   trace?(target: Readonly<T>): void
   created?(target: Readonly<T>): void
   updated?(newTarget: Readonly<T>, oldTarget: Readonly<T>): void
-  properties?: EntityPropertyLifecycleMap<T>
+  attributes?: EntityAttributeLifecycleMap<T>
 }
 
 /**
@@ -56,18 +56,18 @@ function createEntityHandler<T extends object>(target: T, handler: EntityLifecyc
 
   return {
     /**
-     * The `set` updates the given property with the given value.
+     * The `set` updates the given attribute with the given value.
      */
-    set<P extends EntityPropertyKey<T>, V extends T[P]>(target: T, prop: P, value: V): boolean | never {
-      const h = handler.properties?.[prop]
+    set<A extends EntityAttributeKey<T>, V extends T[A]>(target: T, attr: A, value: V): boolean | never {
+      const h = handler.attributes?.[attr]
 
       if (false === h?.validate?.(value, state)) {
-        throw new EntityError(`${String(prop)} is invalid`)
+        throw new EntityError(`${String(attr)} is invalid`)
       }
 
-      const oldValue = target[prop]
+      const oldValue = target[attr]
       const oldTarget = state
-      const ret = Reflect.set(target, prop, value)
+      const ret = Reflect.set(target, attr, value)
 
       state = clone(target) as Readonly<T>
 
@@ -87,12 +87,12 @@ function createEntityHandler<T extends object>(target: T, handler: EntityLifecyc
  */
 function createEntity<T extends object>(target: T, handler: EntityLifecycle<T> = {}): T | never {
   if (guardFor(target)) {
-    const { properties } = handler
+    const { attributes } = handler
 
-    if (guardFor(properties)) {
-      for (const prop in properties) {
-        if (false === properties[prop]?.validate?.(target[prop], {} as Readonly<T>)) {
-          throw new EntityError(`${String(prop)} is invalid`)
+    if (guardFor(attributes)) {
+      for (const attr in attributes) {
+        if (false === attributes[attr]?.validate?.(target[attr], {} as Readonly<T>)) {
+          throw new EntityError(`${String(attr)} is invalid`)
         }
       }
     }

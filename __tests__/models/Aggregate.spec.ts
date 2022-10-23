@@ -49,7 +49,7 @@ interface User extends Entity {
 type UserRegisterEvent = Event<User>
 
 const createUserAggregateRegisterEvent = defineEvent<UserRegisterEvent>({
-  properties: {
+  attributes: {
     message: {
       validate: (value: User): boolean => guardFor(value),
     },
@@ -126,7 +126,7 @@ describe('Aggregate', () => {
         expect(newTarget.name).toBe('jonathan')
         expect(name).toBe(oldTarget.name)
       },
-      properties: {
+      attributes: {
         id: {
           validate: (value: string): boolean => {
             expect(value).toBe(id)

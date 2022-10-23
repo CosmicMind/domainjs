@@ -15,8 +15,8 @@ export type {
   EventTopics,
   EventTypeFor,
   EventLifecycle,
-  EventPropertyLifecycle,
-  EventPropertyLifecycleMap,
+  EventAttributeLifecycle,
+  EventAttributeLifecycleMap,
 } from '@/Event'
 
 export {
@@ -27,8 +27,8 @@ export {
 export type {
   Entity,
   EntityLifecycle,
-  EntityPropertyLifecycle,
-  EntityPropertyLifecycleMap,
+  EntityAttributeLifecycle,
+  EntityAttributeLifecycleMap,
 } from '@/Entity'
 
 export {
