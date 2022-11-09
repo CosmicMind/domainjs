@@ -14,7 +14,6 @@ extends:
 overrides:
   - files:
     - '**/*.js'
-    - '**/*.jsx'
     rules:
       '@typescript-eslint/no-inferrable-types':
         - 0
