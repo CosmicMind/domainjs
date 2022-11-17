@@ -34,7 +34,7 @@ export type EntityAttributeLifecycleMap<T> = {
 
 export type EntityLifecycle<T> = {
   trace?(target: Readonly<T>): void
-  created?(target: Readonly<T>): void
+  createdAt?(target: Readonly<T>): void
   updated?(newTarget: Readonly<T>, oldTarget: Readonly<T>): void
   attributes?: EntityAttributeLifecycleMap<T>
 }
@@ -98,7 +98,7 @@ function createEntity<T extends object>(target: T, handler: EntityLifecycle<T> =
     }
 
     const state = clone(target) as Readonly<T>
-    handler.created?.(state)
+    handler.createdAt?.(state)
     handler.trace?.(state)
   }
 

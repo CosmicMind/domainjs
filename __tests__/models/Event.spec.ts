@@ -26,7 +26,7 @@ const createUserEvent = defineEvent<Event<User>>({
     correlationId: {
       validate: (value: string): boolean => 2 < value.length,
     },
-    created: {
+    createdAt: {
       validate: (value: Date): boolean => value instanceof Date,
     },
     message: {
@@ -39,33 +39,33 @@ describe('Event', () => {
   it('interface', () => {
     const id = '123'
     const correlationId = '456'
-    const created = new Date()
+    const createdAt = new Date()
     const message = {
       id,
-      created,
+      createdAt,
       name: 'daniel',
     }
 
     const e1 = createUserEvent({
       id,
       correlationId,
-      created,
+      createdAt,
       message,
     })
 
     expect(e1.id).toBe(id)
     expect(e1.correlationId).toBe(correlationId)
-    expect(e1.created).toBe(created)
+    expect(e1.createdAt).toBe(createdAt)
     expect(e1.message).toStrictEqual(message)
   })
 
   it('EventLifecycle', () => {
     const id = '123'
     const correlationId = '456'
-    const created = new Date()
+    const createdAt = new Date()
     const message = {
       id,
-      created,
+      createdAt,
       name: 'daniel',
     }
 
@@ -73,7 +73,7 @@ describe('Event', () => {
       trace(target: Event<User>) {
         expect(guardFor(target)).toBeTruthy()
       },
-      created(target: Event<User>) {
+      createdAt(target: Event<User>) {
         expect(guardFor(target)).toBeTruthy()
       },
       attributes: {
@@ -89,9 +89,9 @@ describe('Event', () => {
             return 2 < value.length
           },
         },
-        created: {
+        createdAt: {
           validate: (value: Date): boolean => {
-            expect(value).toBe(created)
+            expect(value).toBe(createdAt)
             return value instanceof Date
           },
         },
@@ -107,13 +107,13 @@ describe('Event', () => {
     const e1 = createEvent({
       id,
       correlationId,
-      created,
+      createdAt,
       message,
     })
 
     expect(e1.id).toBe(id)
     expect(e1.correlationId).toBe(correlationId)
-    expect(e1.created).toBe(created)
+    expect(e1.createdAt).toBe(createdAt)
     expect(e1.message).toStrictEqual(message)
   })
 })

@@ -10,8 +10,16 @@ import {
   FoundationError,
 } from '@cosmicmind/foundation'
 
-export type Value<T> = {
-  readonly value: T
+export abstract class Value<V> {
+  private _value: V
+
+  get value(): V {
+    return this._value
+  }
+
+  constructor(value: V) {
+    this._value = value
+  }
 }
 
 /**
@@ -28,7 +36,7 @@ export type ValueConstructor<V extends Value<unknown>> = new (value: ValueTypeFo
 export type ValueLifecycle<T> = {
   trace?(target: T): void
   validate?(value: ValueTypeFor<T>, state: T): boolean | never
-  created?(target: T): void
+  createdAt?(target: T): void
 }
 
 /**
@@ -74,7 +82,7 @@ function createValue<T extends Value<unknown>>(target: T, handler: ValueLifecycl
     }
 
     const state = clone(target) as Readonly<T>
-    handler.created?.(state)
+    handler.createdAt?.(state)
     handler.trace?.(state)
   }
 

@@ -33,12 +33,7 @@ const createEmail = defineValue(Email, {
   },
 })
 
-class Version implements Value<number> {
-  readonly value: number
-  constructor(value: number) {
-    this.value = value
-  }
-}
+class Version implements Value<number> {}
 
 const createVersionValue = defineValue(Version, {
   validate: (value: number): boolean => 0 < value,
@@ -109,7 +104,7 @@ describe('Value', () => {
         return 'string' === typeof string().email('email is invalid').strict(true).validateSync(value)
       },
 
-      created: (email: Email): void => {
+      createdAt: (email: Email): void => {
         expect(e1).toBe(email.value)
       },
     })

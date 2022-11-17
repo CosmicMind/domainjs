@@ -18,7 +18,7 @@ import {
 export type Event<T> = {
   readonly id: string
   readonly correlationId: string
-  readonly created: Date
+  readonly createdAt: Date
   readonly message: T
 }
 
@@ -52,7 +52,7 @@ export type EventAttributeLifecycleMap<T> = {
 
 export type EventLifecycle<T> = {
   trace?(target: T): void
-  created?(target: T): void
+  createdAt?(target: T): void
   attributes?: EventAttributeLifecycleMap<T>
 }
 
@@ -109,7 +109,7 @@ function createEvent<T extends object>(target: T, handler: EventLifecycle<T> = {
     }
 
     const state = clone(target) as Readonly<T>
-    handler.created?.(state)
+    handler.createdAt?.(state)
     handler.trace?.(state)
   }
 

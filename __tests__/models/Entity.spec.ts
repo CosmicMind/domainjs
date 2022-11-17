@@ -16,7 +16,7 @@ import {
 
 interface User extends Entity {
   readonly id: string
-  readonly created: Date
+  readonly createdAt: Date
   name: string
 }
 
@@ -25,7 +25,7 @@ const createUser = defineEntity<User>({
     id: {
       validate: (value: string): boolean => 2 < value.length,
     },
-    created: {
+    createdAt: {
       validate: (value: Date): boolean => value instanceof Date,
     },
     name: {
@@ -37,30 +37,30 @@ const createUser = defineEntity<User>({
 describe('Entity', () => {
   it('interface', () => {
     const id = '123'
-    const created = new Date()
+    const createdAt = new Date()
     const name = 'daniel'
 
     const e1 = createUser({
       id,
-      created,
+      createdAt,
       name: 'jonathan',
     })
 
     e1.name = 'daniel'
 
     expect(e1.id).toBe(id)
-    expect(e1.created).toBe(created)
+    expect(e1.createdAt).toBe(createdAt)
     expect(e1.name).toBe(name)
   })
 
   it('partial validator', () => {
     const id = '123'
-    const created = new Date()
+    const createdAt = new Date()
     const name = 'daniel'
 
     const e1 = createUser({
       id,
-      created,
+      createdAt,
       name: 'jonathan',
     })
 
@@ -79,20 +79,20 @@ describe('Entity', () => {
     }
 
     expect(e1.id).toBe(id)
-    expect(e1.created).toBe(created)
+    expect(e1.createdAt).toBe(createdAt)
     expect(name).not.toBe(e1.name)
   })
 
   it('EntityLifecycle', () => {
     const id = '123'
-    const created = new Date()
+    const createdAt = new Date()
     const name = 'daniel'
 
     const createEntity = defineEntity<User>({
       trace(target: User) {
         expect(guardFor(target)).toBeTruthy()
       },
-      created(target: User) {
+      createdAt(target: User) {
         expect(guardFor(target))
       },
       updated(newTarget: User, oldTarget: User) {
@@ -108,9 +108,9 @@ describe('Entity', () => {
             return 2 < value.length
           },
         },
-        created: {
+        createdAt: {
           validate: (value: Date): boolean => {
-            expect(value).toBe(created)
+            expect(value).toBe(createdAt)
             return value instanceof Date
           },
         },
@@ -125,12 +125,12 @@ describe('Entity', () => {
 
     const e1 = createEntity({
       id,
-      created,
+      createdAt,
       name,
     })
 
     expect(e1.id).toBe(id)
-    expect(e1.created).toBe(created)
+    expect(e1.createdAt).toBe(createdAt)
 
     e1.name = 'jonathan'
 

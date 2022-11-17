@@ -37,13 +37,13 @@ export {
 } from '@/Entity'
 
 export type {
-  Value,
   ValueTypeFor,
   ValueConstructor,
   ValueLifecycle,
 } from '@/Value'
 
 export {
+  Value,
   ValueError,
   defineValue,
 } from '@/Value'
