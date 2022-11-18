@@ -17,13 +17,9 @@ import {
   defineValue,
 } from '../../src'
 
-class Email implements Value<string> {
-  readonly value: string
+class Email extends Value<string> {
   get domainAddress(): string {
     return this.value.split('@')[1]
-  }
-  constructor(value: string) {
-    this.value = value
   }
 }
 
