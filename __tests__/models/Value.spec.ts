@@ -29,7 +29,7 @@ const createEmail = defineValue(Email, {
   },
 })
 
-class Version implements Value<number> {}
+class Version extends Value<number> {}
 
 const createVersionValue = defineValue(Version, {
   validate: (value: number): boolean => 0 < value,
