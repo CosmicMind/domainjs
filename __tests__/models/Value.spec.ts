@@ -1,20 +1,20 @@
 /* Copyright (C) 2022, CosmicMind, Inc. <http://cosmicmind.com>. All rights reserved. */
 
 import {
-  it,
-  expect,
-  describe,
+it,
+expect,
+describe
 } from 'vitest'
 
 import {
-  string,
-  ValidationError,
+string,
+ValidationError
 } from 'yup'
 
 import {
-  Value,
-  ValueError,
-  defineValue,
+Value,
+ValueError,
+defineValue
 } from '../../src'
 
 class Email extends Value<string> {

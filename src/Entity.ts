@@ -5,9 +5,9 @@
  */
 
 import {
-  clone,
-  guardFor,
-  FoundationError,
+clone,
+guardFor,
+FoundationError
 } from '@cosmicmind/foundation'
 
 export type Entity = Record<string, unknown>

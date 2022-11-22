@@ -5,14 +5,14 @@
  */
 
 import {
-  clone,
-  guardFor,
-  FoundationError,
+clone,
+guardFor,
+FoundationError
 } from '@cosmicmind/foundation'
 
 import {
-  Observable,
-  ObservableTopics,
+Observable,
+ObservableTopics
 } from '@cosmicmind/patterns'
 
 export type Event<T> = {

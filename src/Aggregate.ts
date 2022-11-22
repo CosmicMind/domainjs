@@ -5,14 +5,14 @@
  */
 
 import {
-  Entity,
-  EntityLifecycle,
-  defineEntity,
+Entity,
+EntityLifecycle,
+defineEntity
 } from '@/Entity'
 
 import {
-  EventTopics,
-  EventObservable,
+EventTopics,
+EventObservable
 } from '@/Event'
 
 const sentinel: EventTopics = {}
