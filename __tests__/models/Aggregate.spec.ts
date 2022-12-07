@@ -1,16 +1,16 @@
 /* Copyright (C) 2022, CosmicMind, Inc. <http://cosmicmind.com>. All rights reserved. */
 
 import {
-it,
-expect,
-describe
+  it,
+  expect,
+  describe,
 } from 'vitest'
 
 import { string } from 'yup'
 
 import {
-uuidv4,
-guardFor
+  uuidv4,
+  guardFor,
 } from '@cosmicmind/foundation'
 
 import {
