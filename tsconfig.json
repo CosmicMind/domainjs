@@ -38,7 +38,6 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.js",
-    "typings/**/*.d.ts",
     "vite.config*.ts"
   ],
   "exclude": [
