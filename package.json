@@ -52,7 +52,7 @@
     "yup": "^0.32.11"
   },
   "dependencies": {
-    "@cosmicmind/foundation": "^0.0.1-rc-120822-2",
+    "@cosmicmind/foundation": "^0.0.1-rc-121122-1",
     "@cosmicmind/patterns": "^0.0.1-rc-120822-2"
   }
 }
