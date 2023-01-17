@@ -1,6 +1,6 @@
 {
-  "name": "@cosmicmind/domain",
-  "version": "0.0.1-rc-120822-2",
+  "name": "@cosmicmind/domainjs",
+  "version": "0.0.1-rc-011723-1",
   "description": "A framework for building applications with Domain-driven design in TypeScript.",
   "keywords": [],
   "author": {
