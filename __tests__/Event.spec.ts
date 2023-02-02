@@ -1,18 +1,18 @@
 /* Copyright (C) 2022, CosmicMind, Inc. <http://cosmicmind.com>. All rights reserved. */
 
 import {
-it,
-expect,
-describe
+  it,
+  expect,
+  describe,
 } from 'vitest'
 
 import { guardFor } from '@cosmicmind/foundationjs'
 
 import {
-Entity,
-Event,
-defineEvent
-} from '../../src'
+  Entity,
+  Event,
+  defineEvent,
+} from '@/internal'
 
 interface User extends Entity {
   name: string
@@ -27,7 +27,7 @@ const createUserEvent = defineEvent<Event<User>>({
       validate: (value: string): boolean => 2 < value.length,
     },
     createdAt: {
-      validate: (value: Date): boolean => value instanceof Date,
+      validate: (value: Date): boolean => guardFor(value),
     },
     message: {
       validate: (value: User): boolean => guardFor(value),
@@ -92,7 +92,7 @@ describe('Event', () => {
         createdAt: {
           validate: (value: Date): boolean => {
             expect(value).toBe(createdAt)
-            return value instanceof Date
+            return guardFor(value)
           },
         },
         message: {

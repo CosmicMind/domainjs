@@ -5,9 +5,9 @@
  */
 
 import {
-clone,
-guardFor,
-FoundationError
+  assign,
+  guardFor,
+  FoundationError,
 } from '@cosmicmind/foundationjs'
 
 export type Entity = Record<string, unknown>
@@ -19,9 +19,8 @@ export type Entity = Record<string, unknown>
 export type EntityAttributeKey<T> = keyof T extends string | symbol ? keyof T : never
 
 export type EntityAttributeLifecycle<T, V> = {
-  validate?(value: Readonly<V>, state: Readonly<T>): boolean | never
-  updated?(newValue: Readonly<V>, oldValue: Readonly<V>, state: Readonly<T>): void
-  deleted?(value: Readonly<V>, state: Readonly<T>): void
+  validate?(value: V, model: T): boolean | never
+  updated?(newValue: V, oldValue: V, model: T): void
 }
 
 /**
@@ -33,9 +32,8 @@ export type EntityAttributeLifecycleMap<T> = {
 }
 
 export type EntityLifecycle<T> = {
-  trace?(target: Readonly<T>): void
-  createdAt?(target: Readonly<T>): void
-  updated?(newTarget: Readonly<T>, oldTarget: Readonly<T>): void
+  trace?(target: T): void
+  createdAt?(target: T): void
   attributes?: EntityAttributeLifecycleMap<T>
 }
 
@@ -51,9 +49,7 @@ export const defineEntity = <E extends Entity>(handler: EntityLifecycle<E> = {})
  * The `createEntityHandler` prepares the `EntityLifecycle` for
  * the given `handler`.
  */
-function createEntityHandler<T extends object>(target: T, handler: EntityLifecycle<T>): ProxyHandler<T> {
-  let state = clone(target) as Readonly<T>
-
+function createEntityHandler<T extends object>(handler: EntityLifecycle<T>): ProxyHandler<T> {
   return {
     /**
      * The `set` updates the given attribute with the given value.
@@ -61,22 +57,17 @@ function createEntityHandler<T extends object>(target: T, handler: EntityLifecyc
     set<A extends EntityAttributeKey<T>, V extends T[A]>(target: T, attr: A, value: V): boolean | never {
       const h = handler.attributes?.[attr]
 
-      if (false === h?.validate?.(value, state)) {
+      if (false === h?.validate?.(value, target)) {
         throw new EntityError(`${String(attr)} is invalid`)
       }
 
       const oldValue = target[attr]
-      const oldTarget = state
-      const ret = Reflect.set(target, attr, value)
+      h?.updated?.(value, oldValue, target)
 
-      state = clone(target) as Readonly<T>
+      const result = Reflect.set(target, attr, value)
+      handler.trace?.(target)
 
-      h?.updated?.(value, oldValue, state)
-
-      handler.updated?.(state, oldTarget)
-      handler.trace?.(state)
-
-      return ret
+      return result
     },
   }
 }
@@ -86,21 +77,17 @@ function createEntityHandler<T extends object>(target: T, handler: EntityLifecyc
  * given `target` and `handler`.
  */
 function createEntity<T extends object>(target: T, handler: EntityLifecycle<T> = {}): T | never {
-  if (guardFor(target)) {
-    const { attributes } = handler
-
-    if (guardFor(attributes)) {
-      for (const attr in attributes) {
-        if (false === attributes[attr]?.validate?.(target[attr], {} as Readonly<T>)) {
-          throw new EntityError(`${String(attr)} is invalid`)
-        }
+  const { attributes } = handler
+  if (guardFor(attributes)) {
+    for (const attr in attributes) {
+      if (false === attributes[attr]?.validate?.(target[attr], {} as Readonly<T>)) {
+        throw new EntityError(`${String(attr)} is invalid`)
       }
     }
-
-    const state = clone(target) as Readonly<T>
-    handler.createdAt?.(state)
-    handler.trace?.(state)
   }
-
-  return new Proxy(target, createEntityHandler(target, handler))
+  const p = new Proxy(target, createEntityHandler(handler))
+  const model = assign({}, target) as T
+  handler.createdAt?.(model)
+  handler.trace?.(model)
+  return p
 }

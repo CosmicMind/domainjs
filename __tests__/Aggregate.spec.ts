@@ -22,7 +22,7 @@ import {
   defineEvent,
   Value,
   defineValue,
-} from '../../src'
+} from '@/internal'
 
 class Email extends Value<string> {
   get domainAddress(): string {
@@ -74,10 +74,6 @@ class UserAggregate extends Aggregate<User, UserTopics> {
     return this.root.version
   }
 
-  get _root(): User {
-    return this.root
-  }
-
   updateName(): void {
     this.root.name = 'jonathan'
   }
@@ -110,11 +106,11 @@ describe('Aggregate', () => {
     const email = 'susan@domain.com'
 
     const createAggregate = defineAggregate(UserAggregate, {
-      trace(target: User) {
-        expect(guardFor(target)).toBeTruthy()
+      trace(model: User) {
+        expect(guardFor(model)).toBeTruthy()
       },
-      createdAt(target: User) {
-        expect(guardFor(target)).toBeTruthy()
+      createdAt(model: User) {
+        expect(guardFor(model)).toBeTruthy()
       },
       updated(newTarget: User, oldTarget: User) {
         expect(guardFor(newTarget)).toBeTruthy()

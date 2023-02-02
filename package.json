@@ -36,13 +36,13 @@
     "dev:build": "run-s dev:build:lib",
     "dev:build:lib": "vite build --config vite.config.lib.ts --mode development",
     "test": "run-s test:unit",
-    "test:unit": "vitest run --config vite.config.lib.ts --mode development",
-    "test:watch": "vitest --config vite.config.lib.ts --mode development",
-    "test:coverage": "vitest run --coverage --config vite.config.lib.ts --mode development"
+    "test:unit": "vitest run --config vite.config.lib.ts --mode test",
+    "test:watch": "vitest --config vite.config.lib.ts --mode test",
+    "test:coverage": "vitest run --coverage --config vite.config.lib.ts --mode benchmark"
   },
   "dependencies": {
-    "@cosmicmind/foundationjs": "^0.0.1-rc-020123-2",
-    "@cosmicmind/patternjs": "^0.0.1-rc-020123-2"
+    "@cosmicmind/foundationjs": "^0.0.1-rc-020123-4",
+    "@cosmicmind/patternjs": "^0.0.1-rc-020123-4"
   },
   "devDependencies": {
     "@microsoft/eslint-formatter-sarif": "^3.0.0",

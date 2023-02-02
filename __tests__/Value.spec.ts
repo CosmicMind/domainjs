@@ -15,7 +15,7 @@ import {
   Value,
   ValueError,
   defineValue,
-} from '../../src'
+} from '@/internal'
 
 class Email extends Value<string> {
   get domainAddress(): string {

@@ -5,19 +5,19 @@
  */
 
 import {
-Entity,
-EntityLifecycle,
-defineEntity
+  Entity,
+  EntityLifecycle,
+  defineEntity,
 } from '@/Entity'
 
 import {
-EventTopics,
-EventObservable
+  EventTopics,
+  EventObservable,
 } from '@/Event'
 
 const sentinel: EventTopics = {}
 
-export class Aggregate<E extends Entity, T extends EventTopics = typeof sentinel> extends EventObservable<T> {
+export abstract class Aggregate<E extends Entity, T extends EventTopics = typeof sentinel> extends EventObservable<T> {
   protected root: E
 
   constructor(root: E) {

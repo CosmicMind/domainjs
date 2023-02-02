@@ -1,18 +1,18 @@
 /* Copyright (C) 2022, CosmicMind, Inc. <http://cosmicmind.com>. All rights reserved. */
 
 import {
-it,
-expect,
-describe
+  it,
+  expect,
+  describe,
 } from 'vitest'
 
 import { guardFor } from '@cosmicmind/foundationjs'
 
 import {
-Entity,
-EntityError,
-defineEntity
-} from '../../src'
+  Entity,
+  EntityError,
+  defineEntity,
+} from '@/internal'
 
 interface User extends Entity {
   readonly id: string
@@ -26,7 +26,7 @@ const createUser = defineEntity<User>({
       validate: (value: string): boolean => 2 < value.length,
     },
     createdAt: {
-      validate: (value: Date): boolean => value instanceof Date,
+      validate: (value: Date): boolean => guardFor(value),
     },
     name: {
       validate: (value: string): boolean => 2 < value.length,
@@ -89,17 +89,11 @@ describe('Entity', () => {
     const name = 'daniel'
 
     const createEntity = defineEntity<User>({
-      trace(target: User) {
-        expect(guardFor(target)).toBeTruthy()
+      trace(model: User) {
+        expect(guardFor(model)).toBeTruthy()
       },
       createdAt(target: User) {
         expect(guardFor(target))
-      },
-      updated(newTarget: User, oldTarget: User) {
-        expect(guardFor(newTarget)).toBeTruthy()
-        expect(guardFor(oldTarget)).toBeTruthy()
-        expect(newTarget.name).toBe('jonathan')
-        expect(name).toBe(oldTarget.name)
       },
       attributes: {
         id: {
@@ -111,13 +105,21 @@ describe('Entity', () => {
         createdAt: {
           validate: (value: Date): boolean => {
             expect(value).toBe(createdAt)
-            return value instanceof Date
+            return guardFor(value)
           },
         },
         name: {
           validate: (value: string): boolean => {
             expect(2 < value.length).toBeTruthy()
             return 2 < value.length
+          },
+
+          updated: (newValue: string, oldValue: string, model: User): void => {
+            expect(newValue).toBe('jonathan')
+            expect(oldValue).toBe(name)
+            expect(model.id).toBe(id)
+            expect(model.createdAt).toBe(createdAt)
+            expect(model.name).toBe(name)
           },
         },
       },

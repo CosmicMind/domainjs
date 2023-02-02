@@ -5,14 +5,14 @@
  */
 
 import {
-clone,
-guardFor,
-FoundationError
+  clone,
+  guardFor,
+  FoundationError,
 } from '@cosmicmind/foundationjs'
 
 import {
-Observable,
-ObservableTopics
+  Observable,
+  ObservableTopics,
 } from '@cosmicmind/patternjs'
 
 export type Event<T> = {
@@ -28,7 +28,7 @@ export type EventTopics = ObservableTopics & {
 
 export type EventTypeFor<E> = E extends Event<infer T> ? T : E
 
-export type EventFn<E extends Event<unknown>> = (event: E) => void
+export type EventFn<E extends Event<EventTypeFor<E>>> = (event: E) => void
 
 export abstract class EventObservable<T extends EventTopics> extends Observable<T> {}
 
@@ -61,7 +61,7 @@ export type EventLifecycle<T> = {
  */
 export class EventError extends FoundationError {}
 
-export const defineEvent = <E extends Event<unknown>>(handler: EventLifecycle<E> = {}): (entity: E) => E =>
+export const defineEvent = <E extends Event<EventTypeFor<E>>>(handler: EventLifecycle<E> = {}): (entity: E) => E =>
   (entity: E) => createEvent(entity, handler)
 
 /**
@@ -96,19 +96,19 @@ function createEventHandler<T extends object>(target: T, handler: EventLifecycle
  * The `createEvent` creates a new `Proxy` instance with the
  * given `target` and `handler`.
  */
-function createEvent<T extends object>(target: T, handler: EventLifecycle<T> = {}): T | never {
+function createEvent<E extends Event<EventTypeFor<E>>>(target: E, handler: EventLifecycle<E> = {}): E | never {
   if (guardFor(target)) {
     const { attributes } = handler
 
     if (guardFor(attributes)) {
       for (const attr in attributes) {
-        if (false === attributes[attr]?.validate?.(target[attr], {} as Readonly<T>)) {
+        if (false === attributes[attr]?.validate?.(target[attr], {} as Readonly<E>)) {
           throw new EventError(`${String(attr)} is invalid`)
         }
       }
     }
 
-    const state = clone(target) as Readonly<T>
+    const state = clone(target) as Readonly<E>
     handler.createdAt?.(state)
     handler.trace?.(state)
   }
