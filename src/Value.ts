@@ -6,12 +6,11 @@
 
 import {
 clone,
-guardFor,
 FoundationError
 } from '@cosmicmind/foundationjs'
 
 export abstract class Value<V> {
-  private _value: V
+  private readonly _value: V
 
   get value(): V {
     return this._value
@@ -76,15 +75,11 @@ function createValueHandler<T extends Value<unknown>, V extends ValueTypeFor<T> 
  * given `target` and `handler`.
  */
 function createValue<T extends Value<unknown>>(target: T, handler: ValueLifecycle<T> = {}): T | never {
-  if (guardFor(target)) {
-    if (false === handler.validate?.(target.value as ValueTypeFor<T>, {} as Readonly<T>)) {
-      throw new ValueError(`value is invalid`)
-    }
-
-    const state = clone(target) as Readonly<T>
-    handler.createdAt?.(state)
-    handler.trace?.(state)
+  if (false === handler.validate?.(target.value as ValueTypeFor<T>, {} as Readonly<T>)) {
+    throw new ValueError(`value is invalid`)
   }
-
-  return new Proxy(target, createValueHandler(target, handler))
+  const p = new Proxy(target, createValueHandler(target, handler))
+  handler.createdAt?.(p)
+  handler.trace?.(p)
+  return p
 }
