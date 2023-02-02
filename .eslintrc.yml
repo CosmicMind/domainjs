@@ -7,12 +7,13 @@ parser: '@typescript-eslint/parser'
 plugins:
   - '@typescript-eslint'
 extends:
-  - 'eslint:recommended'
-  - 'plugin:@typescript-eslint/eslint-recommended'
-  - 'plugin:@typescript-eslint/recommended'
-  - 'plugin:yml/standard'
+  - eslint:recommended
+  - plugin:@typescript-eslint/eslint-recommended
+  - plugin:@typescript-eslint/recommended
+  - plugin:yml/standard
 overrides:
-  - files: '**/*.js'
+  - files:
+    - '**/*.js'
     rules:
       '@typescript-eslint/no-inferrable-types':
         - 0
@@ -85,11 +86,6 @@ rules:
     - 2
   no-undef-init:
     - 2
-  no-undefined:
-    - 2
-  no-underscore-dangle:
-    - 2
-    - allowAfterThis: true
   no-unmodified-loop-condition:
     - 2
   no-unneeded-ternary:

@@ -7,11 +7,7 @@ on:
 
 jobs:
   dev-build:
-    uses: cosmicverse/actions/.github/workflows/dev-build.yml@release
-    secrets:
-      npm_token: ${{ secrets.npm_token }}
+    uses: cosmicmind/actions/.github/workflows/dev-build.yml@release
   test:
     needs: dev-build
-    uses: cosmicverse/actions/.github/workflows/test.yml@release
-    secrets:
-      npm_token: ${{ secrets.npm_token }}
+    uses: cosmicmind/actions/.github/workflows/test.yml@release

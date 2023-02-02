@@ -2,7 +2,7 @@
   "maxNodeModuleJsDepth": 5,
   "compilerOptions": {
     "types": [
-      "vite/client"
+      "node"
     ],
     "target": "esnext",
     "module": "esnext",
@@ -29,20 +29,23 @@
     ],
     "rootDir": ".",
     "baseUrl": ".",
-    "outDir": "dist"
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
   },
   "include": [
     "src/**/*.ts",
-    "tests/**/*.ts"
+    "src/**/*.js",
+    "vite.config*.ts"
   ],
   "exclude": [
     "dist",
-    "node_modules",
-    "typings"
+    "node_modules"
   ],
   "typeRoots": [
     "typings",
-    "@types",
-    "node_modules/@types"
+    "@types"
   ]
 }

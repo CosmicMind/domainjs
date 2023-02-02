@@ -1,8 +1,11 @@
 .DS_Store
 node_modules
-package.json.lerna_backup
+ssl
 dist
 coverage
+logs
+.docker
+.fleet
 .idea
 .vscode
 *.local
