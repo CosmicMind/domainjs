@@ -13,8 +13,8 @@ import dts from 'vite-plugin-dts'
 
 const external = [
   'yup',
-  '@cosmicmind/foundation',
-  '@cosmicmind/patterns'
+  '@cosmicmind/foundationjs',
+  '@cosmicmind/patternjs'
 ]
 
 const srcDir = './src'

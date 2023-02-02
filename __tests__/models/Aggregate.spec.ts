@@ -11,7 +11,7 @@ import { string } from 'yup'
 import {
   uuidv4,
   guardFor,
-} from '@cosmicmind/foundation'
+} from '@cosmicmind/foundationjs'
 
 import {
   Entity,

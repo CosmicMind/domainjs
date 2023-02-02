@@ -4,8 +4,8 @@
     "types": [
       "node"
     ],
-    "target": "es2022",
-    "module": "es2022",
+    "target": "esnext",
+    "module": "esnext",
     "strict": true,
     "importHelpers": true,
     "moduleResolution": "node",
@@ -25,7 +25,7 @@
     "forceConsistentCasingInFileNames": true,
     "removeComments": true,
     "lib": [
-      "es2022"
+      "esnext"
     ],
     "rootDir": ".",
     "baseUrl": ".",

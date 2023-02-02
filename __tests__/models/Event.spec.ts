@@ -6,7 +6,7 @@ expect,
 describe
 } from 'vitest'
 
-import { guardFor } from '@cosmicmind/foundation'
+import { guardFor } from '@cosmicmind/foundationjs'
 
 import {
 Entity,

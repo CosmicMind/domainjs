@@ -8,7 +8,7 @@ import {
 clone,
 guardFor,
 FoundationError
-} from '@cosmicmind/foundation'
+} from '@cosmicmind/foundationjs'
 
 export abstract class Value<V> {
   private _value: V
