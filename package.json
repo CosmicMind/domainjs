@@ -1,6 +1,6 @@
 {
   "name": "@cosmicmind/domainjs",
-  "version": "0.0.1-rc-012623-1",
+  "version": "0.0.1-rc-020123-1",
   "description": "A framework for building applications with Domain-driven design in TypeScript.",
   "keywords": [],
   "author": {
@@ -11,6 +11,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/cosmicmind/domain.git"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "type": "module",
   "main": "dist/lib.es.js",
@@ -25,11 +28,21 @@
   ],
   "scripts": {
     "lint": "eslint --fix --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts",
-    "build": "vite build --mode production",
-    "watch": "vite build --watch --mode development",
+    "build": "run-s build:lib",
+    "build:lib": "vite build --config vite.config.lib.ts --mode production",
+    "watch": "run-p watch:lib",
+    "watch:lib": "vite build --watch --config vite.config.lib.ts --mode development",
+    "dev": "run-s dev:build",
+    "dev:build": "run-s dev:build:lib",
+    "dev:build:lib": "vite build --config vite.config.lib.ts --mode development",
+    "test": "run-s test:unit",
     "test:unit": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@cosmicmind/foundation": "^0.0.1-rc-020123-1",
+    "@cosmicmind/patterns": "^0.0.1-rc-020123-1"
   },
   "devDependencies": {
     "@microsoft/eslint-formatter-sarif": "^3.0.0",
@@ -50,9 +63,5 @@
     "vite-plugin-dts": "^1.4.1",
     "vitest": "^0.23.0",
     "yup": "^0.32.11"
-  },
-  "dependencies": {
-    "@cosmicmind/foundation": "^0.0.1-rc-121122-1",
-    "@cosmicmind/patterns": "^0.0.1-rc-120822-2"
   }
 }

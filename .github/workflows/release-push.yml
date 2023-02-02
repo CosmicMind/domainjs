@@ -9,5 +9,4 @@ jobs:
   package-publish:
     uses: cosmicmind/actions/.github/workflows/package-publish.yml@release
     secrets:
-      npm_token: ${{ secrets.npm_token }}
-      gh_token: ${{ secrets.github_token }}
+      NPM_TOKEN: ${{ secrets.npm_token }}
