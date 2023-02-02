@@ -74,6 +74,10 @@ class UserAggregate extends Aggregate<User, UserTopics> {
     return this.root.version
   }
 
+  get user(): User {
+    return this.root
+  }
+
   updateName(): void {
     this.root.name = 'jonathan'
   }
@@ -112,39 +116,33 @@ describe('Aggregate', () => {
       createdAt(model: User) {
         expect(guardFor(model)).toBeTruthy()
       },
-      updated(newTarget: User, oldTarget: User) {
-        expect(guardFor(newTarget)).toBeTruthy()
-        expect(guardFor(oldTarget)).toBeTruthy()
-        expect(newTarget.name).toBe('jonathan')
-        expect(name).toBe(oldTarget.name)
-      },
       attributes: {
         id: {
-          validate: (value: string): boolean => {
+          validate(value: string) {
             expect(value).toBe(id)
             return 2 < value.length
           },
         },
         createdAt: {
-          validate: (value: Date): boolean => {
+          validate(value: Date) {
             expect(value).toBe(createdAt)
             return true
           },
         },
         name: {
-          validate: (value: string): boolean => {
+          validate(value: string) {
             expect(2 < value.length).toBeTruthy()
             return 2 < value.length
           },
         },
         version: {
-          validate(value: number): boolean {
+          validate(value: number) {
             expect(0 < value).toBeTruthy()
             return 0 < value
           },
         },
         email: {
-          validate(value: Email): boolean {
+          validate(value: Email) {
             expect(email).toBe(value.value)
             return email === value.value
           },
@@ -160,13 +158,13 @@ describe('Aggregate', () => {
       email: createEmail(email),
     })
 
-    // a1.subscribe('register-user-account-sync', (event: UserRegisterEvent) => {
-    //   expect(event.message, a1._root)
-    // })
-    //
-    // a1.subscribe('register-user-account', (event: UserRegisterEvent) => {
-    //   expect(event.message, a1._root)
-    // })
+    a1.subscribe('register-user-account-sync', (event: UserRegisterEvent) => {
+      expect(event.message).toStrictEqual(a1.user)
+    })
+
+    a1.subscribe('register-user-account', (event: UserRegisterEvent) => {
+      expect(event.message).toStrictEqual(a1.user)
+    })
 
     a1.updateName()
 
