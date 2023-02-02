@@ -5,7 +5,6 @@
  */
 
 import {
-  assign,
   guardFor,
   FoundationError,
 } from '@cosmicmind/foundationjs'
@@ -14,27 +13,27 @@ export type Entity = Record<string, unknown>
 
 /**
  * The `EntityAttributeKey` defines the allowable keys for
- * a given type `T`.
+ * a given type `K`.
  */
-export type EntityAttributeKey<T> = keyof T extends string | symbol ? keyof T : never
+export type EntityAttributeKey<K> = keyof K extends string | symbol ? keyof K : never
 
-export type EntityAttributeLifecycle<T, V> = {
-  validate?(value: V, model: T): boolean | never
-  updated?(newValue: V, oldValue: V, model: T): void
+export type EntityAttributeLifecycle<E, V> = {
+  validate?(value: V, entity: E): boolean | never
+  updated?(newValue: V, oldValue: V, entity: E): void
 }
 
 /**
  * The `EntityAttributeLifecycleMap` defined the key-value
  * pairs used in handling attribute events.
  */
-export type EntityAttributeLifecycleMap<T> = {
-  [P in keyof T]?: EntityAttributeLifecycle<T, T[P]>
+export type EntityAttributeLifecycleMap<E> = {
+  [K in keyof E]?: EntityAttributeLifecycle<E, E[K]>
 }
 
-export type EntityLifecycle<T> = {
-  trace?(target: T): void
-  createdAt?(target: T): void
-  attributes?: EntityAttributeLifecycleMap<T>
+export type EntityLifecycle<E> = {
+  trace?(entity: E): void
+  createdAt?(entity: E): void
+  attributes?: EntityAttributeLifecycleMap<E>
 }
 
 /**
@@ -49,14 +48,13 @@ export const defineEntity = <E extends Entity>(handler: EntityLifecycle<E> = {})
  * The `createEntityHandler` prepares the `EntityLifecycle` for
  * the given `handler`.
  */
-function createEntityHandler<T extends object>(handler: EntityLifecycle<T>): ProxyHandler<T> {
+function createEntityHandler<E extends Entity>(handler: EntityLifecycle<E>): ProxyHandler<E> {
   return {
     /**
      * The `set` updates the given attribute with the given value.
      */
-    set<A extends EntityAttributeKey<T>, V extends T[A]>(target: T, attr: A, value: V): boolean | never {
+    set<A extends EntityAttributeKey<E>, V extends E[A]>(target: E, attr: A, value: V): boolean | never {
       const h = handler.attributes?.[attr]
-
       if (false === h?.validate?.(value, target)) {
         throw new EntityError(`${String(attr)} is invalid`)
       }
@@ -66,7 +64,6 @@ function createEntityHandler<T extends object>(handler: EntityLifecycle<T>): Pro
 
       const result = Reflect.set(target, attr, value)
       handler.trace?.(target)
-
       return result
     },
   }
@@ -76,18 +73,23 @@ function createEntityHandler<T extends object>(handler: EntityLifecycle<T>): Pro
  * The `createEntity` creates a new `Proxy` instance with the
  * given `target` and `handler`.
  */
-function createEntity<T extends object>(target: T, handler: EntityLifecycle<T> = {}): T | never {
-  const { attributes } = handler
-  if (guardFor(attributes)) {
-    for (const attr in attributes) {
-      if (false === attributes[attr]?.validate?.(target[attr], {} as Readonly<T>)) {
-        throw new EntityError(`${String(attr)} is invalid`)
+function createEntity<E extends Entity>(target: E, handler: EntityLifecycle<E> = {}): E | never {
+  if (guardFor(target)) {
+    const { attributes } = handler
+    const entity = new Proxy(target, createEntityHandler(handler))
+
+    if (guardFor(attributes)) {
+      for (const attr in attributes) {
+        if (false === attributes[attr]?.validate?.(target[attr], entity)) {
+          throw new EntityError(`${String(attr)} is invalid`)
+        }
       }
+
+      handler.createdAt?.(entity)
+      handler.trace?.(entity)
+      return entity
     }
   }
-  const p = new Proxy(target, createEntityHandler(handler))
-  const model = assign({}, target) as T
-  handler.createdAt?.(model)
-  handler.trace?.(model)
-  return p
+
+  throw new EntityError('Unable to create Entity')
 }

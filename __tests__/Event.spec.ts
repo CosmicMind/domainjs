@@ -70,12 +70,14 @@ describe('Event', () => {
     }
 
     const createEvent = defineEvent<Event<User>>({
-      trace(target: Event<User>) {
-        expect(guardFor(target)).toBeTruthy()
+      trace(event: Event<User>) {
+        expect(guardFor(event)).toBeTruthy()
       },
-      createdAt(target: Event<User>) {
-        expect(guardFor(target)).toBeTruthy()
+
+      createdAt(event: Event<User>) {
+        expect(guardFor(event)).toBeTruthy()
       },
+
       attributes: {
         id: {
           validate: (value: string): boolean => {
@@ -83,18 +85,21 @@ describe('Event', () => {
             return 2 < value.length
           },
         },
+
         correlationId: {
           validate: (value: string): boolean => {
             expect(value).toBe(correlationId)
             return 2 < value.length
           },
         },
+
         createdAt: {
           validate: (value: Date): boolean => {
             expect(value).toBe(createdAt)
             return guardFor(value)
           },
         },
+
         message: {
           validate: (value: User): boolean => {
             expect(guardFor(value)).toBeTruthy()

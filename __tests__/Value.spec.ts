@@ -24,9 +24,8 @@ class Email extends Value<string> {
 }
 
 const createEmail = defineValue(Email, {
-  validate: (value: string): boolean => {
-    return 'string' === typeof string().email('email is invalid').strict(true).validateSync(value)
-  },
+  validate: (value: string): boolean =>
+    'string' === typeof string().email('email is invalid').strict(true).validateSync(value),
 })
 
 class Version extends Value<number> {}
@@ -37,10 +36,9 @@ const createVersionValue = defineValue(Version, {
 
 describe('Value', () => {
   it('create value', () => {
-    const e1 = 'susan@domain.com'
-    const v1 = createEmail(e1)
-
-    expect(v1.value).toBe(e1)
+    const email = 'me@domain.com'
+    const vo = createEmail(email)
+    expect(vo.value).toBe(email)
   })
 
   it('ValueError', () => {
@@ -76,38 +74,38 @@ describe('Value', () => {
   })
 
   it('get computed value', () => {
-    const e1 = 'susan@domain.com'
-    const v1 = createEmail(e1)
+    const email1 = 'me@domain.com'
+    const vo1 = createEmail(email1)
 
-    const e2 = 'bob@domain.com'
-    const v2 = createEmail(e2)
+    const email2 = 'you@domain.com'
+    const vo2 = createEmail(email2)
 
-    expect(v1.value).toBe(e1)
-    expect(v2.value).toBe(e2)
-    expect(v1.domainAddress).toBe(v2.domainAddress)
+    expect(vo1.value).toBe(email1)
+    expect(vo2.value).toBe(email2)
+    expect(vo1.domainAddress).toBe(vo2.domainAddress)
   })
 
   it('ValueLifecycle', () => {
-    const e1 = 'susan@domain.com'
+    const email = 'me@domain.com'
 
     const createValue = defineValue(Email, {
-      trace: (email: Email): void => {
-        expect(e1).toBe(email.value)
+      trace(vo: Email): void {
+        expect(email).toBe(vo.value)
       },
 
-      validate: (value: string): boolean => {
-        expect(e1).toBe(value)
+      validate(value: string, vo: Email): boolean {
+        expect(email).toBe(value)
+        expect(email).toBe(vo.value)
         return 'string' === typeof string().email('email is invalid').strict(true).validateSync(value)
       },
 
-      createdAt: (email: Email): void => {
-        expect(e1).toBe(email.value)
+      createdAt(vo: Email): void {
+        expect(email).toBe(vo.value)
       },
     })
 
-    const v1 = createValue(e1)
-
-    expect(v1.value).toBe(e1)
-    expect(v1.domainAddress).toBe(e1.split('@')[1])
+    const vo = createValue(email)
+    expect(vo.value).toBe(email)
+    expect(vo.domainAddress).toBe(email.split('@')[1])
   })
 })

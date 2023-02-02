@@ -42,12 +42,14 @@ interface User extends Entity {
   email: Email
 }
 
-type UserRegisterEvent = Event<User>
+type UserRegisterEvent = Event & {
+  entity: User
+}
 
 const createUserAggregateRegisterEvent = defineEvent<UserRegisterEvent>({
   attributes: {
-    message: {
-      validate: (value: User): boolean => guardFor(value),
+    entity: {
+      validate: (entity: User): boolean => guardFor(entity),
     },
   },
 })
@@ -84,19 +86,13 @@ class UserAggregate extends Aggregate<User, UserTopics> {
 
   registerAccountSync(): void {
     this.publishSync('register-user-account-sync', createUserAggregateRegisterEvent({
-      id: '123',
-      correlationId: '456',
-      createdAt: new Date(),
-      message: this.root,
+      entity: this.root,
     }))
   }
 
   registerAccount(): void {
     this.publish('register-user-account', createUserAggregateRegisterEvent({
-      id: '123',
-      correlationId: '456',
-      createdAt: new Date(),
-      message: this.root,
+      entity: this.root,
     }))
   }
 }
@@ -110,12 +106,14 @@ describe('Aggregate', () => {
     const email = 'susan@domain.com'
 
     const createAggregate = defineAggregate(UserAggregate, {
-      trace(model: User) {
-        expect(guardFor(model)).toBeTruthy()
+      trace(entity: User) {
+        expect(guardFor(entity)).toBeTruthy()
       },
-      createdAt(model: User) {
-        expect(guardFor(model)).toBeTruthy()
+
+      createdAt(entity: User) {
+        expect(guardFor(entity)).toBeTruthy()
       },
+
       attributes: {
         id: {
           validate(value: string) {
@@ -123,27 +121,40 @@ describe('Aggregate', () => {
             return 2 < value.length
           },
         },
+
         createdAt: {
           validate(value: Date) {
             expect(value).toBe(createdAt)
             return true
           },
         },
+
         name: {
           validate(value: string) {
             expect(2 < value.length).toBeTruthy()
             return 2 < value.length
           },
+
+          updated: (newValue: string, oldValue: string, entity: User): void => {
+            expect(newValue).toBe('jonathan')
+            expect(oldValue).toBe(name)
+            expect(entity.id).toBe(id)
+            expect(entity.createdAt).toBe(createdAt)
+            expect(entity.name).toBe(name)
+          },
         },
+
         version: {
           validate(value: number) {
             expect(0 < value).toBeTruthy()
             return 0 < value
           },
         },
+
         email: {
-          validate(value: Email) {
+          validate(value: Email, entity: User) {
             expect(email).toBe(value.value)
+            expect(email).toBe(entity.email.value)
             return email === value.value
           },
         },
@@ -159,11 +170,11 @@ describe('Aggregate', () => {
     })
 
     a1.subscribe('register-user-account-sync', (event: UserRegisterEvent) => {
-      expect(event.message).toStrictEqual(a1.user)
+      expect(event.entity).toStrictEqual(a1.user)
     })
 
     a1.subscribe('register-user-account', (event: UserRegisterEvent) => {
-      expect(event.message).toStrictEqual(a1.user)
+      expect(event.entity).toStrictEqual(a1.user)
     })
 
     a1.updateName()

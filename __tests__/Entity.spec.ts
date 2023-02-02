@@ -25,9 +25,11 @@ const createUser = defineEntity<User>({
     id: {
       validate: (value: string): boolean => 2 < value.length,
     },
+
     createdAt: {
       validate: (value: Date): boolean => guardFor(value),
     },
+
     name: {
       validate: (value: string): boolean => 2 < value.length,
     },
@@ -89,37 +91,42 @@ describe('Entity', () => {
     const name = 'daniel'
 
     const createEntity = defineEntity<User>({
-      trace(model: User) {
-        expect(guardFor(model)).toBeTruthy()
+      trace(entity: User) {
+        expect(guardFor(entity)).toBeTruthy()
       },
-      createdAt(target: User) {
-        expect(guardFor(target))
+
+      createdAt(entity: User) {
+        expect(guardFor(entity))
       },
+
       attributes: {
         id: {
-          validate: (value: string): boolean => {
+          validate: (value: string, entity: User): boolean => {
             expect(value).toBe(id)
+            expect(entity.id).toBe(id)
             return 2 < value.length
           },
         },
         createdAt: {
-          validate: (value: Date): boolean => {
+          validate: (value: Date, entity: User): boolean => {
             expect(value).toBe(createdAt)
+            expect(entity.createdAt).toBe(createdAt)
             return guardFor(value)
           },
         },
         name: {
-          validate: (value: string): boolean => {
+          validate: (value: string, entity: User): boolean => {
             expect(2 < value.length).toBeTruthy()
+            expect(2 < entity.name.length).toBeTruthy()
             return 2 < value.length
           },
 
-          updated: (newValue: string, oldValue: string, model: User): void => {
+          updated: (newValue: string, oldValue: string, entity: User): void => {
             expect(newValue).toBe('jonathan')
             expect(oldValue).toBe(name)
-            expect(model.id).toBe(id)
-            expect(model.createdAt).toBe(createdAt)
-            expect(model.name).toBe(name)
+            expect(entity.id).toBe(id)
+            expect(entity.createdAt).toBe(createdAt)
+            expect(entity.name).toBe(name)
           },
         },
       },
