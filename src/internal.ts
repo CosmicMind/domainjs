@@ -13,7 +13,6 @@ export {
 export type {
   Event,
   EventTopics,
-  EventTypeFor,
   EventFn,
   EventLifecycle,
   EventAttributeLifecycle,

@@ -18,7 +18,7 @@ interface User extends Entity {
   name: string
 }
 
-const createUserEvent = defineEvent<Event<User>>({
+const createUserEvent = defineEvent<Event>({
   attributes: {
     id: {
       validate: (value: string): boolean => 2 < value.length,
@@ -29,7 +29,7 @@ const createUserEvent = defineEvent<Event<User>>({
     createdAt: {
       validate: (value: Date): boolean => guardFor(value),
     },
-    message: {
+    entity: {
       validate: (value: User): boolean => guardFor(value),
     },
   },
@@ -40,7 +40,7 @@ describe('Event', () => {
     const id = '123'
     const correlationId = '456'
     const createdAt = new Date()
-    const message = {
+    const entity = {
       id,
       createdAt,
       name: 'daniel',
@@ -50,31 +50,31 @@ describe('Event', () => {
       id,
       correlationId,
       createdAt,
-      message,
+      entity,
     })
 
     expect(e1.id).toBe(id)
     expect(e1.correlationId).toBe(correlationId)
     expect(e1.createdAt).toBe(createdAt)
-    expect(e1.message).toStrictEqual(message)
+    expect(e1.entity).toStrictEqual(entity)
   })
 
   it('EventLifecycle', () => {
     const id = '123'
     const correlationId = '456'
     const createdAt = new Date()
-    const message = {
+    const entity = {
       id,
       createdAt,
       name: 'daniel',
     }
 
-    const createEvent = defineEvent<Event<User>>({
-      trace(event: Event<User>) {
+    const createEvent = defineEvent<Event>({
+      trace(event: Event) {
         expect(guardFor(event)).toBeTruthy()
       },
 
-      createdAt(event: Event<User>) {
+      createdAt(event: Event) {
         expect(guardFor(event)).toBeTruthy()
       },
 
@@ -100,7 +100,7 @@ describe('Event', () => {
           },
         },
 
-        message: {
+        entity: {
           validate: (value: User): boolean => {
             expect(guardFor(value)).toBeTruthy()
             return guardFor(value)
@@ -113,12 +113,12 @@ describe('Event', () => {
       id,
       correlationId,
       createdAt,
-      message,
+      entity,
     })
 
     expect(e1.id).toBe(id)
     expect(e1.correlationId).toBe(correlationId)
     expect(e1.createdAt).toBe(createdAt)
-    expect(e1.message).toStrictEqual(message)
+    expect(e1.entity).toStrictEqual(entity)
   })
 })
