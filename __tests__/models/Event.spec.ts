@@ -1,17 +1,17 @@
 /* Copyright (C) 2022, CosmicMind, Inc. <http://cosmicmind.com>. All rights reserved. */
 
 import {
-it,
-expect,
-describe
+  it,
+  expect,
+  describe,
 } from 'vitest'
 
 import { guardFor } from '@cosmicmind/foundationjs'
 
 import {
-Entity,
-Event,
-defineEvent
+  Entity,
+  Event,
+  defineEvent,
 } from '../../src'
 
 interface User extends Entity {

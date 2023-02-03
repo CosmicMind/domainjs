@@ -24,6 +24,7 @@
     "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
     "removeComments": true,
+    "isolatedModules": true,
     "lib": [
       "esnext"
     ],
@@ -36,9 +37,12 @@
     }
   },
   "include": [
+    "typings/**/*.d.ts",
     "src/**/*.ts",
+    "src/**/*.js",
     "vite.config*.ts",
-    "__tests__/**/*"
+    "__tests__/**/*",
+    "__benchmarks__/**/*"
   ],
   "exclude": [
     "dist",
