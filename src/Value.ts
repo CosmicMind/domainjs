@@ -5,8 +5,8 @@
  */
 
 import {
-clone,
-FoundationError
+  guardFor,
+  FoundationError,
 } from '@cosmicmind/foundationjs'
 
 export abstract class Value<V> {
@@ -32,10 +32,10 @@ export type ValueTypeFor<V> = V extends Value<infer T> ? T : V
  */
 export type ValueConstructor<V extends Value<unknown>> = new (value: ValueTypeFor<V>) => V
 
-export type ValueLifecycle<T> = {
-  trace?(target: T): void
-  validate?(value: ValueTypeFor<T>, state: T): boolean | never
-  createdAt?(target: T): void
+export type ValueLifecycle<V> = {
+  trace?(vo: V): void
+  validate?(value: ValueTypeFor<V>, vo: V): boolean | never
+  createdAt?(vo: V): void
 }
 
 /**
@@ -46,23 +46,20 @@ export class ValueError extends FoundationError {}
 /**
  * The `defineValue` sets a new ValueLifecycle to the given `Value`.
  */
-export const defineValue = <V extends Value<unknown>>(_class: ValueConstructor<V>, handler: ValueLifecycle<V> = {}): (value: ValueTypeFor<V>) => V =>
-  (value: ValueTypeFor<V>): V => createValue(new _class(value), handler)
-
+export const defineValue = <V extends Value<ValueTypeFor<V>>>(_class: ValueConstructor<V>, handler: ValueLifecycle<V> = {}): (value: ValueTypeFor<V>) => V =>
+  (value: ValueTypeFor<V>): V => createValue(new _class(value), value, handler)
 
 /**
  * The `createValueHandler` prepares the `ValueLifecycle` for
  * the given `handler`.
  */
-function createValueHandler<T extends Value<unknown>, V extends ValueTypeFor<T> = ValueTypeFor<T>>(target: T, handler: ValueLifecycle<T>): ProxyHandler<T> {
-  const state = clone(target) as Readonly<T>
-
+function createValueHandler<V extends Value<ValueTypeFor<V>>, T extends ValueTypeFor<V> = ValueTypeFor<V>>(handler: ValueLifecycle<V>): ProxyHandler<V> {
   return {
     /**
      * The `set` updates the given attribute with the given value.
      */
-    set(target: T, attr: 'value', value: V): boolean | never {
-      if (false === handler.validate?.(value, state)) {
+    set(target: V, attr: 'value', value: T): boolean | never {
+      if (false === handler.validate?.(value, target)) {
         throw new ValueError(`${String(attr)} is invalid`)
       }
       return Reflect.set(target, attr, value)
@@ -74,12 +71,18 @@ function createValueHandler<T extends Value<unknown>, V extends ValueTypeFor<T> 
  * The `createValue` creates a new `Proxy` instance with the
  * given `target` and `handler`.
  */
-function createValue<T extends Value<unknown>>(target: T, handler: ValueLifecycle<T> = {}): T | never {
-  if (false === handler.validate?.(target.value as ValueTypeFor<T>, {} as Readonly<T>)) {
-    throw new ValueError(`value is invalid`)
+function createValue<V extends Value<ValueTypeFor<V>>>(target: V, value: ValueTypeFor<V>, handler: ValueLifecycle<V> = {}): V | never {
+  if (guardFor(target)) {
+    const vo = new Proxy(target, createValueHandler(handler))
+
+    if (false === handler.validate?.(value, vo)) {
+      throw new ValueError(`value is invalid`)
+    }
+
+    handler.createdAt?.(vo)
+    handler.trace?.(vo)
+    return vo
   }
-  const p = new Proxy(target, createValueHandler(target, handler))
-  handler.createdAt?.(p)
-  handler.trace?.(p)
-  return p
+
+  throw new ValueError('unable to create value')
 }

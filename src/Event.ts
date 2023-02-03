@@ -5,55 +5,47 @@
  */
 
 import {
-clone,
-guardFor,
-FoundationError
+  guardFor,
+  FoundationError,
 } from '@cosmicmind/foundationjs'
 
 import {
-Observable,
-ObservableTopics
+  Observable,
+  ObservableTopics,
 } from '@cosmicmind/patternjs'
 
-export type Event<T> = {
-  readonly id: string
-  readonly correlationId: string
-  readonly createdAt: Date
-  readonly message: T
-}
+export type Event = Record<string, unknown>
 
 export type EventTopics = ObservableTopics & {
-  readonly [K: string]: Event<unknown>
+  readonly [K: string]: Event
 }
 
-export type EventTypeFor<E> = E extends Event<infer T> ? T : E
-
-export type EventFn<E extends Event<unknown>> = (event: E) => void
+export type EventFn<E extends Event> = (event: E) => void
 
 export abstract class EventObservable<T extends EventTopics> extends Observable<T> {}
 
 /**
  * The `EventAttributeKey` defines the allowable keys for
- * a given type `T`.
+ * a given type `K`.
  */
-export type EventAttributeKey<T> = keyof T extends string | symbol ? keyof T : never
+export type EventAttributeKey<K> = keyof K extends string | symbol ? keyof K : never
 
-export type EventAttributeLifecycle<T, V> = {
-  validate?(value: V, state: T): boolean | never
+export type EventAttributeLifecycle<E, V> = {
+  validate?(value: V, event: E): boolean | never
 }
 
 /**
  * The `EventAttributeLifecycleMap` defined the key-value
  * pairs used in handling attribute events.
  */
-export type EventAttributeLifecycleMap<T> = {
-  [P in keyof T]?: EventAttributeLifecycle<T, T[P]>
+export type EventAttributeLifecycleMap<E> = {
+  [K in keyof E]?: EventAttributeLifecycle<E, E[K]>
 }
 
-export type EventLifecycle<T> = {
-  trace?(target: T): void
-  createdAt?(target: T): void
-  attributes?: EventAttributeLifecycleMap<T>
+export type EventLifecycle<E> = {
+  trace?(event: E): void
+  createdAt?(event: E): void
+  attributes?: EventAttributeLifecycleMap<E>
 }
 
 /**
@@ -61,33 +53,27 @@ export type EventLifecycle<T> = {
  */
 export class EventError extends FoundationError {}
 
-export const defineEvent = <E extends Event<unknown>>(handler: EventLifecycle<E> = {}): (entity: E) => E =>
-  (entity: E) => createEvent(entity, handler)
+export const defineEvent = <E extends Event>(handler: EventLifecycle<E> = {}): (event: E) => E =>
+  (event: E) => createEvent(event, handler)
 
 /**
  * The `createEventHandler` prepares the `EventLifecycle` for
  * the given `handler`.
  */
-function createEventHandler<T extends object>(target: T, handler: EventLifecycle<T>): ProxyHandler<T> {
-  let state = clone(target) as T
-
+function createEventHandler<E extends Event>(handler: EventLifecycle<E>): ProxyHandler<E> {
   return {
     /**
      * The `set` updates the given attribute with the given value.
      */
-    set<A extends EventAttributeKey<T>, V extends T[A]>(target: T, attr: A, value: V): boolean | never {
+    set<A extends EventAttributeKey<E>, V extends E[A]>(target: E, attr: A, value: V): boolean | never {
       const h = handler.attributes?.[attr]
-
-      if (false === h?.validate?.(value, state)) {
+      if (false === h?.validate?.(value, target)) {
         throw new EventError(`${String(attr)} is invalid`)
       }
 
-      const ret = Reflect.set(target, attr, value)
-
-      state = clone(target) as T
-      handler.trace?.(state)
-
-      return ret
+      const result = Reflect.set(target, attr, value)
+      handler.trace?.(target)
+      return result
     },
   }
 }
@@ -96,22 +82,23 @@ function createEventHandler<T extends object>(target: T, handler: EventLifecycle
  * The `createEvent` creates a new `Proxy` instance with the
  * given `target` and `handler`.
  */
-function createEvent<T extends object>(target: T, handler: EventLifecycle<T> = {}): T | never {
+function createEvent<E extends Event>(target: E, handler: EventLifecycle<E> = {}): E | never {
   if (guardFor(target)) {
     const { attributes } = handler
+    const event = new Proxy(target, createEventHandler(handler))
 
     if (guardFor(attributes)) {
       for (const attr in attributes) {
-        if (false === attributes[attr]?.validate?.(target[attr], {} as Readonly<T>)) {
+        if (false === attributes[attr]?.validate?.(target[attr], event)) {
           throw new EventError(`${String(attr)} is invalid`)
         }
       }
-    }
 
-    const state = clone(target) as Readonly<T>
-    handler.createdAt?.(state)
-    handler.trace?.(state)
+      handler.createdAt?.(event)
+      handler.trace?.(event)
+      return event
+    }
   }
 
-  return new Proxy(target, createEventHandler(target, handler))
+  throw new EventError('Unable to create Event')
 }

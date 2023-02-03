@@ -1,0 +1,190 @@
+/* Copyright (C) 2022, CosmicMind, Inc. <http://cosmicmind.com>. All rights reserved. */
+
+import {
+  it,
+  expect,
+  describe,
+} from 'vitest'
+
+import { string } from 'yup'
+
+import {
+  uuidv4,
+  guardFor,
+} from '@cosmicmind/foundationjs'
+
+import {
+  Entity,
+  Aggregate,
+  defineAggregate,
+  Event,
+  EventTopics,
+  defineEvent,
+  Value,
+  defineValue,
+} from '@/internal'
+
+class Email extends Value<string> {
+  get domainAddress(): string {
+    return this.value.split('@')[1]
+  }
+}
+
+const createEmail = defineValue(Email, {
+  validate: (value: string): boolean => 'string' === typeof string().email('email is invalid').strict(true).validateSync(value),
+})
+
+interface User extends Entity {
+  readonly id: string
+  readonly createdAt: Date
+  name: string
+  version: number
+  email: Email
+}
+
+type UserRegisterEvent = Event & {
+  entity: User
+}
+
+const createUserAggregateRegisterEvent = defineEvent<UserRegisterEvent>({
+  attributes: {
+    entity: {
+      validate: (entity: User): boolean => guardFor(entity),
+    },
+  },
+})
+
+type UserTopics = EventTopics & {
+  'register-user-account-sync': UserRegisterEvent
+  'register-user-account': UserRegisterEvent
+}
+
+class UserAggregate extends Aggregate<User, UserTopics> {
+  get id(): string {
+    return this.root.id
+  }
+
+  get createdAt(): Date {
+    return this.root.createdAt
+  }
+
+  get name(): string {
+    return this.root.name
+  }
+
+  get version(): number {
+    return this.root.version
+  }
+
+  get user(): User {
+    return this.root
+  }
+
+  updateName(): void {
+    this.root.name = 'jonathan'
+  }
+
+  registerAccountSync(): void {
+    this.publishSync('register-user-account-sync', createUserAggregateRegisterEvent({
+      entity: this.root,
+    }))
+  }
+
+  registerAccount(): void {
+    this.publish('register-user-account', createUserAggregateRegisterEvent({
+      entity: this.root,
+    }))
+  }
+}
+
+describe('Aggregate', () => {
+  it('createAggregate', () => {
+    const id = uuidv4()
+    const createdAt = new Date()
+    const name = 'daniel'
+    const version = 1
+    const email = 'susan@domain.com'
+
+    const createAggregate = defineAggregate(UserAggregate, {
+      trace(entity: User) {
+        expect(guardFor(entity)).toBeTruthy()
+      },
+
+      createdAt(entity: User) {
+        expect(guardFor(entity)).toBeTruthy()
+      },
+
+      attributes: {
+        id: {
+          validate(value: string) {
+            expect(value).toBe(id)
+            return 2 < value.length
+          },
+        },
+
+        createdAt: {
+          validate(value: Date) {
+            expect(value).toBe(createdAt)
+            return true
+          },
+        },
+
+        name: {
+          validate(value: string) {
+            expect(2 < value.length).toBeTruthy()
+            return 2 < value.length
+          },
+
+          updated: (newValue: string, oldValue: string, entity: User): void => {
+            expect(newValue).toBe('jonathan')
+            expect(oldValue).toBe(name)
+            expect(entity.id).toBe(id)
+            expect(entity.createdAt).toBe(createdAt)
+            expect(entity.name).toBe(name)
+          },
+        },
+
+        version: {
+          validate(value: number) {
+            expect(0 < value).toBeTruthy()
+            return 0 < value
+          },
+        },
+
+        email: {
+          validate(value: Email, entity: User) {
+            expect(email).toBe(value.value)
+            expect(email).toBe(entity.email.value)
+            return email === value.value
+          },
+        },
+      },
+    })
+
+    const a1 = createAggregate({
+      id,
+      createdAt,
+      name,
+      version,
+      email: createEmail(email),
+    })
+
+    a1.subscribe('register-user-account-sync', (event: UserRegisterEvent) => {
+      expect(event.entity).toStrictEqual(a1.user)
+    })
+
+    a1.subscribe('register-user-account', (event: UserRegisterEvent) => {
+      expect(event.entity).toStrictEqual(a1.user)
+    })
+
+    a1.updateName()
+
+    a1.registerAccountSync()
+    a1.registerAccount()
+
+    expect(a1.id).toBe(id)
+    expect(a1.createdAt).toBe(createdAt)
+    expect(a1.name).toBe('jonathan')
+    expect(a1.version).toBe(version)
+  })
+})
