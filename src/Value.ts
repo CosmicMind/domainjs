@@ -49,7 +49,6 @@ export class ValueError extends FoundationError {}
 export const defineValue = <V extends Value<ValueTypeFor<V>>>(_class: ValueConstructor<V>, handler: ValueLifecycle<V> = {}): (value: ValueTypeFor<V>) => V =>
   (value: ValueTypeFor<V>): V => createValue(new _class(value), value, handler)
 
-
 /**
  * The `createValueHandler` prepares the `ValueLifecycle` for
  * the given `handler`.
