@@ -13,18 +13,11 @@ import {
 import {
   EventTopics,
   EventObservable,
-} from '@/Entity'
-
-import {
-EventTopics,
-EventObservable
 } from '@/Event'
 
 const sentinel: EventTopics = {}
 
 export abstract class Aggregate<E extends Entity, T extends EventTopics = typeof sentinel> extends EventObservable<T> {
-
-export class Aggregate<E extends Entity, T extends EventTopics = typeof sentinel> extends EventObservable<T> {
   protected root: E
 
   constructor(root: E) {
