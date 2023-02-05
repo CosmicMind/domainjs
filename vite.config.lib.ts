@@ -50,6 +50,7 @@ const external = [
 ]
 
 const srcDir = './src'
+const distDir = './dist'
 const emptyOutDir = false
 const formats: LibraryFormats[] = [ 'es' ]
 
@@ -57,6 +58,7 @@ export default defineConfig(({
   mode,
 }) => {
   const minify = 'production' === mode
+
   const config: UserConfigExport = {
     resolve: {
       alias: {
@@ -78,6 +80,18 @@ export default defineConfig(({
         external,
       },
       minify,
+    },
+    test: {
+      include: [ '__tests__/**/*.spec.ts' ],
+      benchmark: {
+        include: [ '__benchmarks__/**/*.bench.ts' ],
+        outputFile: `${distDir}/benchmarks.json`,
+      },
+      coverage: {
+        provider: 'c8',
+        include: [ '**/src/**' ],
+        extension: [ '.ts' ],
+      },
     },
   }
   return config
