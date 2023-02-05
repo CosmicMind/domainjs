@@ -6,7 +6,7 @@ import {
   describe,
 } from 'vitest'
 
-import { guardFor } from '@cosmicmind/foundationjs'
+import { guard } from '@cosmicmind/foundationjs'
 
 import {
   Entity,
@@ -27,7 +27,7 @@ const createUser = defineEntity<User>({
     },
 
     createdAt: {
-      validate: (value: Date): boolean => guardFor(value),
+      validate: (value: Date): boolean => guard(value),
     },
 
     name: {
@@ -92,11 +92,11 @@ describe('Entity', () => {
 
     const createEntity = defineEntity<User>({
       trace(entity: User) {
-        expect(guardFor(entity)).toBeTruthy()
+        expect(guard(entity)).toBeTruthy()
       },
 
       createdAt(entity: User) {
-        expect(guardFor(entity))
+        expect(guard(entity))
       },
 
       attributes: {
@@ -111,7 +111,7 @@ describe('Entity', () => {
           validate: (value: Date, entity: User): boolean => {
             expect(value).toBe(createdAt)
             expect(entity.createdAt).toBe(createdAt)
-            return guardFor(value)
+            return guard(value)
           },
         },
         name: {
