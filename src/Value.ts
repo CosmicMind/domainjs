@@ -5,7 +5,7 @@
  */
 
 import {
-  guardFor,
+  guard,
   FoundationError,
 } from '@cosmicmind/foundationjs'
 
@@ -72,7 +72,7 @@ function createValueHandler<V extends Value<ValueTypeFor<V>>, T extends ValueTyp
  * given `target` and `handler`.
  */
 function createValue<V extends Value<ValueTypeFor<V>>>(target: V, value: ValueTypeFor<V>, handler: ValueLifecycle<V> = {}): V | never {
-  if (guardFor(target)) {
+  if (guard(target)) {
     const vo = new Proxy(target, createValueHandler(handler))
 
     if (false === handler.validate?.(value, vo)) {

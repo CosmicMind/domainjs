@@ -30,6 +30,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/// <reference types="vitest" />
+
 import {
   URL,
   fileURLToPath,
@@ -37,54 +39,25 @@ import {
 
 import {
   defineConfig,
-  LibraryFormats,
   UserConfigExport,
 } from 'vite'
 
-import dts from 'vite-plugin-dts'
-
-const external = [
-  'yup',
-  '@cosmicmind/foundationjs',
-  '@cosmicmind/patternjs'
-]
-
 const srcDir = './src'
 const distDir = './dist'
-const emptyOutDir = false
-const formats: LibraryFormats[] = [ 'es' ]
+const testsDir = '__tests__'
+const benchmarksDir = '__benchmarks__'
 
-export default defineConfig(({
-  mode,
-}) => {
-  const minify = 'production' === mode
-
+export default defineConfig(() => {
   const config: UserConfigExport = {
     resolve: {
       alias: {
         '@': fileURLToPath(new URL(srcDir, import.meta.url)),
       },
     },
-    plugins: [
-      dts()
-    ],
-    build: {
-      emptyOutDir,
-      lib: {
-        name: process.env.npm_package_name,
-        entry: `${srcDir}/index.ts`,
-        formats,
-        fileName: 'lib.es',
-      },
-      rollupOptions: {
-        external,
-      },
-      minify,
-    },
     test: {
-      include: [ '__tests__/**/*.spec.ts' ],
+      include: [ `${testsDir}/**/*.spec.ts` ],
       benchmark: {
-        include: [ '__benchmarks__/**/*.bench.ts' ],
+        include: [ `${benchmarksDir}/**/*.bench.ts` ],
         outputFile: `${distDir}/benchmarks.json`,
       },
       coverage: {

@@ -10,7 +10,7 @@ import { string } from 'yup'
 
 import {
   uuidv4,
-  guardFor,
+  guard,
 } from '@cosmicmind/foundationjs'
 
 import {
@@ -49,7 +49,7 @@ type UserRegisterEvent = Event & {
 const createUserAggregateRegisterEvent = defineEvent<UserRegisterEvent>({
   attributes: {
     entity: {
-      validate: (entity: User): boolean => guardFor(entity),
+      validate: (entity: User): boolean => guard(entity),
     },
   },
 })
@@ -107,11 +107,11 @@ describe('Aggregate', () => {
 
     const createAggregate = defineAggregate(UserAggregate, {
       trace(entity: User) {
-        expect(guardFor(entity)).toBeTruthy()
+        expect(guard(entity)).toBeTruthy()
       },
 
       createdAt(entity: User) {
-        expect(guardFor(entity)).toBeTruthy()
+        expect(guard(entity)).toBeTruthy()
       },
 
       attributes: {

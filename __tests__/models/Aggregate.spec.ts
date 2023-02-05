@@ -10,7 +10,7 @@ import { string } from 'yup'
 
 import {
   uuidv4,
-  guardFor,
+  guard,
 } from '@cosmicmind/foundationjs'
 
 import {
@@ -42,12 +42,12 @@ interface User extends Entity {
   email: Email
 }
 
-type UserRegisterEvent = Event<User>
+type UserRegisterEvent = Event
 
 const createUserAggregateRegisterEvent = defineEvent<UserRegisterEvent>({
   attributes: {
     message: {
-      validate: (value: User): boolean => guardFor(value),
+      validate: (value: User): boolean => guard(value),
     },
   },
 })
@@ -111,17 +111,13 @@ describe('Aggregate', () => {
 
     const createAggregate = defineAggregate(UserAggregate, {
       trace(target: User) {
-        expect(guardFor(target)).toBeTruthy()
+        expect(guard(target)).toBeTruthy()
       },
+
       createdAt(target: User) {
-        expect(guardFor(target)).toBeTruthy()
+        expect(guard(target)).toBeTruthy()
       },
-      updated(newTarget: User, oldTarget: User) {
-        expect(guardFor(newTarget)).toBeTruthy()
-        expect(guardFor(oldTarget)).toBeTruthy()
-        expect(newTarget.name).toBe('jonathan')
-        expect(name).toBe(oldTarget.name)
-      },
+
       attributes: {
         id: {
           validate: (value: string): boolean => {
@@ -129,24 +125,28 @@ describe('Aggregate', () => {
             return 2 < value.length
           },
         },
+
         createdAt: {
           validate: (value: Date): boolean => {
             expect(value).toBe(createdAt)
             return true
           },
         },
+
         name: {
           validate: (value: string): boolean => {
             expect(2 < value.length).toBeTruthy()
             return 2 < value.length
           },
         },
+
         version: {
           validate(value: number): boolean {
             expect(0 < value).toBeTruthy()
             return 0 < value
           },
         },
+
         email: {
           validate(value: Email): boolean {
             expect(email).toBe(value.value)

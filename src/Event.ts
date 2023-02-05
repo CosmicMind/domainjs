@@ -5,7 +5,7 @@
  */
 
 import {
-  guardFor,
+  guard,
   FoundationError,
 } from '@cosmicmind/foundationjs'
 
@@ -83,11 +83,11 @@ function createEventHandler<E extends Event>(handler: EventLifecycle<E>): ProxyH
  * given `target` and `handler`.
  */
 function createEvent<E extends Event>(target: E, handler: EventLifecycle<E> = {}): E | never {
-  if (guardFor(target)) {
+  if (guard(target)) {
     const { attributes } = handler
     const event = new Proxy(target, createEventHandler(handler))
 
-    if (guardFor(attributes)) {
+    if (guard(attributes)) {
       for (const attr in attributes) {
         if (false === attributes[attr]?.validate?.(target[attr], event)) {
           throw new EventError(`${String(attr)} is invalid`)

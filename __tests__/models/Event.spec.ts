@@ -1,24 +1,24 @@
 /* Copyright (C) 2022, CosmicMind, Inc. <http://cosmicmind.com>. All rights reserved. */
 
 import {
-it,
-expect,
-describe
+  it,
+  expect,
+  describe,
 } from 'vitest'
 
-import { guardFor } from '@cosmicmind/foundationjs'
+import { guard } from '@cosmicmind/foundationjs'
 
 import {
-Entity,
-Event,
-defineEvent
+  Entity,
+  Event,
+  defineEvent,
 } from '../../src'
 
 interface User extends Entity {
   name: string
 }
 
-const createUserEvent = defineEvent<Event<User>>({
+const createUserEvent = defineEvent<Event>({
   attributes: {
     id: {
       validate: (value: string): boolean => 2 < value.length,
@@ -27,10 +27,10 @@ const createUserEvent = defineEvent<Event<User>>({
       validate: (value: string): boolean => 2 < value.length,
     },
     createdAt: {
-      validate: (value: Date): boolean => value instanceof Date,
+      validate: (value: Date): boolean => guard<Date>(value),
     },
     message: {
-      validate: (value: User): boolean => guardFor(value),
+      validate: (value: User): boolean => guard(value),
     },
   },
 })
@@ -69,12 +69,12 @@ describe('Event', () => {
       name: 'daniel',
     }
 
-    const createEvent = defineEvent<Event<User>>({
-      trace(target: Event<User>) {
-        expect(guardFor(target)).toBeTruthy()
+    const createEvent = defineEvent<Event>({
+      trace(target: Event) {
+        expect(guard(target)).toBeTruthy()
       },
-      createdAt(target: Event<User>) {
-        expect(guardFor(target)).toBeTruthy()
+      createdAt(target: Event) {
+        expect(guard(target)).toBeTruthy()
       },
       attributes: {
         id: {
@@ -97,8 +97,8 @@ describe('Event', () => {
         },
         message: {
           validate: (value: User): boolean => {
-            expect(guardFor(value)).toBeTruthy()
-            return guardFor(value)
+            expect(guard(value)).toBeTruthy()
+            return guard(value)
           },
         },
       },

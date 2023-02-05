@@ -5,7 +5,7 @@
  */
 
 import {
-  guardFor,
+  guard,
   FoundationError,
 } from '@cosmicmind/foundationjs'
 
@@ -74,11 +74,11 @@ function createEntityHandler<E extends Entity>(handler: EntityLifecycle<E>): Pro
  * given `target` and `handler`.
  */
 function createEntity<E extends Entity>(target: E, handler: EntityLifecycle<E> = {}): E | never {
-  if (guardFor(target)) {
+  if (guard(target)) {
     const { attributes } = handler
     const entity = new Proxy(target, createEntityHandler(handler))
 
-    if (guardFor(attributes)) {
+    if (guard(attributes)) {
       for (const attr in attributes) {
         if (false === attributes[attr]?.validate?.(target[attr], entity)) {
           throw new EntityError(`${String(attr)} is invalid`)
