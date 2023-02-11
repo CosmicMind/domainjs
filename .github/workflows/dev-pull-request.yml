@@ -1,4 +1,4 @@
-name: Dev Pull Request
+name: Development Pull Request
 
 on:
   pull_request:
@@ -7,13 +7,13 @@ on:
 
 jobs:
   lint:
-    uses: cosmicmind/actions/.github/workflows/lint.yml@release
+    uses: cosmicmind/github-actions/.github/workflows/lint.yml@release
   codeql:
     needs: lint
-    uses: cosmicmind/actions/.github/workflows/codeql.yml@release
-  dev-build:
+    uses: cosmicmind/github-actions/.github/workflows/codeql.yml@release
+  build:
     needs: codeql
-    uses: cosmicmind/actions/.github/workflows/dev-build.yml@release
+    uses: cosmicmind/github-actions/.github/workflows/lib-dev.yml@release
   test:
-    needs: dev-build
-    uses: cosmicmind/actions/.github/workflows/test.yml@release
+    needs: build
+    uses: cosmicmind/github-actions/.github/workflows/lib-test.yml@release

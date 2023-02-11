@@ -6,8 +6,14 @@ on:
       - dev
 
 jobs:
-  dev-build:
-    uses: cosmicmind/actions/.github/workflows/dev-build.yml@release
+  lint:
+    uses: cosmicmind/github-actions/.github/workflows/lint.yml@release
+  codeql:
+    needs: lint
+    uses: cosmicmind/github-actions/.github/workflows/codeql.yml@release
+  build:
+    needs: codeql
+    uses: cosmicmind/github-actions/.github/workflows/lib-dev.yml@release
   test:
-    needs: dev-build
-    uses: cosmicmind/actions/.github/workflows/test.yml@release
+    needs: build
+    uses: cosmicmind/github-actions/.github/workflows/lib-test.yml@release

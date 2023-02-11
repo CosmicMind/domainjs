@@ -49,16 +49,12 @@ const external = [
   '@cosmicmind/patternjs'
 ]
 
-const srcDir = './src'
-const distDir = './dist'
+const srcDir = 'src'
 const emptyOutDir = false
 const formats: LibraryFormats[] = [ 'es' ]
 
-export default defineConfig(({
-  mode,
-}) => {
-  const minify = 'production' === mode
-
+export default defineConfig(() => {
+  const minify = 'production' === process.env.NODE_ENV
   const config: UserConfigExport = {
     resolve: {
       alias: {
@@ -80,18 +76,6 @@ export default defineConfig(({
         external,
       },
       minify,
-    },
-    test: {
-      include: [ '__tests__/**/*.spec.ts' ],
-      benchmark: {
-        include: [ '__benchmarks__/**/*.bench.ts' ],
-        outputFile: `${distDir}/benchmarks.json`,
-      },
-      coverage: {
-        provider: 'c8',
-        include: [ '**/src/**' ],
-        extension: [ '.ts' ],
-      },
     },
   }
   return config
