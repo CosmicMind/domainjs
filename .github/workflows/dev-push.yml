@@ -9,11 +9,8 @@ jobs:
   lint:
     uses: cosmicmind/github-actions/.github/workflows/lint.yml@release
   codeql:
-    needs: lint
     uses: cosmicmind/github-actions/.github/workflows/codeql.yml@release
   build:
-    needs: codeql
     uses: cosmicmind/github-actions/.github/workflows/lib-dev.yml@release
   test:
-    needs: build
     uses: cosmicmind/github-actions/.github/workflows/lib-test.yml@release
