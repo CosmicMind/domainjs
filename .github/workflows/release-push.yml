@@ -11,6 +11,15 @@ jobs:
   codeql:
     uses: cosmicmind/github-actions/.github/workflows/codeql.yml@release
   build:
-    uses: cosmicmind/github-actions/.github/workflows/lib-release.yml@release
+      uses: cosmicmind/github-actions/.github/workflows/lib-release.yml@release
   test:
     uses: cosmicmind/github-actions/.github/workflows/lib-test.yml@release
+  publish:
+    needs:
+      - lint
+      - codeql
+      - build
+      - test
+    uses: cosmicmind/github-actions/.github/workflows/lib-publish.yml@release
+    secrets:
+      npm_token: ${{ secrets.npm_token }}
