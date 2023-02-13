@@ -6,7 +6,20 @@ on:
       - release
 
 jobs:
-  package-publish:
-    uses: cosmicmind/actions/.github/workflows/package-publish.yml@release
+  lint:
+    uses: cosmicmind/github-actions/.github/workflows/lint.yml@release
+  codeql:
+    uses: cosmicmind/github-actions/.github/workflows/codeql.yml@release
+  build:
+      uses: cosmicmind/github-actions/.github/workflows/lib-release.yml@release
+  test:
+    uses: cosmicmind/github-actions/.github/workflows/lib-test.yml@release
+  publish:
+    needs:
+      - lint
+      - codeql
+      - build
+      - test
+    uses: cosmicmind/github-actions/.github/workflows/lib-publish.yml@release
     secrets:
-      NPM_TOKEN: ${{ secrets.npm_token }}
+      npm_token: ${{ secrets.npm_token }}

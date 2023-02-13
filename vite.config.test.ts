@@ -42,8 +42,8 @@ import {
   UserConfigExport,
 } from 'vite'
 
-const srcDir = './src'
-const distDir = './dist'
+const srcDir = 'src'
+const distDir = 'dist'
 const testsDir = '__tests__'
 const benchmarksDir = '__benchmarks__'
 
@@ -51,7 +51,7 @@ export default defineConfig(() => {
   const config: UserConfigExport = {
     resolve: {
       alias: {
-        '@': fileURLToPath(new URL(srcDir, import.meta.url)),
+        '@': fileURLToPath(new URL(`${srcDir}`, import.meta.url)),
       },
     },
     test: {
@@ -62,7 +62,7 @@ export default defineConfig(() => {
       },
       coverage: {
         provider: 'c8',
-        include: [ '**/src/**' ],
+        include: [ `**/${srcDir}/**` ],
         extension: [ '.ts' ],
       },
     },
