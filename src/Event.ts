@@ -117,7 +117,7 @@ function createEvent<E extends Event>(target: E, handler: EventLifecycle<E> = {}
     const { attributes } = handler
     const event = new Proxy(target, createEventHandler(handler))
 
-    if (guard(attributes)) {
+    if (guard<EventAttributeLifecycleMap<E>>(attributes)) {
       for (const attr in attributes) {
         if (false === attributes[attr]?.validate?.(target[attr], event)) {
           throw new EventError(`${String(attr)} is invalid`)

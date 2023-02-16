@@ -108,7 +108,7 @@ function createEntity<E extends Entity>(target: E, handler: EntityLifecycle<E> =
     const { attributes } = handler
     const entity = new Proxy(target, createEntityHandler(handler))
 
-    if (guard(attributes)) {
+    if (guard<EntityAttributeLifecycleMap<E>>(attributes)) {
       for (const attr in attributes) {
         if (false === attributes[attr]?.validate?.(target[attr], entity)) {
           throw new EntityError(`${String(attr)} is invalid`)
