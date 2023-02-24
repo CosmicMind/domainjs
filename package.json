@@ -10,7 +10,7 @@
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cosmicmind/domain.git"
+    "url": "https://github.com/cosmicmind/domainjs.git"
   },
   "publishConfig": {
     "access": "public"
