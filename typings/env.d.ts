@@ -2,7 +2,6 @@
 
 interface ImportMetaEnv {
   readonly VITE_NODE_NAME: string
-  readonly VITE_NODE_ENV: string
 }
 
 interface ImportMeta {

@@ -20,6 +20,8 @@ overrides:
       '@typescript-eslint/explicit-function-return-type':
         - 0
 rules:
+  '@typescript-eslint/no-empty-interface':
+    - 2
   '@typescript-eslint/no-inferrable-types':
     - 2
   '@typescript-eslint/explicit-function-return-type':
@@ -141,4 +143,3 @@ rules:
     - 2
   require-await:
     - 2
-  
