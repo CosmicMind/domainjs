@@ -38,7 +38,7 @@ import {
 import {
   defineConfig,
   LibraryFormats,
-  UserConfigExport,
+  UserConfig,
 } from 'vite'
 
 import dts from 'vite-plugin-dts'
@@ -55,7 +55,7 @@ const formats: LibraryFormats[] = [ 'es' ]
 
 export default defineConfig(() => {
   const minify = 'production' === process.env.NODE_ENV
-  const config: UserConfigExport = {
+  const config: UserConfig = {
     resolve: {
       alias: {
         '@': fileURLToPath(new URL(srcDir, import.meta.url)),

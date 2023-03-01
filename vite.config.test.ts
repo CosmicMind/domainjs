@@ -39,7 +39,7 @@ import {
 
 import {
   defineConfig,
-  UserConfigExport,
+  UserConfig,
 } from 'vite'
 
 const srcDir = 'src'
@@ -48,7 +48,7 @@ const testsDir = '__tests__'
 const benchmarksDir = '__benchmarks__'
 
 export default defineConfig(() => {
-  const config: UserConfigExport = {
+  const config: UserConfig = {
     resolve: {
       alias: {
         '@': fileURLToPath(new URL(`${srcDir}`, import.meta.url)),
