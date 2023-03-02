@@ -35,11 +35,10 @@ import {
   fileURLToPath,
 } from 'node:url'
 
-import { resolve } from 'path'
-
 import {
-  defineConfig,
+  PluginOption,
   LibraryFormats,
+  defineConfig,
 } from 'vite'
 
 import dts from 'vite-plugin-dts'
@@ -56,18 +55,20 @@ const alias = {
   '@': fileURLToPath(new URL(srcDir, import.meta.url)),
 }
 
-const external = (id: string): boolean =>
-  !id.startsWith(resolve(entry)) &&
-  !id.startsWith('.') &&
-	!id.startsWith('@/')
+const external = [
+  '@cosmicmind/foundationjs',
+  '@cosmicmind/patternjs'
+]
+
+const plugins = [
+  dts()
+] as PluginOption[]
 
 export default defineConfig(() => ({
   resolve: {
     alias,
   },
-  plugins: [
-    dts()
-  ],
+  plugins,
   build: {
     emptyOutDir,
     lib: {

@@ -39,7 +39,7 @@
     "test:coverage": "vitest run --coverage --config vite.config.test.ts --mode ${VITE_MODE:-benchmark}"
   },
   "dependencies": {
-    "@cosmicmind/foundationjs": "^0.0.1-rc-030123-1",
+    "@cosmicmind/foundationjs": "^0.0.1-rc-030123-1-a",
     "@cosmicmind/patternjs": "^0.0.1-rc-022423-3"
   },
   "devDependencies": {
