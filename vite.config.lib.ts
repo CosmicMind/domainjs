@@ -46,8 +46,8 @@ import dts from 'vite-plugin-dts'
 const name = process.env.npm_package_name
 const srcDir = 'src'
 const entry = `${srcDir}/index.ts`
-const output = 'lib.es'
-const formats: LibraryFormats[] = [ 'es' ]
+const output = 'lib-[format]'
+const formats: LibraryFormats[] = [ 'es', 'cjs' ]
 const emptyOutDir = false
 const minify = 'development' !== process.env.NODE_ENV
 

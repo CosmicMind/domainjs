@@ -1,6 +1,6 @@
 {
   "name": "@cosmicmind/domainjs",
-  "version": "0.0.1-rc-030123-4",
+  "version": "0.0.1-rc-030223-4",
   "description": "A framework for building applications with Domain-driven design in TypeScript.",
   "keywords": [],
   "author": {
@@ -16,9 +16,15 @@
     "access": "public"
   },
   "type": "module",
-  "main": "dist/lib.es.js",
-  "module": "dist/lib.es.js",
-  "types": "dist/src/index.d.ts",
+  "main": "./dist/lib-cjs.js",
+  "module": "./dist/lib-es.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/lib-es.js",
+      "require": "./dist/lib-cjs.cjs"
+    }
+  },
   "files": [
     "dist",
     "typings",
@@ -39,8 +45,8 @@
     "test:coverage": "vitest run --coverage --config vite.config.test.ts --mode ${VITE_MODE:-benchmark}"
   },
   "dependencies": {
-    "@cosmicmind/foundationjs": "^0.0.1-rc-030123-1-a",
-    "@cosmicmind/patternjs": "^0.0.1-rc-022423-3"
+    "@cosmicmind/foundationjs": "^0.0.1-rc-030223-1",
+    "@cosmicmind/patternjs": "^0.0.1-rc-030223-3"
   },
   "devDependencies": {
     "@microsoft/eslint-formatter-sarif": "^3.0.0",
