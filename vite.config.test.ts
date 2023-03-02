@@ -37,35 +37,31 @@ import {
   fileURLToPath,
 } from 'node:url'
 
-import {
-  defineConfig,
-  UserConfigExport,
-} from 'vite'
+import { defineConfig } from 'vite'
 
 const srcDir = 'src'
 const distDir = 'dist'
 const testsDir = '__tests__'
 const benchmarksDir = '__benchmarks__'
 
-export default defineConfig(() => {
-  const config: UserConfigExport = {
-    resolve: {
-      alias: {
-        '@': fileURLToPath(new URL(`${srcDir}`, import.meta.url)),
-      },
+const alias = {
+  '@': fileURLToPath(new URL(srcDir, import.meta.url)),
+}
+
+export default defineConfig(() => ({
+  resolve: {
+    alias,
+  },
+  test: {
+    include: [ `${testsDir}/**/*.spec.ts` ],
+    benchmark: {
+      include: [ `${benchmarksDir}/**/*.bench.ts` ],
+      outputFile: `${distDir}/benchmarks.json`,
     },
-    test: {
-      include: [ `${testsDir}/**/*.spec.ts` ],
-      benchmark: {
-        include: [ `${benchmarksDir}/**/*.bench.ts` ],
-        outputFile: `${distDir}/benchmarks.json`,
-      },
-      coverage: {
-        provider: 'c8',
-        include: [ `**/${srcDir}/**` ],
-        extension: [ '.ts' ],
-      },
+    coverage: {
+      provider: 'c8',
+      include: [ `**/${srcDir}/**` ],
+      extension: [ '.ts' ],
     },
-  }
-  return config
-})
+  },
+}))

@@ -11,6 +11,14 @@ jobs:
   codeql:
     uses: cosmicmind/github-actions/.github/workflows/codeql.yml@release
   build:
-    uses: cosmicmind/github-actions/.github/workflows/lib-dev.yml@release
+    uses: cosmicmind/github-actions/.github/workflows/lib-build.yml@release
+    with:
+      build_target: dev
+      node_env: development
+      vite_mode: test
   test:
-    uses: cosmicmind/github-actions/.github/workflows/lib-test.yml@release
+    uses: cosmicmind/github-actions/.github/workflows/lib-build.yml@release
+    with:
+      build_target: test
+      node_env: development
+      vite_mode: test
