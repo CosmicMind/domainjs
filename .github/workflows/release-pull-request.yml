@@ -13,12 +13,12 @@ jobs:
   build:
     uses: cosmicmind/github-actions/.github/workflows/lib-build.yml@release
     with:
-      build_target: dev
-      node_env: development
-      vite_mode: test
+      BUILD_TARGET: dev
+      NODE_ENV: development
+      VITE_MODE: test
   test:
     uses: cosmicmind/github-actions/.github/workflows/lib-build.yml@release
     with:
-      build_target: test
-      node_env: development
-      vite_mode: test
+      BUILD_TARGET: test
+      NODE_ENV: development
+      VITE_MODE: test

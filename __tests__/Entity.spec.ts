@@ -53,15 +53,15 @@ interface User extends Entity {
 const createUser = defineEntity<User>({
   attributes: {
     id: {
-      validate: (value: string): boolean => 2 < value.length,
+      validate: (value): boolean => 2 < value.length,
     },
 
     createdAt: {
-      validate: (value: Date): boolean => guard<Date>(value),
+      validate: (value): boolean => guard(value),
     },
 
     name: {
-      validate: (value: string): boolean => 2 < value.length,
+      validate: (value): boolean => 2 < value.length,
     },
   },
 })
@@ -121,37 +121,37 @@ describe('Entity', () => {
     const name = 'daniel'
 
     const createEntity = defineEntity<User>({
-      trace(entity: User) {
-        expect(guard<User>(entity)).toBeTruthy()
+      trace(entity) {
+        expect(guard(entity)).toBeTruthy()
       },
 
-      createdAt(entity: User) {
-        expect(guard<User>(entity))
+      createdAt(entity) {
+        expect(guard(entity))
       },
 
       attributes: {
         id: {
-          validate: (value: string, entity: User): boolean => {
+          validate: (value, entity) => {
             expect(value).toBe(id)
             expect(entity.id).toBe(id)
             return 2 < value.length
           },
         },
         createdAt: {
-          validate: (value: Date, entity: User): boolean => {
+          validate: (value, entity) => {
             expect(value).toBe(createdAt)
             expect(entity.createdAt).toBe(createdAt)
             return guard(value)
           },
         },
         name: {
-          validate: (value: string, entity: User): boolean => {
+          validate: (value, entity) => {
             expect(2 < value.length).toBeTruthy()
             expect(2 < entity.name.length).toBeTruthy()
             return 2 < value.length
           },
 
-          updated: (newValue: string, oldValue: string, entity: User): void => {
+          updated: (newValue, oldValue, entity) => {
             expect(newValue).toBe('jonathan')
             expect(oldValue).toBe(name)
             expect(entity.id).toBe(id)
