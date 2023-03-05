@@ -43,6 +43,7 @@ export type {
 export {
   EventError,
   defineEvent,
+  EventObservable,
 } from '@/Event'
 
 export type {
