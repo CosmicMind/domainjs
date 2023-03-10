@@ -44,7 +44,7 @@ import {
   ObservableTopics,
 } from '@cosmicmind/patternjs'
 
-export type Event = Record<string, unknown>
+export type Event = object
 
 export type EventTopics = ObservableTopics & {
   readonly [K: string]: Event

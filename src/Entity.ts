@@ -39,7 +39,7 @@ import {
   FoundationError,
 } from '@cosmicmind/foundationjs'
 
-export type Entity = Record<string, unknown>
+export type Entity = object
 
 /**
  * The `EntityAttributeKey` defines the allowable keys for
@@ -47,7 +47,7 @@ export type Entity = Record<string, unknown>
  */
 export type EntityAttributeKey<K> = keyof K extends string | symbol ? keyof K : never
 
-export type EntityAttributeLifecycle<E, V> = {
+export type EntityAttributeLifecycle<E extends Entity, V> = {
   validate?(value: V, entity: E): boolean | never
   updated?(newValue: V, oldValue: V, entity: E): void
 }
@@ -56,11 +56,11 @@ export type EntityAttributeLifecycle<E, V> = {
  * The `EntityAttributeLifecycleMap` defined the key-value
  * pairs used in handling attribute events.
  */
-export type EntityAttributeLifecycleMap<E> = {
+export type EntityAttributeLifecycleMap<E extends Entity> = {
   [K in keyof E]?: EntityAttributeLifecycle<E, E[K]>
 }
 
-export type EntityLifecycle<E> = {
+export type EntityLifecycle<E extends Entity> = {
   trace?(entity: E): void
   createdAt?(entity: E): void
   attributes?: EntityAttributeLifecycleMap<E>
@@ -89,8 +89,7 @@ function createEntityHandler<E extends Entity>(handler: EntityLifecycle<E>): Pro
         throw new EntityError(`${String(attr)} is invalid`)
       }
 
-      const oldValue = target[attr]
-      h?.updated?.(value, oldValue, target)
+      h?.updated?.(value, target[attr], target)
 
       const result = Reflect.set(target, attr, value)
       handler.trace?.(target)

@@ -44,11 +44,18 @@ import {
   defineEvent,
 } from '@/internal'
 
-interface User extends Entity {
+type User = Entity & {
   name: string
 }
 
-const createUserEvent = defineEvent<Event>({
+type UserEvent = Event & {
+  id: string
+  correlationId: string
+  createdAt: Date
+  entity: User
+}
+
+const createUserEvent = defineEvent<UserEvent>({
   attributes: {
     id: {
       validate: (value: string): boolean => 2 < value.length,
@@ -99,7 +106,7 @@ describe('Event', () => {
       name: 'daniel',
     }
 
-    const createEvent = defineEvent<Event>({
+    const createEvent = defineEvent<UserEvent>({
       trace(event: Event) {
         expect(guard<Event>(event)).toBeTruthy()
       },

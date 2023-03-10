@@ -44,7 +44,7 @@ import {
   defineEntity,
 } from '@/internal'
 
-interface User extends Entity {
+type User = Entity & {
   readonly id: string
   readonly createdAt: Date
   name: string
@@ -53,15 +53,15 @@ interface User extends Entity {
 const createUser = defineEntity<User>({
   attributes: {
     id: {
-      validate: (value): boolean => 2 < value.length,
+      validate: value => 2 < value.length,
     },
 
     createdAt: {
-      validate: (value): boolean => guard(value),
+      validate: value => guard(value),
     },
 
     name: {
-      validate: (value): boolean => 2 < value.length,
+      validate: value => 2 < value.length,
     },
   },
 })
