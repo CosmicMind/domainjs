@@ -1,7 +1,7 @@
 /**
  * BSD 3-Clause License
  *
- * Copyright (c) 2022, Daniel Jonathan <daniel at cosmicmind dot com>
+ * Copyright © 2023, Daniel Jonathan <daniel at cosmicmind dot com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,8 +50,8 @@ type User = Entity & {
 
 type UserEvent = Event & {
   id: string
-  correlationId: string
   createdAt: Date
+  correlationId: string
   entity: User
 }
 
@@ -60,12 +60,15 @@ const createUserEvent = defineEvent<UserEvent>({
     id: {
       validate: (value: string): boolean => 2 < value.length,
     },
+
     correlationId: {
       validate: (value: string): boolean => 2 < value.length,
     },
+
     createdAt: {
       validate: (value: Date): boolean => guard<Date>(value),
     },
+
     entity: {
       validate: (value: User): boolean => guard<User>(value),
     },

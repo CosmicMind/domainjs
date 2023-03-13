@@ -1,7 +1,7 @@
 /**
  * BSD 3-Clause License
  *
- * Copyright (c) 2022, Daniel Jonathan <daniel at cosmicmind dot com>
+ * Copyright © 2023, Daniel Jonathan <daniel at cosmicmind dot com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -85,9 +85,6 @@ export const defineValue = <V extends Value<ValueTypeFor<V>>>(_class: ValueConst
  */
 function createValueHandler<V extends Value<ValueTypeFor<V>>, T extends ValueTypeFor<V> = ValueTypeFor<V>>(handler: ValueLifecycle<V>): ProxyHandler<V> {
   return {
-    /**
-     * The `set` updates the given attribute with the given value.
-     */
     set(target: V, attr: 'value', value: T): boolean | never {
       if (false === handler.validate?.(value, target)) {
         throw new ValueError(`${String(attr)} is invalid`)

@@ -1,7 +1,7 @@
 /**
  * BSD 3-Clause License
  *
- * Copyright (c) 2022, Daniel Jonathan <daniel at cosmicmind dot com>
+ * Copyright © 2023, Daniel Jonathan <daniel at cosmicmind dot com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -92,9 +92,6 @@ export const defineEvent = <E extends Event>(handler: EventLifecycle<E> = {}): (
  */
 function createEventHandler<E extends Event>(handler: EventLifecycle<E>): ProxyHandler<E> {
   return {
-    /**
-     * The `set` updates the given attribute with the given value.
-     */
     set<A extends EventAttributeKey<E>, V extends E[A]>(target: E, attr: A, value: V): boolean | never {
       const h = handler.attributes?.[attr]
       if (false === h?.validate?.(value, target)) {
