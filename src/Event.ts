@@ -52,7 +52,7 @@ export type EventTopics = ObservableTopics & {
 
 export type EventFn<E extends Event> = (event: E) => void
 
-export abstract class EventObservable<T extends EventTopics> extends Observable<T> {}
+export class EventObservable<T extends EventTopics> extends Observable<T> {}
 
 /**
  * The `EventAttributeKey` defines the allowable keys for
