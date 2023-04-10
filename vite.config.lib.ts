@@ -46,7 +46,7 @@ import dts from 'vite-plugin-dts'
 const name = process.env.npm_package_name
 const srcDir = 'src'
 const entry = `${srcDir}/index.ts`
-const output = 'lib-[format]'
+const fileName = 'lib-[format]'
 const formats: LibraryFormats[] = [ 'es', 'cjs' ]
 const emptyOutDir = false
 const minify = 'development' !== process.env.NODE_ENV
@@ -75,7 +75,7 @@ export default defineConfig(() => ({
       name,
       entry,
       formats,
-      fileName: output,
+      fileName,
     },
     rollupOptions: {
       external,
