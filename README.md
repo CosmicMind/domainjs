@@ -132,13 +132,13 @@ export const createUser = defineEntity<User>({
         // or throw an error
       },
     },
-  }
+  },
 })
 ```
 
 ```typescript
 import { 
-  createUser
+  createUser,
 } from './User'
 
 const user = createUser({
@@ -190,13 +190,13 @@ export const createUser = defineEntity<User>({
         // ... do something 
       }, 
       
-      udpated(newValue, oldValue, entity): void {
+      udpated(newValue, oldValue, user): void {
         // ... do something
       },
     },
     
     // ...
-  }
+  },
 })
 ```
 
@@ -261,7 +261,7 @@ export const createEmail = defineValue(Email, {
 
 ```typescript
 import { 
-  createEmail
+  createEmail,
 } from './Email'
 
 const email = createEmail('me@domain.com')
@@ -324,24 +324,24 @@ export const createUser = defineEntity<User>({
         // or throw an error
       },
     },
-  }
+  },
 })
 ```
 
 ```typescript
 import { 
-  createUser
+  createUser,
 } from './User'
 
 import {
   createEmail,
-} from './User'
+} from './Email'
 
 const user = createUser({
   id: '123',
   name: 'Daniel',
   age: 39,
-  email: createEmail('me@domain.com')
+  email: createEmail('me@domain.com'),
 })
 
 console.log(user.id) // "123"
@@ -351,3 +351,240 @@ console.log(user.email.value) // "me@domain.com"
 console.log(user.email.domainAddress) // "domain.com"
 ```
 
+Value Objects are great for parameter passing, letting the function handler know that it is using a 
+valid value. For example:
+
+```typescript
+import {
+  Email,
+} from './Email'
+
+function someFunction(email: Email): void {
+  if ('domain.com' === email.domainAddress) {
+    // ... do something
+  }
+  
+  // ... do something
+}
+```
+
+## Aggregates - Defining possibilities while encapsulating the logic
+
+Aggregates are a very powerful concept in Domain-driven design and arguably the most complicated part of the 
+design paradigm itself. Let's simplify the complexities by thinking of Aggregates as the broker into Entities. 
+An Aggregate is effectively the allowable functionality for a given Entity. The easiest way to discuss Aggregates
+with an example. We will expand on our User Entity, and provide some additional features: 
+
+1. Data encapsulation and value accessibility. 
+2. Functionality features defined by the Aggregate.
+3. Event publishing.
+
+#### Data encapsulation and value accessibility.
+
+Aggregates effectively hide the Entity that it encapsulates and gives the Aggregate the ability to expose what it would like
+in the form that it would like to, for example: 
+
+```typescript
+// UserAggregate.ts
+
+import {
+  Aggregate,
+  defineAggregate,
+} from '@cosmicmind/domainjs'
+
+import {
+  User,
+} from './User'
+
+import {
+  Email,
+} from './Email'
+
+export class UserAggregate extends Aggregate<User> {
+  get id(): string {
+    return this.root.id
+  }
+
+  get email(): Email {
+    return this.root.email
+  }
+
+  registerAccount(): void {
+    // ... do something
+  }
+}
+
+export const createUserAggregate = defineAggregate(UserAggregate, {
+  created(user) {
+    // ... do something
+  },
+
+  trace(user) {
+    // ... do something
+  },
+
+  attributes: {
+    // ...
+
+    age: {
+      validate(value): boolean | never {
+        // ... do something 
+      },
+
+      udpated(newValue, oldValue, user): void {
+        // ... do something
+      },
+    },
+
+    // ...
+  },
+})
+```
+
+```typescript
+import { 
+  createUserAggregate
+} from './UserAggregate'
+
+import {
+  createEmail,
+} from './Email'
+
+const user = createUserAggregate({
+  id: '123',
+  name: 'Daniel',
+  age: 39,
+  email: createEmail('me@domain.com'),
+})
+
+console.log(user.id) // "123"
+console.log(user.name) // error cannot access (not exposed in UserAggragte)
+console.log(user.age) // error cannot access (not exposed in UserAggragte)
+console.log(user.email.value) // "me@domain.com"
+console.log(user.email.domainAddress) // "domain.com"
+
+user.registerAccount() // ... account registration process
+```
+
+In the above example there is quite a bit going on, so let's break it down. The first item to notice is that
+we can define various Entity definitions for the given User type. This allows for a lot of flexibility. All the 
+features available to an Entity and Value Object are now available to the Aggregate with the added ability to
+encapsulate and modify that functionality. 
+
+The Aggregate sets the entity to the protected `root` property and only allows exposure based on the API definition 
+of the Aggregate itself. This is great when our code needs to manage data but doesn't want to expose it to the outside 
+world. 
+
+The next item to notice is that we can add functionality to our Entity, such as the `registerAccount` method. 
+The functionality itself is defined within the Aggregate, and therefore allows us to define various Aggregates with the 
+same Entity definition. 
+
+### Aggregate Events
+
+Let's expand our example further by adding Event publishing to the Aggregate. DomainJS allows for events to be 
+constructed very much like Entities. The values each have the opportunity to encapsulate validation and the `created` 
+and `trace` lifecycle hooks are available as well. Let's create a `RegisterAccountEvent`. 
+
+```typescript
+// RegisterAccountEvent.ts
+
+import {
+  Event,
+  defineEvent,
+} from '@cosmicmind/domainjs'
+
+import {
+  User,
+} from './User'
+
+export type RegisterAccountEvent = Event & {
+  id: string
+  user: User
+}
+
+export type createRegisterAccountEvent = defineEvent<RegisterAccountEvent>({
+  attributes: {
+    id: {
+      validate(value): boolean | never {
+        // id validation logic
+        // return true | false
+        // or throw an error
+      },
+    },
+  },
+})
+```
+
+Now that we have our `RegisterAccountEvent`, let's add it to the `UserAggregate` example. 
+
+```typescript
+// UserAggregate.ts
+
+import {
+  Aggregate,
+  defineAggregate,
+  EventTopics,
+} from '@cosmicmind/domainjs'
+
+// ...
+
+import {
+  RegisterAccountEvent,
+  createRegisterAccountEvent,
+} from './RegisterAccountEvent'
+
+export type UserAggregateTopics = EventTopics & {
+  'register-account': RegisterAccountEvent
+}
+
+export class UserAggregate extends Aggregate<User, UserAggregateTopics> {
+  // ...
+
+  registerAccount(): void {
+    // ... do something
+
+    this.publishSync('register-account', createRegisterAccountEvent({
+      id: '123',
+      user: this.root,
+    }))
+  }
+}
+
+// ...
+```
+
+```typescript
+import { 
+  createUserAggregate
+} from './UserAggregate'
+
+import {
+  createEmail,
+} from './Email'
+
+const user = createUserAggregate({
+  id: '123',
+  name: 'Daniel',
+  age: 39,
+  email: createEmail('me@domain.com'),
+})
+
+user.subscribe('register-account', (event: RegisterAccountEvent) => {
+  // ... do something
+})
+
+console.log(user.id) // "123"
+console.log(user.name) // error cannot access (not exposed in UserAggragte)
+console.log(user.age) // error cannot access (not exposed in UserAggragte)
+console.log(user.email.value) // "me@domain.com"
+console.log(user.email.domainAddress) // "domain.com"
+
+user.registerAccount() // ... account registration process and event is published
+```
+
+# What's Next
+
+Additional documentation and examples will follow shortly. If you have any examples or use cases that 
+you are interested in exploring if DomainJS can help, please create a discussion. 
+
+Thank you! 
