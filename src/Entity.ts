@@ -61,8 +61,8 @@ export type EntityAttributeLifecycleMap<E extends Entity> = {
 }
 
 export type EntityLifecycle<E extends Entity> = {
+  created?(entity: E): void
   trace?(entity: E): void
-  createdAt?(entity: E): void
   attributes?: EntityAttributeLifecycleMap<E>
 }
 
@@ -111,7 +111,7 @@ function createEntity<E extends Entity>(target: E, handler: EntityLifecycle<E> =
         }
       }
 
-      handler.createdAt?.(entity)
+      handler.created?.(entity)
       handler.trace?.(entity)
       return entity
     }

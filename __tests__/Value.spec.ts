@@ -129,7 +129,7 @@ describe('Value', () => {
         return 'string' === typeof string().email('email is invalid').strict(true).validateSync(value)
       },
 
-      createdAt(vo: Email): void {
+      created(vo: Email): void {
         expect(email).toBe(vo.value)
       },
     })

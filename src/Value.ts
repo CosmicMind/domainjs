@@ -63,9 +63,9 @@ export type ValueTypeFor<V> = V extends Value<infer T> ? T : V
 export type ValueConstructor<V extends Value<unknown>> = new (value: ValueTypeFor<V>) => V
 
 export type ValueLifecycle<V> = {
+  created?(vo: V): void
   trace?(vo: V): void
   validate?(value: ValueTypeFor<V>, vo: V): boolean | never
-  createdAt?(vo: V): void
 }
 
 /**
@@ -106,7 +106,7 @@ function createValue<V extends Value<ValueTypeFor<V>>>(target: V, value: ValueTy
       throw new ValueError(`value is invalid`)
     }
 
-    handler.createdAt?.(vo)
+    handler.created?.(vo)
     handler.trace?.(vo)
     return vo
   }

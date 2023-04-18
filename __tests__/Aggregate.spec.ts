@@ -140,7 +140,7 @@ describe('Aggregate', () => {
         expect(guard<User>(entity)).toBeTruthy()
       },
 
-      createdAt(entity: User) {
+      created(entity: User) {
         expect(guard<User>(entity)).toBeTruthy()
       },
 

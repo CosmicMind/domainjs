@@ -125,7 +125,7 @@ describe('Entity', () => {
         expect(guard(entity)).toBeTruthy()
       },
 
-      createdAt(entity) {
+      created(entity) {
         expect(guard(entity))
       },
 

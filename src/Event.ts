@@ -73,8 +73,8 @@ export type EventAttributeLifecycleMap<E> = {
 }
 
 export type EventLifecycle<E> = {
+  created?(event: E): void
   trace?(event: E): void
-  createdAt?(event: E): void
   attributes?: EventAttributeLifecycleMap<E>
 }
 
@@ -121,7 +121,7 @@ function createEvent<E extends Event>(target: E, handler: EventLifecycle<E> = {}
         }
       }
 
-      handler.createdAt?.(event)
+      handler.created?.(event)
       handler.trace?.(event)
       return event
     }

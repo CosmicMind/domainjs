@@ -144,5 +144,31 @@ const user = createUser({
   age: 39,
 })
 ```
+
 Now when the `user` is passed to `someFunction` above, it is impossible for the User instance to exist if it is invalid. I can confidently
-use the User instance in my code logic. 
+use the User instance in my code logic. We inherently answered question (2) - `How to reliably construct a new User instance from this definition?`. 
+By using the `constructor function` or `factory method`, depending on the terminology you want to use ... bottom line the function that reliably
+creates User instances. The validators are nicely tucked away into a single and reusable piece of code. The `User.ts` file can be included in both
+frontend and backend code bases, and in both worlds will define a User in the same way. 
+
+For the experienced developer, it may look like we introduced another issue, where now our validators need to be duplicated within Entity definitions. 
+There is an elegant way to handle this within DomainJS and generally Domain-driven design. Look at `Value Objects` below if you'd like to jump into that
+topic. 
+
+Our final concern (3) - `How to observe changes within the entity's lifecycle?` is an advanced topic within DomainJS as there are various ways to approach
+Observability and Traceability - fancy words for "know and observe what is happening with precision in my system". 
+
+#### How to observe changes within the entity's lifecycle?
+
+Probably one of the most complicated challenges in software design is how to monitor and debug code. If you are like me, you have probably used the 
+"console.log" feature in JavaScript way too much, that said, probably my favourite line of code to insert as it reveals so much. That said, I find
+that the "console.log" function is placed within too many areas of my code, very similar to validators. DomainJS organizes lifecycle callbacks within
+the Entity definition itself, like so: 
+
+```typescript
+export const createUser = defineEntity<User>({
+  attributes: {
+    // ...
+  }
+})
+```

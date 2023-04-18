@@ -114,7 +114,7 @@ describe('Event', () => {
         expect(guard<Event>(event)).toBeTruthy()
       },
 
-      createdAt(event: Event) {
+      created(event: Event) {
         expect(guard<Event>(event)).toBeTruthy()
       },
 
