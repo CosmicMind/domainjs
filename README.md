@@ -147,8 +147,8 @@ const user = createUser({
   age: 39,
 })
 
-console.log(user.id) // 123
-console.log(user.name) // Daniel
+console.log(user.id) // "123"
+console.log(user.name) // "Daniel"
 console.log(user.age) // 39
 ```
 
@@ -266,8 +266,8 @@ import {
 
 const email = createEmail('me@domain.com')
 
-console.log(email.value) // me@domain.com
-console.log(email.domainAddress) // domain.com
+console.log(email.value) // "me@domain.com"
+console.log(email.domainAddress) // "domain.com"
 ```
 
 The code above shows the flexibility of a Value Object, while ensuring that the value itself is always valid.
@@ -344,9 +344,10 @@ const user = createUser({
   email: createEmail('me@domain.com')
 })
 
-console.log(user.id) // 123
-console.log(user.name) // Daniel
+console.log(user.id) // "123"
+console.log(user.name) // "Daniel"
 console.log(user.age) // 39
-console.log(user.email.value) // me@domain.com
-console.log(user.email.domainAddress) // domain.com
+console.log(user.email.value) // "me@domain.com"
+console.log(user.email.domainAddress) // "domain.com"
 ```
+
