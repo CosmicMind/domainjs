@@ -37,7 +37,9 @@ into a single representative structure is potentially an entity. Let's take a lo
 our system.
 
 ```typescript
-type User = {
+// User.ts
+
+export type User = {
   id: string
   name: string
   age: number
@@ -88,11 +90,12 @@ code block. How can we solve this?
 
 In order to provide a 100% guarantee that a user is actually the User type I am looking for, the User type would
 itself need to be its own validator, and thus can only exist when it is valid. In DomainJS, this is achieved by
-defining the Entity with validators that are called before creating and updating the user attributes/properties. 
+defining the Entity with validators that are called before creating and updating the user attributes. 
 For example:
 
 ```typescript
 // User.ts
+
 import {
   Entity,
   defineEntity,
@@ -143,6 +146,10 @@ const user = createUser({
   name: 'Daniel',
   age: 39,
 })
+
+console.log(user.id) // 123
+console.log(user.name) // Daniel
+console.log(user.age) // 39
 ```
 
 Now when the `user` is passed to `someFunction` above, it is impossible for the User instance to exist if it is invalid. I can confidently
@@ -162,13 +169,184 @@ Observability and Traceability - fancy words for "know and observe what is happe
 
 Probably one of the most complicated challenges in software design is how to monitor and debug code. If you are like me, you have probably used the 
 "console.log" feature in JavaScript way too much, that said, probably my favourite line of code to insert as it reveals so much. That said, I find
-that the "console.log" function is placed within too many areas of my code, very similar to validators. DomainJS organizes lifecycle callbacks within
+that the "console.log" function is placed within too many areas of my code, very similar to validators. DomainJS organizes lifecycle hooks within
 the Entity definition itself, like so: 
 
 ```typescript
 export const createUser = defineEntity<User>({
+  created(user) {
+    // ... do something
+  },
+  
+  trace(user) {
+    // ... do something
+  },
+  
   attributes: {
+    // ...
+    
+    age: {
+      validate(value): boolean | never {
+        // ... do something 
+      }, 
+      
+      udpated(newValue, oldValue, entity): void {
+        // ... do something
+      },
+    },
+    
     // ...
   }
 })
+```
+
+The above example shows the various lifecycle hooks available for entities. Let's take a look at each one of these
+hooks to understand when they are executed. 
+
+##### created
+
+The `created` lifecycle hook is executed only once when an instance is initially created. 
+
+##### trace
+
+The `trace` lifecycle hook is executed after the `created` lifecycle hook is executed and
+after the attribute `updated` lifecycle is executed.
+
+##### updated
+
+The `updated` lifecycle hook is executed after an attribute has been updated.
+
+## Value Objects - if it's not what I want, I don't want it
+
+A Value Object is generally a Domain-driven design concept, though other paradigms and even coding languages adopt the core principle of a Value Object. 
+
+Values Objects are very similar to Entities in that they can only exist if they are valid, yet they offer some additional features
+that are beneficial.
+
+#### Value Objects are easily sharable
+
+The purpose of a Value Object is to encompass a single value and its validity. Further to ensuring its validity, Values Objects (VOs) provide specific functionality 
+that is relevant to the value itself. Let's look at an example: 
+
+```typescript
+// Email.ts
+
+import {
+  Value,
+  defineValue,
+} from '@cosmicmind/domainjs'
+
+export class Email extends Value<string> {
+  get domainAddress(): string {
+    return this.value.split('@')[1]
+  }
+}
+
+export const createEmail = defineValue(Email, {
+  created(email): void {
+    // ... do something
+  },
+
+  trace(email) {
+    // ... do something
+  },
+  
+  validate(value): boolean | never {
+    // email validation logic
+    // return true | false
+    // or throw an error
+  },
+})
+```
+
+```typescript
+import { 
+  createEmail
+} from './Email'
+
+const email = createEmail('me@domain.com')
+
+console.log(email.value) // me@domain.com
+console.log(email.domainAddress) // domain.com
+```
+
+The code above shows the flexibility of a Value Object, while ensuring that the value itself is always valid.
+A good use case for Value Objects are as parameter values, or attributes of an Entity. Value Objects allow 
+sharable values without any code duplication. Let's look at an example within an Entity definition by adding
+the Email VO to our User Entity. 
+
+Our new User definition is found below. Notice that we don't need to create
+a validator in our User definition for emails, as the Value Object itself already handles that. We could however
+add additional validations within the Entity if we felt that further specific validations were needed. Furthermore,
+the helpful functionality available within the Email Value Object is available to the Entity.
+
+```typescript
+// User.ts
+
+import {
+  Entity,
+  defineEntity,
+} from '@cosmicmind/domainjs'
+
+import {
+  Email,
+} from './Email'
+
+export type User = Entity & {
+  id: string
+  name: string
+  age: number
+  email: Email
+}
+
+export const createUser = defineEntity<User>({
+  attributes: {
+    id: {
+      validate(value): boolean | never {
+        // id validation logic
+        // return true | false
+        // or throw an error
+      },
+    },
+    
+    name: {
+      validate(value): boolean | never {
+        // name validation logic
+        // return true | false
+        // or throw an error
+      },
+    },
+
+    age: {
+      validate(value): boolean | never {
+        // age validation logic
+        // return true | false
+        // or throw an error
+      },
+    },
+  }
+})
+```
+
+```typescript
+import { 
+  createUser
+} from './User'
+
+import {
+  createEmail,
+} from './User'
+
+const user = createUser({
+  id: '123',
+  name: 'Daniel',
+  age: 39,
+  email: createEmail('me@domain.com')
+})
+
+console.log(user.id) // 123
+console.log(user.name) // Daniel
+console.log(user.age) // 39
+console.log(user.email.value) // me@domain.com
+console.log(user.email.domainAddress) // domain.com
 ```
