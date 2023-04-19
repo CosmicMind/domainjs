@@ -1,7 +1,7 @@
 # Welcome to DomainJS
 
 Inspired by [Domain-driven design](https://en.wikipedia.org/wiki/Domain-driven_design) (DDD), DomainJS is a framework 
-that utilizes the powerful concepts within DDD to build reliable and well-defined software.
+that utilizes the powerful concepts in DDD in order to build reliable software.
 
 ### Entities - What are they
 
@@ -30,7 +30,7 @@ DomainJS will immediately help within the following areas of concern:
 
 #### How to validate entities and reliably construct new entity instances?
 
-Let's take a look at the following code example to understand attribute value validation in DomainJS.
+Let's take a look at the following code example to understand entity validation in DomainJS.
 
 ```typescript
 import {
@@ -60,16 +60,7 @@ updating entities, for example:
 ```typescript
 // User.ts
 
-import {
-  Entity,
-  defineEntity,
-} from '@cosmicmind/domainjs'
-
-export type User = Entity & {
-  id: string
-  name: string
-  age: number
-}
+// ...
 
 export const createUser = defineEntity<User>({
   attributes: {
@@ -105,18 +96,25 @@ import {
   createUser,
 } from './User'
 
-const userA = createUser({
+function someFunction(user: User): void {
+    // ... do something
+}
+
+const user = createUser({
   id: '123',
-  name: 'Daniel',
-  age: 39,
+  name: 'Sarah',
+  age: 29,
 })
 
-console.log(userA.id) // "123"
-console.log(userA.name) // "Daniel"
-console.log(userA.age) // 39
+console.log(user.id) // "123"
+console.log(user.name) // "Sarah"
+console.log(user.age) // 29
+
+someFunction(user)
 ```
 
-Now when the `user` is passed to `someFunction` above, it is impossible for the entity to exist if it is invalid. 
+By using the constructor function returned by `defineEntity<User>(...)`, each user entity is guaranteed to be valid.
+It is impossible for the user entity to be created and reach the code at line `someFunction(user)` if it is invalid.
 
 #### How to observe the entity lifecycle?
 
@@ -214,6 +212,13 @@ console.log(email.domainAddress) // "domain.com"
 
 
 
+
+... mode to come ...
+
+
+
+
+
 ```typescript
 // User.ts
 
@@ -274,13 +279,13 @@ import {
 const user = createUser({
   id: '123',
   name: 'Daniel',
-  age: 39,
+  age: 29,
   email: createEmail('me@domain.com'),
 })
 
 console.log(user.id) // "123"
 console.log(user.name) // "Daniel"
-console.log(user.age) // 39
+console.log(user.age) // 29
 console.log(user.email.value) // "me@domain.com"
 console.log(user.email.domainAddress) // "domain.com"
 ```
@@ -302,18 +307,27 @@ function someFunction(email: Email): void {
 
 ### Aggregates - Defining possibilities while encapsulating the logic
 
-Aggregates are a very powerful concept in Domain-driven design and arguably the most complicated part of the 
-design paradigm itself. Let's simplify the complexities by thinking of Aggregates as the broker for Entities. 
-An Aggregate is effectively the allowable functionality for a given Entity. The easiest way to discuss Aggregates is 
-with an example. We will expand on our User Entity, and provide some additional features: 
 
-1. Data encapsulation and value accessibility. 
-2. Added functionality defined by the Aggregate.
-3. Event publishing.
+
+
+
+... mode to come ...
+
+
+
+
+
 
 #### Data encapsulation and value accessibility
 
-Aggregates effectively encapsulate Entities and expose what it would like in the form that it would like to, for example: 
+
+
+
+... mode to come ...
+
+
+
+
 
 ```typescript
 // UserAggregate.ts
@@ -384,7 +398,7 @@ import {
 const user = createUserAggregate({
   id: '123',
   name: 'Daniel',
-  age: 39,
+  age: 29,
   email: createEmail('me@domain.com'),
 })
 
@@ -397,24 +411,28 @@ console.log(user.email.domainAddress) // "domain.com"
 user.registerAccount() // ... account registration process
 ```
 
-In the above example there is quite a bit going on, so let's break it down. The first item to notice is that
-we can define various Entity definitions for a given Aggregate. This allows for a lot of flexibility. All the 
-features available to an Entity and Value Object are now available to the Aggregate with the added ability to
-encapsulate and modify that functionality. 
 
-The Aggregate sets the entity to the protected `root` property and only allows exposure based on the API definition 
-of the Aggregate itself. This is great when our code needs to manage data but doesn't want to expose it to the outside 
-world. 
 
-The next item to notice is that we can add functionality to our Entity, through the Aggregate, such as the `registerAccount` method. 
-The functionality itself is defined within the Aggregate, and therefore allows us to define various Aggregates with the 
-same Entity definition. (More examples on this to come).
+
+
+... mode to come ...
+
+
+
+
+
 
 ### Aggregate Events
 
-Let's expand our example further by adding Event publishing to the Aggregate. DomainJS allows for Events to be 
-constructed very much like Entities. The values each have the opportunity to encapsulate validation and the `created` 
-and `trace` lifecycle hooks are available as well. Let's create a `RegisterAccountEvent`. 
+
+
+
+
+... mode to come ...
+
+
+
+
 
 ```typescript
 // RegisterAccountEvent.ts
@@ -496,7 +514,7 @@ import {
 const user = createUserAggregate({
   id: '123',
   name: 'Daniel',
-  age: 39,
+  age: 29,
   email: createEmail('me@domain.com'),
 })
 
