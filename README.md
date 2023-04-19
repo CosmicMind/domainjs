@@ -1,97 +1,61 @@
 # Welcome to DomainJS
 
-Inspired by Domain-driven design, DomainJS is a framework intended to help with the complexities of system design. 
-Although the framework aims to solve big problems, it is built from tackling smaller problems that are at the core
-of software design and effectively system design. 
+Inspired by [Domain-driven design](https://en.wikipedia.org/wiki/Domain-driven_design) (DDD), DomainJS is a framework 
+that utilizes the powerful concepts within DDD to build reliable and well-defined software.
 
-### Why TypeScript? 
+### Entities - What are they
 
-In my opinion, software is an incredibly fun area to study and more so, implement creative solutions in a now ever
-more distributed landscape. As the canvas becomes more widespread, the paintbrushes need to behave differently. 
-TypeScript, and well JavaScript really, offer such an ability. It is possible to design a tool, component, or even
-framework that exists and powers a fully interactive client and further computes a prediction that accepts events
-from a stream of user engagement. 
-
-TypeScript simplifies the "location" as to where code runs by allowing a single piece of
-software to function in multiple areas. DomainJS takes full advantage of this and offers building blocks to create
-reliable, flexible, and most importantly secure software. 
-
-### Break It, Shake It, Share It
-
-As the maintainer of DomainJS, I invite you to use the framework in ways I have not thought of, to push its
-boundaries, and to then share it with the community. This library is my way of saying "Hello World, I want
-to code with you". I hope you enjoy what has been and continues to be a fun framework to build and use in my projects.
-
-## Basic Principles of DomainJS
-
-I recommend reading more on [Domain-driven design](https://en.wikipedia.org/wiki/Domain-driven_design) if your goal is 
-to build something robust, but before you do that, I will share with you a few key concepts found within DomainJS that 
-regardless of the type of software you are developing, will act as a solid foundation for your code and ultimately system. 
-
-## Entities - What are they and how to trust them. 
-
-Software would arguably have no use if it wasn't doing something. That "something" it does - needs a "thing" to do it with.
-There are some good definitions out there for Entities, please share one when you find it. Generally, let's think
-of an Entity as a "thing", for example: a book, a house, a person, a system, ... anything that can conceptually be unified 
-into a single representative structure is potentially an entity. Let's take a look at an entity definition of a `User` in
-our system.
+In Domain-driven design (DDD) an entity is a representation of an object within a given domain, for example: a book, product order, and user would be 
+entities within a domain that handles purchase orders for an e-commerce website that sold books. Let's take a look at an entity type definition for a user within our domain.
 
 ```typescript
 // User.ts
 
-export type User = {
+import {
+  Entity,
+} from '@cosmicmind/domainjs'
+
+export type User = Entity & {
   id: string
   name: string
   age: number
 }
 ```
 
-That's it, the above example is an Entity. It represents a "thing", in this case a user in our system. The user itself
-is not so interesting until we look at what defines it. In this case, the user is defined by an "id" hopefully unique,
-a name that doesn't need to be unique, and an age, which is a number. There are a few major challenges though with this:
+The above example is a user entity type definition. It represents an object, in this case a user within our domain. The user is defined by the id, name, and age attribute values. When working with entities, 
+DomainJS will immediately help within the following areas of concern:
 
-1. How do I know I am getting what I am actually wanting? 
-2. How to reliably construct a new User instance from this definition?
-3. How to observe changes within the entity's lifecycle?
+1. How to validate entities and reliably construct new entity instances?
+2. How to observe the entity lifecycle?
 
-I am sure there are more challenges than the three above. I find that if I can't solve the three proposed challenges,
-none of the others really matter. So before we create a massive list of things to concern ourselves with, let's keep
-it to its arguable core challenges.
+#### How to validate entities and reliably construct new entity instances?
 
-#### How do I know I am getting what I am actually wanting? 
-
-Let's look at some code that constructs a new User from the Entity definition above. 
+Let's take a look at the following code example to understand attribute value validation in DomainJS.
 
 ```typescript
-const user: User = {
-  id: '123',
-  name: 'Daniel',
-  age: 39,
-}
-
-// ... a bunch of code is executed ... and eventually I hit a function that accepts a User instance
+import {
+  User,
+} from './User'
 
 function someFunction(user: User): void {
-  // ... do something interesting
+  // ... do something
 }
+
+const user: User = {
+  id: '123',
+  name: 'Sarah',
+  age: 29,
+}
+
+// ... 
+
+someFunction(user)
 ```
 
-From the above example, it may be very clear that the `user` instance passed to `someFunction` actually
-doesn't provide any guarantees of what it really is. Yes, the TypeScript type checker will provide an error
-message if a type were passed that is not part of the User type family. As helpful as that is, it really doesn't
-tell me much about the values that make up the `user` instance, other than I have two strings and a number. 
-
-Normally, a validator would be used somewhere to ensure that the User instance does in fact have values that are
-meaningful to process without general concern. Here is the fundamental problem though, the validator and the User 
-type are separated by design. In order to 100% guarantee that I am dealing with an instance of a User, I would need 
-to validate it within the function, otherwise the function is blindly trusting its caller. That may sound like enough, 
-but if you are like me, I prefer not to trust outside systems and code, including callers to functions within the same 
-code block. How can we solve this? 
-
-In order to provide a 100% guarantee that a user is actually the User type I am looking for, the User type would
-itself need to be its own validator, and thus can only exist when it is valid. In DomainJS, this is achieved by
-defining the Entity with validators that are called before creating and updating the user attributes. 
-For example:
+In the above code, we can see that the `user` passed to `someFunction` actually doesn't provide any guarantees of its validity. In order to guarantee validity within
+`someFunction`, validation logic would need to be executed within the function itself. An issue arises when we need to constantly validate our entities, causing validation 
+logic to exist in multiple places within our codebase. DomainJS defines the validation logic within the entity itself and calls the appropriate validators when creating and 
+updating entities, for example:
 
 ```typescript
 // User.ts
@@ -141,36 +105,22 @@ import {
   createUser,
 } from './User'
 
-const user = createUser({
+const userA = createUser({
   id: '123',
   name: 'Daniel',
   age: 39,
 })
 
-console.log(user.id) // "123"
-console.log(user.name) // "Daniel"
-console.log(user.age) // 39
+console.log(userA.id) // "123"
+console.log(userA.name) // "Daniel"
+console.log(userA.age) // 39
 ```
 
-Now when the `user` is passed to `someFunction` above, it is impossible for the User instance to exist if it is invalid. I can confidently
-use the User instance in my code logic. We inherently answered question (2) - `How to reliably construct a new User instance from this definition?`. 
-By using the `constructor function` or `factory method`, depending on the terminology you want to use ... bottom line the function that reliably
-creates User instances. The validators are nicely tucked away into a single and reusable piece of code. The `User.ts` file can be included in both
-frontend and backend code bases, and in both worlds will define a User in the same way. 
+Now when the `user` is passed to `someFunction` above, it is impossible for the entity to exist if it is invalid. 
 
-For the experienced developer, it may look like we introduced another issue, where now our validators need to be duplicated within Entity definitions. 
-There is an elegant way to handle this within DomainJS and generally Domain-driven design. Look at `Value Objects` below if you'd like to jump into that
-topic. 
+#### How to observe the entity lifecycle?
 
-Our final concern (3) - `How to observe changes within the entity's lifecycle?` is an advanced topic within DomainJS as there are various ways to approach
-Observability and Traceability - fancy words for "know and observe what is happening with precision in my system". 
-
-#### How to observe changes within the entity's lifecycle?
-
-Probably one of the most complicated challenges in software design is how to monitor and debug code. If you are like me, you have probably used the 
-"console.log" feature in JavaScript way too much, that said, probably my favourite line of code to insert as it reveals so much. That said, I find
-that the "console.log" function is placed within too many areas of my code, very similar to validators. DomainJS organizes lifecycle hooks within
-the Entity definition itself, like so: 
+DomainJS organizes lifecycle hooks within the entity definition itself, like so: 
 
 ```typescript
 export const createUser = defineEntity<User>({
@@ -207,26 +157,18 @@ hooks to understand when they are executed.
 
 The `created` lifecycle hook is executed only once when an instance is initially created. 
 
-##### trace
-
-The `trace` lifecycle hook is executed after the `created` lifecycle hook is executed and
-after the attribute `updated` lifecycle is executed.
-
 ##### updated
 
 The `updated` lifecycle hook is executed after an attribute has been updated.
 
-## Value Objects - if it's not what I want, I don't want it
+##### trace
 
-A Value Object is generally a Domain-driven design concept, though other paradigms and even coding languages adopt the core principle of a Value Object. 
+The `trace` lifecycle hook is executed after the `created` and `updated` lifecycle hooks.
 
-Values Objects are very similar to Entities in that they can only exist if they are valid, yet they offer some additional features
-that are beneficial.
+### Value Objects
 
-#### Value Objects are easily sharable
-
-The purpose of a Value Object is to encompass a single value and its validity. Further to ensuring its validity, Values Objects (VOs) provide specific functionality 
-that is relevant to the value itself. Let's look at an example: 
+A Value Object (VO) in Domain-driven design encapsulates a single value and its validity. Further to ensuring its validity, 
+a VO provides specific functionality that is relevant to the value itself, for example: 
 
 ```typescript
 // Email.ts
@@ -270,15 +212,7 @@ console.log(email.value) // "me@domain.com"
 console.log(email.domainAddress) // "domain.com"
 ```
 
-The code above shows the flexibility of a Value Object, while ensuring that the value itself is always valid.
-A good use case for Value Objects are as parameter values, or attributes of an Entity. Value Objects allow 
-sharable values without any code duplication. Let's look at an example within an Entity definition by adding
-the Email VO to our User Entity. 
 
-Our new User definition is found below. Notice that we don't need to create
-a validator in our User definition for emails, as the Value Object itself already handles that. We could however
-add additional validations within the Entity if we felt that further specific validations were needed. Furthermore,
-the helpful functionality available within the Email Value Object is available to the Entity.
 
 ```typescript
 // User.ts
@@ -351,7 +285,7 @@ console.log(user.email.value) // "me@domain.com"
 console.log(user.email.domainAddress) // "domain.com"
 ```
 
-Value Objects are great for parameter passing, letting the function handler know that it is using a 
+Value Objects are great for parameter passing and letting the function know that it is using a 
 valid value. For example:
 
 ```typescript
@@ -363,26 +297,23 @@ function someFunction(email: Email): void {
   if ('domain.com' === email.domainAddress) {
     // ... do something
   }
-  
-  // ... do something
 }
 ```
 
-## Aggregates - Defining possibilities while encapsulating the logic
+### Aggregates - Defining possibilities while encapsulating the logic
 
 Aggregates are a very powerful concept in Domain-driven design and arguably the most complicated part of the 
-design paradigm itself. Let's simplify the complexities by thinking of Aggregates as the broker into Entities. 
-An Aggregate is effectively the allowable functionality for a given Entity. The easiest way to discuss Aggregates
+design paradigm itself. Let's simplify the complexities by thinking of Aggregates as the broker for Entities. 
+An Aggregate is effectively the allowable functionality for a given Entity. The easiest way to discuss Aggregates is 
 with an example. We will expand on our User Entity, and provide some additional features: 
 
 1. Data encapsulation and value accessibility. 
-2. Functionality features defined by the Aggregate.
+2. Added functionality defined by the Aggregate.
 3. Event publishing.
 
-#### Data encapsulation and value accessibility.
+#### Data encapsulation and value accessibility
 
-Aggregates effectively hide the Entity that it encapsulates and gives the Aggregate the ability to expose what it would like
-in the form that it would like to, for example: 
+Aggregates effectively encapsulate Entities and expose what it would like in the form that it would like to, for example: 
 
 ```typescript
 // UserAggregate.ts
@@ -467,7 +398,7 @@ user.registerAccount() // ... account registration process
 ```
 
 In the above example there is quite a bit going on, so let's break it down. The first item to notice is that
-we can define various Entity definitions for the given User type. This allows for a lot of flexibility. All the 
+we can define various Entity definitions for a given Aggregate. This allows for a lot of flexibility. All the 
 features available to an Entity and Value Object are now available to the Aggregate with the added ability to
 encapsulate and modify that functionality. 
 
@@ -475,13 +406,13 @@ The Aggregate sets the entity to the protected `root` property and only allows e
 of the Aggregate itself. This is great when our code needs to manage data but doesn't want to expose it to the outside 
 world. 
 
-The next item to notice is that we can add functionality to our Entity, such as the `registerAccount` method. 
+The next item to notice is that we can add functionality to our Entity, through the Aggregate, such as the `registerAccount` method. 
 The functionality itself is defined within the Aggregate, and therefore allows us to define various Aggregates with the 
-same Entity definition. 
+same Entity definition. (More examples on this to come).
 
 ### Aggregate Events
 
-Let's expand our example further by adding Event publishing to the Aggregate. DomainJS allows for events to be 
+Let's expand our example further by adding Event publishing to the Aggregate. DomainJS allows for Events to be 
 constructed very much like Entities. The values each have the opportunity to encapsulate validation and the `created` 
 and `trace` lifecycle hooks are available as well. Let's create a `RegisterAccountEvent`. 
 
@@ -502,7 +433,7 @@ export type RegisterAccountEvent = Event & {
   user: User
 }
 
-export type createRegisterAccountEvent = defineEvent<RegisterAccountEvent>({
+export const createRegisterAccountEvent = defineEvent<RegisterAccountEvent>({
   attributes: {
     id: {
       validate(value): boolean | never {
@@ -533,11 +464,11 @@ import {
   createRegisterAccountEvent,
 } from './RegisterAccountEvent'
 
-export type UserAggregateTopics = EventTopics & {
+export type UserAggregateEventTopics = EventTopics & {
   'register-account': RegisterAccountEvent
 }
 
-export class UserAggregate extends Aggregate<User, UserAggregateTopics> {
+export class UserAggregate extends Aggregate<User, UserAggregateEventTopics> {
   // ...
 
   registerAccount(): void {
@@ -582,9 +513,9 @@ console.log(user.email.domainAddress) // "domain.com"
 user.registerAccount() // ... account registration process and event is published
 ```
 
-# What's Next
+## What's Next
 
 Additional documentation and examples will follow shortly. If you have any examples or use cases that 
-you are interested in exploring if DomainJS can help, please create a discussion. 
+you are interested in exploring, please create a discussion. 
 
 Thank you! 
