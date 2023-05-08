@@ -48,7 +48,7 @@ const srcDir = 'src'
 const entry = `${srcDir}/index.ts`
 const fileName = 'lib-[format]'
 const formats: LibraryFormats[] = [ 'es', 'cjs' ]
-const emptyOutDir = true
+const emptyOutDir = false
 const minify = 'development' !== process.env.NODE_ENV
 
 const alias = {
