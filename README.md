@@ -1,6 +1,6 @@
 # Welcome to DomainJS
 
-Inspired by [Domain-driven design](https://en.wikipedia.org/wiki/Domain-driven_design) (DDD), DomainJS is a domain-driven design framework for scalable systems.
+Inspired by [domain-driven design](https://en.wikipedia.org/wiki/Domain-driven_design) (DDD), DomainJS is a domain-driven design framework for scalable systems.
 
 ### Entities - What are they
 
