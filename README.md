@@ -1,7 +1,6 @@
 # Welcome to DomainJS
 
-Inspired by [Domain-driven design](https://en.wikipedia.org/wiki/Domain-driven_design) (DDD), DomainJS is a framework 
-that utilizes the powerful concepts in DDD in order to build reliable software.
+Inspired by [Domain-driven design](https://en.wikipedia.org/wiki/Domain-driven_design) (DDD), DomainJS is a domain-driven design framework for scalable systems.
 
 ### Entities - What are they
 
@@ -213,7 +212,7 @@ console.log(email.domainAddress) // "domain.com"
 
 
 
-... mode to come ...
+... more to come ...
 
 
 
@@ -311,7 +310,7 @@ function someFunction(email: Email): void {
 
 
 
-... mode to come ...
+... more to come ...
 
 
 
@@ -323,7 +322,7 @@ function someFunction(email: Email): void {
 
 
 
-... mode to come ...
+... more to come ...
 
 
 
@@ -415,7 +414,7 @@ user.registerAccount() // ... account registration process
 
 
 
-... mode to come ...
+... more to come ...
 
 
 
@@ -428,7 +427,7 @@ user.registerAccount() // ... account registration process
 
 
 
-... mode to come ...
+... more to come ...
 
 
 

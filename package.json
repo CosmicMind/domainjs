@@ -1,7 +1,7 @@
 {
   "name": "@cosmicmind/domainjs",
-  "version": "0.0.1-rc-050323-4",
-  "description": "A framework for building applications with Domain-driven design in TypeScript.",
+  "version": "0.0.1-rc-052423-4",
+  "description": "A domain-driven design framework for scalable systems.",
   "keywords": [],
   "author": {
     "name": "Daniel Jonathan",
