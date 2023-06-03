@@ -36,7 +36,9 @@ import {
   describe,
 } from 'vitest'
 
-import { string } from 'yup'
+import {
+  string,
+} from 'yup'
 
 import {
   uuidv4,
