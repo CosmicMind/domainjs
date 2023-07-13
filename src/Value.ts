@@ -103,7 +103,7 @@ function createValue<V extends Value<ValueTypeFor<V>>>(target: V, value: ValueTy
     const vo = new Proxy(target, createValueHandler(handler))
 
     if (false === handler.validate?.(value, vo)) {
-      throw new ValueError(`value is invalid`)
+      throw new ValueError(`${target} is invalid`)
     }
 
     handler.created?.(vo)
