@@ -42,7 +42,7 @@ import {
   Entity,
   Event,
   defineEvent,
-} from '@/internal'
+} from '@/index'
 
 type User = Entity & {
   name: string
