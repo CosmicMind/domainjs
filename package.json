@@ -1,6 +1,6 @@
 {
   "name": "@cosmicmind/domainjs",
-  "version": "0.0.1-rc-092723-4",
+  "version": "0.0.1-rc-102123-4",
   "description": "A domain-driven design framework for scalable systems.",
   "keywords": [],
   "author": {
@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@cosmicmind/foundationjs": "^0.0.1-rc-092723-1",
-    "@cosmicmind/patternjs": "^0.0.1-rc-092723-3"
+    "@cosmicmind/patternjs": "^0.0.1-rc-102123-3"
   },
   "devDependencies": {
     "@microsoft/eslint-formatter-sarif": "^3.0.0",

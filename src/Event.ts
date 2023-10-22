@@ -50,8 +50,6 @@ export type EventTopics = ObservableTopics & {
   readonly [K: string]: Event
 }
 
-export type EventFn<E extends Event> = (event: E) => void
-
 export class EventObservable<T extends EventTopics> extends Observable<T> {}
 
 /**
