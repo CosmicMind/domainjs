@@ -47,8 +47,10 @@ export abstract class Value<V> {
   }
 
   constructor(value: V) {
-    this._value = value
+    this._value = 'function' === typeof this.prepare ? this.prepare(value) : value
   }
+
+  protected prepare?(value: V): V
 }
 
 /**

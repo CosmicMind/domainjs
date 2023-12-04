@@ -51,6 +51,10 @@ class Email extends Value<string> {
   get domainAddress(): string {
     return this.value.split('@')[1]
   }
+
+  protected prepare(value: string): string {
+    return value.trim().toLowerCase()
+  }
 }
 
 const createEmail = defineValue(Email, {
@@ -66,9 +70,10 @@ const createVersionValue = defineValue(Version, {
 
 describe('Value', () => {
   it('create value', () => {
-    const email = 'me@domain.com'
+    const email = 'ME@domain.com'
     const vo = createEmail(email)
-    expect(vo.value).toBe(email)
+    expect(vo.value).not.toBe(email)
+    expect(vo.value).toBe(email.toLowerCase())
   })
 
   it('ValueError', () => {
