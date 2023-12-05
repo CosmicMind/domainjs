@@ -30,6 +30,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/* eslint-disable camelcase */
+
 import {
   URL,
   fileURLToPath,
@@ -38,50 +40,56 @@ import {
 import {
   PluginOption,
   LibraryFormats,
+  ConfigEnv,
   defineConfig,
+  UserConfigExport,
 } from 'vite'
 
 import dts from 'vite-plugin-dts'
 
-const name = process.env.npm_package_name
-const srcDir = 'src'
-const entry = `${srcDir}/index.ts`
-const fileName = 'lib-[format]'
-const formats: LibraryFormats[] = [ 'es', 'cjs' ]
-const emptyOutDir = false
-const minify = false
+export default ({ mode }: ConfigEnv): UserConfigExport => {
+  const name = process.env.npm_package_name
+  const srcDir = 'src'
+  const entry = `${srcDir}/index.ts`
+  const fileName = 'lib-[format]'
+  const formats: LibraryFormats[] = [ 'es', 'cjs' ]
+  const emptyOutDir = true
+  const minify = 'development' !== mode
 
-const alias = {
-  '@': fileURLToPath(new URL(srcDir, import.meta.url)),
-}
+  const alias = {
+    '@': fileURLToPath(new URL(srcDir, import.meta.url)),
+  }
 
-const external = [
-  '@cosmicmind/foundationjs',
-  '@cosmicmind/patternjs'
-]
+  const external = [
+    '@cosmicmind/foundationjs',
+    '@cosmicmind/patternjs'
+  ]
 
-const plugins = [
-  dts()
-] as PluginOption[]
+  const plugins = [
+    dts()
+  ] as PluginOption[]
 
-export default defineConfig(() => ({
-  resolve: {
-    alias,
-  },
-  plugins,
-  build: {
-    minify,
-    emptyOutDir,
-    lib: {
-      name,
-      entry,
-      formats,
-      fileName,
+  return defineConfig({
+    resolve: {
+      alias,
     },
-    rollupOptions: {
-      external,
-      output: {
+    esbuild: {
+      minifyIdentifiers: true,
+      keepNames: true,
+    },
+    plugins,
+    build: {
+      minify,
+      emptyOutDir,
+      lib: {
+        name,
+        entry,
+        formats,
+        fileName,
+      },
+      rollupOptions: {
+        external,
       },
     },
-  },
-}))
+  })
+}
