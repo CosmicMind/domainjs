@@ -54,7 +54,7 @@ import {
   defineEvent,
   Value,
   defineValue,
-} from '@/index'
+} from '@/'
 
 class Email extends Value<string> {
   get domainAddress(): string {

@@ -42,7 +42,7 @@ import {
   Entity,
   EntityError,
   defineEntity,
-} from '@/index'
+} from '@/'
 
 type User = Entity & {
   readonly id: string
