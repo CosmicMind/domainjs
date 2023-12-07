@@ -42,7 +42,7 @@ import {
   Entity,
   Event,
   defineEvent,
-} from '@/'
+} from '@/index'
 
 type User = Entity & {
   name: string
