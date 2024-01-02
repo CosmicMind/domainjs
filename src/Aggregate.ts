@@ -48,19 +48,19 @@ import {
 export abstract class Aggregate<E extends Entity, T extends EventTopics = EventTopics> extends EventObservable<T> {
   protected root: E
 
-  protected constructor(root: E, ...args: unknown[]) {
+  protected constructor(root: E) {
     super()
-    this.root = 'function' === typeof this.prepare ? this.prepare(root, ...args) : root
+    this.root = 'function' === typeof this.prepare ? this.prepare(root) : root
   }
 
-  protected prepare?(root: E, ...args: unknown[]): E
+  protected prepare?(root: E): E
 }
 
 export type AggregateTypeFor<A> = A extends Aggregate<infer E> ? E : A
 
-export type AggregateConstructor<A extends Aggregate<Entity>> = new (root: AggregateTypeFor<A>, ...args: unknown[]) => A
+export type AggregateConstructor<A extends Aggregate<Entity>> = new (root: AggregateTypeFor<A>) => A
 
-export function defineAggregate<A extends Aggregate<Entity>>(_class: AggregateConstructor<A>, handler: EntityLifecycle<AggregateTypeFor<A>> = {}): (root: AggregateTypeFor<A>, ...args: unknown[]) => A {
+export function defineAggregate<A extends Aggregate<Entity>>(_class: AggregateConstructor<A>, handler: EntityLifecycle<AggregateTypeFor<A>> = {}): (root: AggregateTypeFor<A>) => A {
   const createEntity = defineEntity<AggregateTypeFor<A>>(handler)
-  return (root: AggregateTypeFor<A>, ...args: unknown[]): A => new _class(createEntity(root), ...args)
+  return (root: AggregateTypeFor<A>): A => new _class(createEntity(root))
 }

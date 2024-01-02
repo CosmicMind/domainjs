@@ -46,11 +46,11 @@ export abstract class Value<V> {
     return this._value
   }
 
-  constructor(value: V, ...args: unknown[]) {
-    this._value = 'function' === typeof this.prepare ? this.prepare(value, ...args) : value
+  constructor(value: V) {
+    this._value = 'function' === typeof this.prepare ? this.prepare(value) : value
   }
 
-  protected prepare?(value: V, ...args: unknown[]): V
+  protected prepare?(value: V): V
 }
 
 /**
@@ -62,7 +62,7 @@ export type ValueTypeFor<V> = V extends Value<infer T> ? T : V
  * The constructor that the `defineValue` is willing to accept
  * as an implemented `Value<T>`.
  */
-export type ValueConstructor<V extends Value<unknown>> = new (value: ValueTypeFor<V>, ...args: unknown[]) => V
+export type ValueConstructor<V extends Value<unknown>> = new (value: ValueTypeFor<V>) => V
 
 export class ValueError extends FoundationError {}
 
@@ -76,8 +76,8 @@ export type ValueLifecycle<V> = {
 /**
  * The `defineValue` sets a new ValueLifecycle to the given `Value`.
  */
-export const defineValue = <V extends Value<ValueTypeFor<V>>>(_class: ValueConstructor<V>, handler: ValueLifecycle<V> = {}): (value: ValueTypeFor<V>, ...args: unknown[]) => V =>
-  (value: ValueTypeFor<V>, ...args: unknown[]): V => createValue(new _class(value, ...args), value, handler)
+export const defineValue = <V extends Value<ValueTypeFor<V>>>(_class: ValueConstructor<V>, handler: ValueLifecycle<V> = {}): (value: ValueTypeFor<V>) => V =>
+  (value: ValueTypeFor<V>): V => createValue(new _class(value), value, handler)
 
 /**
  * The `createValueHandler` prepares the `ValueLifecycle` for
