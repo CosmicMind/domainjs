@@ -48,7 +48,7 @@ import {
 export abstract class Aggregate<E extends Entity, T extends EventTopics = EventTopics> extends EventObservable<T> {
   protected root: E
 
-  protected constructor(root: E) {
+  constructor(root: E) {
     super()
     this.root = 'function' === typeof this.prepare ? this.prepare(root) : root
   }
