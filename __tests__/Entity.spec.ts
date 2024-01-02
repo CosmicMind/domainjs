@@ -40,7 +40,7 @@ import { guard } from '@cosmicmind/foundationjs'
 
 import {
   Entity,
-  EntityError,
+  ValueError,
   defineEntity,
 } from '@/index'
 
@@ -53,15 +53,15 @@ type User = Entity & {
 const createUser = defineEntity<User>({
   attributes: {
     id: {
-      validate: value => 2 < value.length,
+      validator: value => 2 < value.length,
     },
 
     createdAt: {
-      validate: value => guard(value),
+      validator: value => guard(value),
     },
 
     name: {
-      validate: value => 2 < value.length,
+      validator: value => 2 < value.length,
     },
   },
 })
@@ -101,8 +101,8 @@ describe('Entity', () => {
       expect(true).toBeFalsy()
     }
     catch (error) {
-      if (error instanceof EntityError) {
-        expect(error.name).toBe('EntityError')
+      if (error instanceof ValueError) {
+        expect(error.name).toBe('ValueError')
         expect(error.message).toBe('name is invalid')
       }
       else {
@@ -131,7 +131,7 @@ describe('Entity', () => {
 
       attributes: {
         id: {
-          validate: (value, entity) => {
+          validator: (value, entity) => {
             expect(value).toBe(id)
             expect(entity.id).toBe(id)
             return 2 < value.length
@@ -139,7 +139,7 @@ describe('Entity', () => {
         },
 
         createdAt: {
-          validate: (value, entity) => {
+          validator: (value, entity) => {
             expect(value).toBe(createdAt)
             expect(entity.createdAt).toBe(createdAt)
             return guard(value)
@@ -147,7 +147,7 @@ describe('Entity', () => {
         },
 
         name: {
-          validate: (value, entity) => {
+          validator: (value, entity) => {
             expect(2 < value.length).toBeTruthy()
             expect(2 < entity.name.length).toBeTruthy()
             return 2 < value.length

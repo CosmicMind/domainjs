@@ -58,19 +58,19 @@ type UserEvent = Event & {
 const createUserEvent = defineEvent<UserEvent>({
   attributes: {
     id: {
-      validate: (value: string): boolean => 2 < value.length,
+      validator: (value: string): boolean => 2 < value.length,
     },
 
     correlationId: {
-      validate: (value: string): boolean => 2 < value.length,
+      validator: (value: string): boolean => 2 < value.length,
     },
 
     createdAt: {
-      validate: (value: Date): boolean => guard<Date>(value),
+      validator: (value: Date): boolean => guard<Date>(value),
     },
 
     entity: {
-      validate: (value: User): boolean => guard<User>(value),
+      validator: (value: User): boolean => guard<User>(value),
     },
   },
 })
@@ -120,28 +120,28 @@ describe('Event', () => {
 
       attributes: {
         id: {
-          validate: (value: string): boolean => {
+          validator: (value: string): boolean => {
             expect(value).toBe(id)
             return 2 < value.length
           },
         },
 
         correlationId: {
-          validate: (value: string): boolean => {
+          validator: (value: string): boolean => {
             expect(value).toBe(correlationId)
             return 2 < value.length
           },
         },
 
         createdAt: {
-          validate: (value: Date): boolean => {
+          validator: (value: Date): boolean => {
             expect(value).toBe(createdAt)
             return guard<Date>(value)
           },
         },
 
         entity: {
-          validate: (value: User): boolean => {
+          validator: (value: User): boolean => {
             expect(guard<User>(value)).toBeTruthy()
             return guard<User>(value)
           },

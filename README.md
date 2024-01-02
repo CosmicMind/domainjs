@@ -64,7 +64,7 @@ updating entities, for example:
 export const createUser = defineEntity<User>({
   attributes: {
     id: {
-      validate(value): boolean | never {
+      validator(value): boolean | never {
         // id validation logic
         // return true | false
         // or throw an error
@@ -72,7 +72,7 @@ export const createUser = defineEntity<User>({
     },
     
     name: {
-      validate(value): boolean | never {
+      validator(value): boolean | never {
         // name validation logic
         // return true | false
         // or throw an error
@@ -80,7 +80,7 @@ export const createUser = defineEntity<User>({
     },
 
     age: {
-      validate(value): boolean | never {
+      validator(value): boolean | never {
         // age validation logic
         // return true | false
         // or throw an error
@@ -133,7 +133,7 @@ export const createUser = defineEntity<User>({
     // ...
     
     age: {
-      validate(value): boolean | never {
+      validator(value): boolean | never {
         // ... do something 
       }, 
       
@@ -190,7 +190,7 @@ export const createEmail = defineValue(Email, {
     // ... do something
   },
   
-  validate(value): boolean | never {
+  validator(value): boolean | never {
     // email validation logic
     // return true | false
     // or throw an error
@@ -240,7 +240,7 @@ export type User = Entity & {
 export const createUser = defineEntity<User>({
   attributes: {
     id: {
-      validate(value): boolean | never {
+      validator(value): boolean | never {
         // id validation logic
         // return true | false
         // or throw an error
@@ -248,7 +248,7 @@ export const createUser = defineEntity<User>({
     },
     
     name: {
-      validate(value): boolean | never {
+      validator(value): boolean | never {
         // name validation logic
         // return true | false
         // or throw an error
@@ -256,7 +256,7 @@ export const createUser = defineEntity<User>({
     },
 
     age: {
-      validate(value): boolean | never {
+      validator(value): boolean | never {
         // age validation logic
         // return true | false
         // or throw an error
@@ -371,7 +371,7 @@ export const createUserAggregate = defineAggregate(UserAggregate, {
     // ...
 
     age: {
-      validate(value): boolean | never {
+      validator(value): boolean | never {
         // ... do something 
       },
 
@@ -453,7 +453,7 @@ export type RegisterAccountEvent = Event & {
 export const createRegisterAccountEvent = defineEvent<RegisterAccountEvent>({
   attributes: {
     id: {
-      validate(value): boolean | never {
+      validator(value): boolean | never {
         // id validation logic
         // return true | false
         // or throw an error

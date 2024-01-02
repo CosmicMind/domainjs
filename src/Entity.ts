@@ -39,6 +39,10 @@ import {
   FoundationError,
 } from '@cosmicmind/foundationjs'
 
+import {
+  ValueError,
+} from '@/Value'
+
 export type Entity = object
 
 /**
@@ -48,7 +52,7 @@ export type Entity = object
 export type EntityAttributeKey<K> = keyof K extends string | symbol ? keyof K : never
 
 export type EntityAttributeLifecycle<E extends Entity, V> = {
-  validate?(value: V, entity: E): boolean | never
+  validator?(value: V, entity: E): boolean | never
   updated?(newValue: V, oldValue: V, entity: E): void
 }
 
@@ -60,16 +64,14 @@ export type EntityAttributeLifecycleMap<E extends Entity> = {
   [K in keyof E]?: EntityAttributeLifecycle<E, E[K]>
 }
 
+export class EntityError extends FoundationError {}
+
 export type EntityLifecycle<E extends Entity> = {
   created?(entity: E): void
   trace?(entity: E): void
+  error?(error: ValueError): void
   attributes?: EntityAttributeLifecycleMap<E>
 }
-
-/**
- * The `EntityError`.
- */
-export class EntityError extends FoundationError {}
 
 export const defineEntity = <E extends Entity>(handler: EntityLifecycle<E> = {}): (entity: E) => E =>
   (entity: E): E => createEntity(entity, handler)
@@ -82,8 +84,8 @@ function createEntityHandler<E extends Entity>(handler: EntityLifecycle<E>): Pro
   return {
     set<A extends EntityAttributeKey<E>, V extends E[A]>(target: E, attr: A, value: V): boolean | never {
       const h = handler.attributes?.[attr]
-      if (false === h?.validate?.(value, target)) {
-        throw new EntityError(`${String(attr)} is invalid`)
+      if (false === h?.validator?.(value, target)) {
+        throw new ValueError(`${String(attr)} is invalid`)
       }
 
       h?.updated?.(value, target[attr], target)
@@ -101,21 +103,31 @@ function createEntityHandler<E extends Entity>(handler: EntityLifecycle<E>): Pro
  */
 function createEntity<E extends Entity>(target: E, handler: EntityLifecycle<E> = {}): E | never {
   if (guard<E>(target)) {
-    const { attributes } = handler
-    const entity = new Proxy(target, createEntityHandler(handler))
+    try {
+      const { attributes } = handler
+      const entity = new Proxy(target, createEntityHandler(handler))
 
-    if (guard<EntityAttributeLifecycleMap<E>>(attributes)) {
-      for (const attr in attributes) {
-        if (false === attributes[attr]?.validate?.(target[attr], entity)) {
-          throw new EntityError(`${String(attr)} is invalid`)
+      if (guard<EntityAttributeLifecycleMap<E>>(attributes)) {
+        for (const attr in attributes) {
+          if (false === attributes[attr]?.validator?.(target[attr], entity)) {
+            throw new ValueError(`${String(attr)} is invalid`)
+          }
         }
+
+        handler.created?.(entity)
+        handler.trace?.(entity)
+
+        return entity
+      }
+    }
+    catch (error) {
+      if (error instanceof ValueError) {
+        handler.error?.(error)
       }
 
-      handler.created?.(entity)
-      handler.trace?.(entity)
-      return entity
+      throw error
     }
   }
 
-  throw new EntityError('Unable to create Entity')
+  throw new EntityError(`${String(target)} is invalid`)
 }

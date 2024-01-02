@@ -63,7 +63,7 @@ class Email extends Value<string> {
 }
 
 const createEmail = defineValue(Email, {
-  validate: (value: string): boolean => 'string' === typeof string().email('email is invalid').strict(true).validateSync(value),
+  validator: (value: string): boolean => 'string' === typeof string().email('email is invalid').strict(true).validateSync(value),
 })
 
 interface User extends Entity {
@@ -81,7 +81,7 @@ type UserRegisterEvent = Event & {
 const createUserAggregateRegisterEvent = defineEvent<UserRegisterEvent>({
   attributes: {
     entity: {
-      validate: (entity: User): boolean => guard<User>(entity),
+      validator: (entity: User): boolean => guard<User>(entity),
     },
   },
 })
@@ -148,21 +148,21 @@ describe('Aggregate', () => {
 
       attributes: {
         id: {
-          validate(value: string) {
+          validator(value: string) {
             expect(value).toBe(id)
             return 2 < value.length
           },
         },
 
         createdAt: {
-          validate(value: Date) {
+          validator(value: Date) {
             expect(value).toBe(createdAt)
             return guard<Date>(value)
           },
         },
 
         name: {
-          validate(value: string) {
+          validator(value: string) {
             expect(2 < value.length).toBeTruthy()
             return 2 < value.length
           },
@@ -177,14 +177,14 @@ describe('Aggregate', () => {
         },
 
         version: {
-          validate(value: number) {
+          validator(value: number) {
             expect(0 < value).toBeTruthy()
             return 0 < value
           },
         },
 
         email: {
-          validate(value: Email, entity: User) {
+          validator(value: Email, entity: User) {
             expect(email).toBe(value.value)
             expect(email).toBe(entity.email.value)
             return email === value.value

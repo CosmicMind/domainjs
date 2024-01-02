@@ -46,11 +46,11 @@ export abstract class Value<V> {
     return this._value
   }
 
-  constructor(value: V) {
-    this._value = 'function' === typeof this.prepare ? this.prepare(value) : value
+  constructor(value: V, ...args: unknown[]) {
+    this._value = 'function' === typeof this.prepare ? this.prepare(value, ...args) : value
   }
 
-  protected prepare?(value: V): V
+  protected prepare?(value: V, ...args: unknown[]): V
 }
 
 /**
@@ -62,24 +62,22 @@ export type ValueTypeFor<V> = V extends Value<infer T> ? T : V
  * The constructor that the `defineValue` is willing to accept
  * as an implemented `Value<T>`.
  */
-export type ValueConstructor<V extends Value<unknown>> = new (value: ValueTypeFor<V>) => V
+export type ValueConstructor<V extends Value<unknown>> = new (value: ValueTypeFor<V>, ...args: unknown[]) => V
+
+export class ValueError extends FoundationError {}
 
 export type ValueLifecycle<V> = {
   created?(vo: V): void
   trace?(vo: V): void
-  validate?(value: ValueTypeFor<V>, vo: V): boolean | never
+  validator?(value: ValueTypeFor<V>, vo: V): boolean | never
+  error?(error: ValueError): void
 }
-
-/**
- * The `ValueError`.
- */
-export class ValueError extends FoundationError {}
 
 /**
  * The `defineValue` sets a new ValueLifecycle to the given `Value`.
  */
-export const defineValue = <V extends Value<ValueTypeFor<V>>>(_class: ValueConstructor<V>, handler: ValueLifecycle<V> = {}): (value: ValueTypeFor<V>) => V =>
-  (value: ValueTypeFor<V>): V => createValue(new _class(value), value, handler)
+export const defineValue = <V extends Value<ValueTypeFor<V>>>(_class: ValueConstructor<V>, handler: ValueLifecycle<V> = {}): (value: ValueTypeFor<V>, ...args: unknown[]) => V =>
+  (value: ValueTypeFor<V>, ...args: unknown[]): V => createValue(new _class(value, ...args), value, handler)
 
 /**
  * The `createValueHandler` prepares the `ValueLifecycle` for
@@ -88,7 +86,7 @@ export const defineValue = <V extends Value<ValueTypeFor<V>>>(_class: ValueConst
 function createValueHandler<V extends Value<ValueTypeFor<V>>, T extends ValueTypeFor<V> = ValueTypeFor<V>>(handler: ValueLifecycle<V>): ProxyHandler<V> {
   return {
     set(target: V, attr: 'value', value: T): boolean | never {
-      if (false === handler.validate?.(value, target)) {
+      if (false === handler.validator?.(value, target)) {
         throw new ValueError(`${String(attr)} is invalid`)
       }
       return Reflect.set(target, attr, value)
@@ -102,15 +100,25 @@ function createValueHandler<V extends Value<ValueTypeFor<V>>, T extends ValueTyp
  */
 function createValue<V extends Value<ValueTypeFor<V>>>(target: V, value: ValueTypeFor<V>, handler: ValueLifecycle<V> = {}): V | never {
   if (guard<V>(target)) {
-    const vo = new Proxy(target, createValueHandler(handler))
+    try {
+      const vo = new Proxy(target, createValueHandler(handler))
 
-    if (false === handler.validate?.(value, vo)) {
-      throw new ValueError(`${JSON.stringify(value)} is invalid`)
+      if (false === handler.validator?.(value, vo)) {
+        throw new ValueError(`${JSON.stringify(value)} is invalid`)
+      }
+
+      handler.created?.(vo)
+      handler.trace?.(vo)
+
+      return vo
     }
+    catch (error) {
+      if (error instanceof ValueError) {
+        handler.error?.(error)
+      }
 
-    handler.created?.(vo)
-    handler.trace?.(vo)
-    return vo
+      throw error
+    }
   }
 
   throw new ValueError('unable to create value')

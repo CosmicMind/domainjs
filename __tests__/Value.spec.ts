@@ -58,14 +58,14 @@ class Email extends Value<string> {
 }
 
 const createEmail = defineValue(Email, {
-  validate: (value: string): boolean =>
+  validator: (value: string): boolean =>
     'string' === typeof string().email('email is invalid').strict(true).validateSync(value),
 })
 
 class Version extends Value<number> {}
 
 const createVersionValue = defineValue(Version, {
-  validate: (value: number): boolean => 0 < value,
+  validator: (value: number): boolean => 0 < value,
 })
 
 describe('Value', () => {
@@ -128,7 +128,7 @@ describe('Value', () => {
         expect(email).toBe(vo.value)
       },
 
-      validate(value: string, vo: Email): boolean {
+      validator(value: string, vo: Email): boolean {
         expect(email).toBe(value)
         expect(email).toBe(vo.value)
         return 'string' === typeof string().email('email is invalid').strict(true).validateSync(value)
