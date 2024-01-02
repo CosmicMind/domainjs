@@ -59,7 +59,7 @@ export class EventObservable<T extends EventTopics> extends Observable<T> {}
 export type EventAttributeKey<K> = keyof K extends string | symbol ? keyof K : never
 
 export type EventAttributeLifecycle<E, V> = {
-  validate?(value: V, event: E): boolean | never
+  validator?(value: V, event: E): boolean | never
 }
 
 /**
@@ -92,7 +92,7 @@ function createEventHandler<E extends Event>(handler: EventLifecycle<E>): ProxyH
   return {
     set<A extends EventAttributeKey<E>, V extends E[A]>(target: E, attr: A, value: V): boolean | never {
       const h = handler.attributes?.[attr]
-      if (false === h?.validate?.(value, target)) {
+      if (false === h?.validator?.(value, target)) {
         throw new EventError(`${String(attr)} is invalid`)
       }
 
@@ -114,13 +114,14 @@ function createEvent<E extends Event>(target: E, handler: EventLifecycle<E> = {}
 
     if (guard<EventAttributeLifecycleMap<E>>(attributes)) {
       for (const attr in attributes) {
-        if (false === attributes[attr]?.validate?.(target[attr], event)) {
+        if (false === attributes[attr]?.validator?.(target[attr], event)) {
           throw new EventError(`${String(attr)} is invalid`)
         }
       }
 
       handler.created?.(event)
       handler.trace?.(event)
+
       return event
     }
   }
