@@ -129,8 +129,8 @@ export const defineValue = <V extends Value<ValueTypeFor<V>>>(_class: ValueConst
  */
 function createValueHandler<V extends Value<ValueTypeFor<V>>, T extends ValueTypeFor<V> = ValueTypeFor<V>>(handler: ValueLifecycle<V>): ProxyHandler<V> {
     return {
-        set(target: V, key: 'value', value: T): boolean | never {
-            if (false === handler.validator?.(value, target)) {
+        set(target: V, key: string | symbol, value: T): boolean | never {
+            if ('value' === key && false === handler.validator?.(value, target)) {
                 throw new ValueError(`${String(key)} is invalid`)
             }
             return Reflect.set(target, key, value)
