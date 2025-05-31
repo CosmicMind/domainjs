@@ -31,19 +31,22 @@
  */
 
 import {
-    guard,
-} from '@cosmicmind/foundationjs'
-import {
-    uuidv4,
-} from 'lib0/random'
-import {
     it,
     expect,
     describe,
 } from 'vitest'
+
 import {
     string,
 } from 'yup'
+
+import {
+    uuidv4,
+} from 'lib0/random'
+
+import {
+    guard,
+} from '@cosmicmind/foundationjs'
 
 import {
     Entity,
