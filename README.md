@@ -24,10 +24,10 @@ export type User = Entity & {
 The above example is a user entity type definition. It represents an object, in this case a user within our domain. The user is defined by the id, name, and age attribute values. When working with entities, 
 DomainJS will immediately help within the following areas of concern:
 
-1. How to validate entities and reliably construct new entity instances?
+1. How to validate entities and reliably conpub struct new entity instances?
 2. How to observe the entity lifecycle?
 
-#### How to validate entities and reliably construct new entity instances?
+#### How to validate entities and reliably conpub struct new entity instances?
 
 Let's take a look at the following code example to understand entity validation in DomainJS.
 

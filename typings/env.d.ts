@@ -1,5 +1,3 @@
-/* Copyright © 2025, CosmicMind, Inc. */
-
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
