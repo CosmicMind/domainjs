@@ -1,6 +1,6 @@
 {
   "name": "@cosmicmind/domainjs",
-  "version": "0.0.1-rc-082825-4",
+  "version": "0.0.1-rc-082825-4-1",
   "description": "A domain-driven design framework for scalable systems.",
   "keywords": [
     "typescript",
@@ -50,7 +50,7 @@
   },
   "dependencies": {
     "@cosmicmind/foundationjs": "^0.0.1-rc-082825-1",
-    "@cosmicmind/patternjs": "^0.0.1-rc-082825-3",
+    "@cosmicmind/patternjs": "^0.0.1-rc-082825-3-1",
     "vite": "^7.1.3",
     "vite-plugin-dts": "^4.5.4"
   },
