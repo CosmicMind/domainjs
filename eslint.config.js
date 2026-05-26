@@ -1,7 +1,7 @@
 import eslint from "@eslint/js"
 import globals from "globals"
 import typescriptEslint from "typescript-eslint"
-import stylisticJsPlugin from "@stylistic/eslint-plugin-js"
+import stylistic from "@stylistic/eslint-plugin"
 
 export default typescriptEslint.config(
     { ignores: ["**/*.d.ts", "**/coverage", "**/dist"] },
@@ -23,36 +23,38 @@ export default typescriptEslint.config(
             },
         },
         rules: {
-            "@stylistic/js/semi": ["error", "never"],
-            "@stylistic/js/block-spacing": ["error", "always"],
-            "@stylistic/js/comma-dangle": ["error", {
+            "@stylistic/semi": ["error", "never"],
+            "@stylistic/block-spacing": ["error", "always"],
+            "@stylistic/comma-dangle": ["error", {
                 "arrays": "never",
                 "objects": "always-multiline",
                 "imports": "always-multiline",
                 "exports": "always-multiline",
                 "functions": "never",
+                "enums": "always-multiline",
+                "generics": "always-multiline",
             }],
-            "@stylistic/js/indent": ["error", 4, { SwitchCase: 1 }],
+            "@stylistic/indent": ["error", 4, { SwitchCase: 1 }],
 
             // Spacing rules
-            "@stylistic/js/object-curly-spacing": ["error", "always"],
-            "@stylistic/js/array-bracket-spacing": ["error", "never"],
-            "@stylistic/js/space-in-parens": ["error", "never"],
-            "@stylistic/js/space-infix-ops": ["error"],
+            "@stylistic/object-curly-spacing": ["error", "always"],
+            "@stylistic/array-bracket-spacing": ["error", "never"],
+            "@stylistic/space-in-parens": ["error", "never"],
+            "@stylistic/space-infix-ops": ["error"],
 
             // Line rules
-            "@stylistic/js/eol-last": ["error", "always"],
-            "@stylistic/js/no-trailing-spaces": ["error"],
-            "@stylistic/js/max-len": ["error", { "code": 255 }],
+            "@stylistic/eol-last": ["error", "always"],
+            "@stylistic/no-trailing-spaces": ["error"],
+            "@stylistic/max-len": ["error", { "code": 255 }],
 
             // Other formatting rules
-            "@stylistic/js/quotes": ["error", "single"],
-            "@stylistic/js/brace-style": ["error", "1tbs"],
-            "@stylistic/js/arrow-spacing": ["error", { "before": true, "after": true }],
-            "@stylistic/js/keyword-spacing": ["error", { "before": true, "after": true }],
+            "@stylistic/quotes": ["error", "single"],
+            "@stylistic/brace-style": ["error", "1tbs"],
+            "@stylistic/arrow-spacing": ["error", { "before": true, "after": true }],
+            "@stylistic/keyword-spacing": ["error", { "before": true, "after": true }],
         },
         plugins: {
-            "@stylistic/js": stylisticJsPlugin, // Correct, explicit key-value entry.
+            "@stylistic": stylistic,
         },
     },
 )
