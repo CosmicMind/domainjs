@@ -39,7 +39,7 @@ import {
 
 import {
     defineConfig,
-} from 'vite'
+} from 'vitest/config'
 
 const srcDir = 'src'
 const distDir = 'dist'
@@ -63,7 +63,6 @@ export default defineConfig({
         coverage: {
             provider: 'v8',
             include: [ `**/${srcDir}/**` ],
-            extension: [ '.ts' ],
         },
     },
 })
